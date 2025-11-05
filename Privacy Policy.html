@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EVERNET – Privacy Policy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --navy: #001f3f;
+      --dark-navy: #00152c;
+      --electric-blue: #0066ff;
+      --light-blue: #00a8ff;
+      --white: #ffffff;
+      --light: #f8fafc;
+      --shadow: rgba(0, 31, 63, 0.1);
+      --gradient: linear-gradient(135deg, var(--navy) 0%, var(--electric-blue) 100%);
+      --gradient-hover: linear-gradient(135deg, var(--electric-blue) 0%, var(--light-blue) 100%);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: var(--white);
+      color: var(--navy);
+      overflow-x: hidden;
+      line-height: 1.7;
+    }
+
+    /* Animated Background */
+    .animated-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      background: linear-gradient(135deg, #001f3f 0%, #003366 50%, #001f3f 100%);
+      overflow: hidden;
+    }
+
+    .floating-shapes {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+
+    .shape {
+      position: absolute;
+      background: rgba(0, 102, 255, 0.1);
+      border-radius: 50%;
+      animation: float 20s infinite linear;
+    }
+
+    .shape:nth-child(1) {
+      width: 200px;
+      height: 200px;
+      top: 10%;
+      left: 5%;
+      animation-delay: 0s;
+    }
+
+    .shape:nth-child(2) {
+      width: 150px;
+      height: 150px;
+      top: 60%;
+      left: 80%;
+      animation-delay: -5s;
+    }
+
+    .shape:nth-child(3) {
+      width: 100px;
+      height: 100px;
+      top: 80%;
+      left: 10%;
+      animation-delay: -10s;
+    }
+
+    .shape:nth-child(4) {
+      width: 180px;
+      height: 180px;
+      top: 20%;
+      left: 70%;
+      animation-delay: -15s;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.1;
+      }
+      25% {
+        transform: translateY(-20px) rotate(90deg);
+        opacity: 0.2;
+      }
+      50% {
+        transform: translateY(0) rotate(180deg);
+        opacity: 0.1;
+      }
+      75% {
+        transform: translateY(20px) rotate(270deg);
+        opacity: 0.2;
+      }
+    }
+
+    .grid-lines {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 102, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 102, 255, 0.05) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: gridMove 20s linear infinite;
+    }
+
+    @keyframes gridMove {
+      0% {
+        transform: translate(0, 0);
+      }
+      100% {
+        transform: translate(50px, 50px);
+      }
+    }
+
+    /* Mobile-First Header */
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+      padding: 15px 5%;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 70px;
+      border-bottom: 1px solid rgba(0, 31, 63, 0.05);
+    }
+
+    .brand {
+      font-family: "Montserrat", sans-serif;
+      font-size: 1.6em;
+      font-weight: 900;
+      color: var(--navy);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      white-space: nowrap;
+      background: linear-gradient(135deg, var(--electric-blue) 0%, var(--light-blue) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      z-index: 1002;
+    }
+
+    .menu-icon {
+      display: block;
+      font-size: 1.5em;
+      color: var(--navy);
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 8px;
+      transition: all 0.3s ease;
+      z-index: 1001;
+    }
+
+    .menu-icon:hover {
+      color: var(--electric-blue);
+    }
+
+    .nav-links {
+      display: none;
+      flex-direction: column;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(20px);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 85%;
+      height: 100vh;
+      box-shadow: 10px 0 50px rgba(0, 0, 0, 0.1);
+      padding: 80px 25px 40px;
+      z-index: 999;
+      gap: 0;
+    }
+
+    .nav-links.show {
+      display: flex;
+      animation: slideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(-100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--navy);
+      font-weight: 500;
+      font-size: 1.1em;
+      transition: all 0.3s ease;
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(0, 31, 63, 0.05);
+      width: 100%;
+      border-radius: 0;
+    }
+
+    .nav-links a:hover {
+      color: var(--electric-blue);
+      background: rgba(0, 102, 255, 0.08);
+    }
+
+    /* Hero Section */
+    .policy-hero {
+      text-align: center;
+      padding: 80px 5%;
+      position: relative;
+      overflow: hidden;
+      background: transparent;
+    }
+
+    .policy-hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .policy-hero h1 {
+      font-family: "Montserrat", sans-serif;
+      font-size: 2.5em;
+      color: var(--white);
+      margin-bottom: 20px;
+      line-height: 1.1;
+      font-weight: 900;
+      letter-spacing: -1px;
+      text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      animation: fadeInUp 1s ease-out;
+    }
+
+    .policy-hero p {
+      max-width: 700px;
+      margin: 0 auto 30px auto;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.1em;
+      padding: 0 10px;
+      font-weight: 400;
+      animation: fadeInUp 1s ease-out 0.2s both;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Policy Content */
+    .policy-content {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 50px 40px;
+      margin: -50px 5% 50px;
+      box-shadow: 0 20px 60px rgba(0, 31, 63, 0.1);
+      position: relative;
+      z-index: 1;
+    }
+
+    .policy-section {
+      margin-bottom: 40px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid rgba(0, 31, 63, 0.1);
+    }
+
+    .policy-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .policy-section h2 {
+      font-family: "Montserrat", sans-serif;
+      font-size: 1.8em;
+      color: var(--navy);
+      margin-bottom: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .policy-section h2 i {
+      color: var(--electric-blue);
+      font-size: 1.2em;
+    }
+
+    .policy-section h3 {
+      font-size: 1.3em;
+      color: var(--navy);
+      margin: 25px 0 15px;
+      font-weight: 600;
+    }
+
+    .policy-section p {
+      color: #4a5568;
+      font-size: 1.05em;
+      line-height: 1.7;
+      margin-bottom: 15px;
+    }
+
+    .policy-section ul {
+      list-style: none;
+      margin-left: 0;
+      margin-bottom: 20px;
+    }
+
+    .policy-section li {
+      margin: 12px 0;
+      padding-left: 35px;
+      position: relative;
+      font-size: 1.05em;
+      line-height: 1.6;
+      color: #4a5568;
+    }
+
+    .policy-section li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--electric-blue);
+      font-weight: bold;
+      font-size: 1.2em;
+      width: 25px;
+      height: 25px;
+      background: rgba(0, 102, 255, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .highlight-box {
+      background: linear-gradient(135deg, #f8fafc 0%, #e9eef6 100%);
+      border-left: 4px solid var(--electric-blue);
+      padding: 25px;
+      border-radius: 10px;
+      margin: 25px 0;
+    }
+
+    .highlight-box p {
+      margin-bottom: 0;
+      font-style: italic;
+    }
+
+    /* Mobile Footer */
+    footer {
+      text-align: center;
+      background: var(--dark-navy);
+      color: var(--white);
+      padding: 40px 20px 30px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--electric-blue), transparent);
+    }
+
+    footer p {
+      margin: 12px 0;
+      font-size: 0.9em;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    footer a {
+      color: var(--light-blue);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    footer a:hover {
+      color: var(--white);
+      text-decoration: underline;
+    }
+
+    /* Back to Top Button */
+    .back-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--gradient);
+      color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2em;
+      cursor: pointer;
+      box-shadow: 0 5px 20px rgba(0, 102, 255, 0.3);
+      transition: all 0.3s ease;
+      z-index: 99;
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .back-to-top:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 102, 255, 0.4);
+    }
+
+    /* Desktop Styles */
+    @media (min-width: 768px) {
+      header {
+        padding: 18px 6%;
+        min-height: 80px;
+      }
+
+      .brand {
+        font-size: 1.9em;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .menu-icon {
+        display: none;
+      }
+
+      .nav-links {
+        display: flex;
+        flex-direction: row;
+        background: transparent;
+        backdrop-filter: none;
+        position: static;
+        width: auto;
+        height: auto;
+        box-shadow: none;
+        padding: 0;
+        gap: clamp(15px, 2vw, 25px);
+      }
+
+      .nav-links a {
+        padding: 8px 16px;
+        border-bottom: none;
+        font-size: 0.95em;
+        width: auto;
+        border-radius: 8px;
+      }
+
+      .nav-links a::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: var(--electric-blue);
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+      }
+
+      .nav-links a:hover::after {
+        width: 80%;
+      }
+
+      .policy-hero {
+        padding: 120px 5% 100px;
+      }
+
+      .policy-hero h1 {
+        font-size: 3.5em;
+      }
+
+      .policy-hero p {
+        font-size: 1.3em;
+      }
+
+      .policy-content {
+        padding: 60px 50px;
+        margin: -80px 10% 80px;
+      }
+
+      .policy-section h2 {
+        font-size: 2.2em;
+      }
+
+      footer {
+        padding: 60px 20px 40px;
+      }
+    }
+
+    /* Large Desktop */
+    @media (min-width: 1200px) {
+      .policy-content {
+        max-width: 1100px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Animated Background -->
+  <div class="animated-bg">
+    <div class="floating-shapes">
+      <div class="shape"></div>
+      <div class="shape"></div>
+      <div class="shape"></div>
+      <div class="shape"></div>
+    </div>
+    <div class="grid-lines"></div>
+  </div>
+
+  <!-- Mobile-First Header -->
+  <header>
+    <button class="menu-icon" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+    <nav>
+      <div class="nav-links" id="navMenu">
+        <a href="index.html" onclick="closeMenu()">Home</a>
+        <a href="About Us.html" onclick="closeMenu()">About</a>
+        <a href="music.html" onclick="closeMenu()">Music Library</a>
+        <a href="sign-in.html" onclick="closeMenu()">Login</a>
+        <a href="sign-up.html" onclick="closeMenu()">Creator Signup</a>
+        <a href="#contact" onclick="closeMenu()">Contact</a>
+      </div>
+    </nav>
+    <div class="brand">EVERNET</div>
+  </header>
+
+  <!-- Policy Hero Section -->
+  <section class="policy-hero">
+    <div class="policy-hero-content">
+      <h1>Privacy Policy</h1>
+      <p>Your privacy is our priority. Learn how EVERNET protects and manages your personal information.</p>
+    </div>
+  </section>
+
+  <!-- Policy Content -->
+  <div class="policy-content">
+    <div class="policy-section">
+      <h2><i class="fas fa-shield-alt"></i> EVERNET Privacy Policy</h2>
+      <p>Last updated: January 2025</p>
+    </div>
+
+    <div class="policy-section">
+      <h2><i class="fas fa-info-circle"></i> 1. Introduction</h2>
+      <p>EVERNET is committed to protecting your privacy. This Privacy Policy outlines how we collect, use, and safeguard your information when you use our platform and services.</p>
+      <p>By using our services, you agree to the collection and use of information in accordance with this policy.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2><i class="fas fa-database"></i> 2. Information We Collect</h2>
+      <ul>
+        <li><strong>Personal Information:</strong> When you register on our platform, we may collect personal details such as your name, email address, payment information, and platform account details.</li>
+        <li><strong>Usage Data:</strong> We may collect information on how our platform is accessed and used, such as your IP address, browser type, device information, and browsing activity.</li>
+        <li><strong>Cookies:</strong> We use cookies to enhance your experience on our website. Cookies help us understand how you interact with our content.</li>
+      </ul>
+    </div>
+
+    <div class="policy-section">
+      <h2><i class="fas fa-cogs"></i> 3. How We Use Your Information</h2>
+      <p>Your personal and usage data may be used for the following purposes:</p>
+      <ul>
+        <li>To provide and maintain our services.</li>
+        <li>To notify you about changes to our services or account-related activities.</li>
+        <li>To send promotional and marketing emails, provided you have opted in.</li>
+        <li>To improve the performance and functionality of our platform.</li>
+        <li>To process payments and track royalty earnings.</li>
+      </ul>
+    </div>
+
+    <div class="policy-section">
+      <h2><i class="fas fa-share-alt"></i> 4. Data Sharing</h2>
+      <p>We do not sell or rent your personal data to third parties. However, we may share your information with:</p>
+      <ul>
+        <li><strong>Service Providers:</strong> Third-party companies that help us with various functions, including payment processing and email services.</li>
+        <li><strong>Legal Requirements:</strong> If required by law or legal process, we may disclose your information to authorities or third parties.</li>
+        <li><strong>Business Transfers:</strong> In connection with any merger, sale of company assets, or acquisition.</li>
+      </ul>
+    </div>
+
+    <div class="policy-section">
+      <h2><i class="fas fa-archive"></i> 5. Data Retention</h2>
+      <p>We will retain your personal information for as long as necessary to fulfill the purposes outlined in this Privacy Policy. If you close your account or request deletion of your data, we will securely delete or anonymize your personal data, unless otherwise required by law.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2><i class="fas fa-lock"></i> 6. Security</h2>
+      <p>We use industry-standard security measures to protect your personal data. However, no method of transmission over the internet or electronic storage is 100% secure, so we cannot guarantee absolute security.</p>
+      <div class="highlight-box">
+        <p>EVERNET employs advanced encryption, secure servers, and regular security audits to protect your information and ensure the safety of your creator earnings and personal data.</p>
+      </div>
+    </div>
+
+    <div class="policy-section">
+      <h2><i class="fas fa-user-shield"></i> 7. Your Rights</h2>
+      <p>As a user, you have the following rights concerning your personal data:</p>
+      <ul>
+        <li><strong>Access:</strong> You may request to access the personal data we hold about you.</li>
+        <li><strong>Correction:</strong> You may update or correct your personal information.</li>
+        <li><strong>Deletion:</strong> You may request the deletion of your personal information.</li>
+        <li><strong>Opt-out:</strong> You can unsubscribe from marketing emails at any time by following the unsubscribe link in the email.</li>
+        <li><strong>Data Portability:</strong> You may request a copy of your data in a structured, machine-readable format.</li>
+      </ul>
+    </div>
+
+    <div class="policy-section">
+      <h2><i class="fas fa-external-link-alt"></i> 8. Third-Party Links</h2>
+      <p>Our platform may contain links to third-party websites. We are not responsible for the privacy practices or content of such sites. We encourage you to read the privacy policies of those sites before providing any personal information.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2><i class="fas fa-sync-alt"></i> 9. Changes to this Privacy Policy</h2>
+      <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page. Changes will take effect immediately upon posting, and we encourage you to review this policy periodically for any updates.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2><i class="fas fa-envelope"></i> 10. Contact Us</h2>
+      <p>If you have any questions about this Privacy Policy or our data practices, please contact us at:</p>
+      <p>info@evergreenempireltd.com</p>
+      </strong> 
+    </div>
+  </div>
+
+  <!-- Back to Top Button -->
+  <div class="back-to-top" id="backToTop">
+    <i class="fas fa-chevron-up"></i>
+  </div>
+
+  <!-- Mobile Footer -->
+  <footer id="contact">
+    <p>Contact our dedicated support team: <a href="mailto:support@evernet.com">support@evergreenempireltd.com</a></p>
+    <p>
+      <a href="Terms of Service.html">Terms & Conditions</a> | 
+      <a href="Privacy policy.html">Privacy Policy</a> | 
+      <a href="Creator Agreement.html">Creator Agreement</a>
+    </p>
+    <p>©2025 EverGreen Empire Ltd. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Mobile Menu Functions
+    function toggleMenu() {
+      const nav = document.getElementById('navMenu');
+      nav.classList.toggle('show');
+    }
+
+    function closeMenu() {
+      const nav = document.getElementById('navMenu');
+      nav.classList.remove('show');
+    }
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+      const nav = document.getElementById('navMenu');
+      const menuIcon = document.querySelector('.menu-icon');
+      
+      if (!nav.contains(event.target) && !menuIcon.contains(event.target) && nav.classList.contains('show')) {
+        closeMenu();
+      }
+    });
+
+    // Back to Top Button
+    const backToTopButton = document.getElementById('backToTop');
+    
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        backToTopButton.classList.add('show');
+      } else {
+        backToTopButton.classList.remove('show');
+      }
+    });
+
+    backToTopButton.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+          closeMenu();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
