@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator Registration - EverNet</title>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <style>
+    body { 
+      font-family: 'Poppins', sans-serif; 
+      background: #f8fafc; 
+      margin: 0; 
+      padding: 20px; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      min-height: 100vh; 
+    }
+    .registration-container { 
+      background: white; 
+      padding: 30px; 
+      border-radius: 15px; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+      max-width: 400px; 
+      width: 100%; 
+    }
+    .form-group { margin-bottom: 20px; }
+    label { display: block; margin-bottom: 8px; font-weight: 500; }
+    input { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; }
+    button { width: 100%; padding: 12px; background: #001f3f; color: white; border: none; border-radius: 8px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="registration-container">
+    <h2>Creator Registration</h2>
+    <form id="registrationForm">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="email" required>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="password" required>
+      </div>
+      <div class="form-group">
+        <label>YouTube Channel URL</label>
+        <input type="url" id="youtubeChannel" required>
+      </div>
+      <button type="submit">Register as Creator</button>
+    </form>
+    <p id="message"></p>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAuSEqhLenwrEz-qrIn1drjAugy1YSkDlI",
+      authDomain: "creators-portal-428c5.firebaseapp.com",
+      projectId: "creators-portal-428c5",
+      storageBucket: "creators-portal-428c5.firebasestorage.app",
+      messagingSenderId: "499280036303",
+      appId: "1:499280036303:web:b4d80d3b7fe1291381d2ba"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const youtubeChannel = document.getElementById('youtubeChannel').value;
+
+      try {
+        // Create user account
+        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+
+        // Save user data to Firestore
+        await db.collection('users').doc(user.uid).set({
+          email: email,
+          youtubeChannel: youtubeChannel,
+          status: 'active',
+          joinDate: new Date(),
+          subscriberCount: 0,
+          videoCount: 0
+        });
+
+        document.getElementById('message').textContent = 'Registration successful!';
+        document.getElementById('message').style.color = 'green';
+        
+        // Redirect to creator dashboard
+        setTimeout(() => {
+          window.location.href = 'creator-dashboard.html';
+        }, 2000);
+
+      } catch (error) {
+        document.getElementById('message').textContent = 'Error: ' + error.message;
+        document.getElementById('message').style.color = 'red';
+      }
+    });
+  </script>
+</body>
+</html>

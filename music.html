@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EVERNET Music Library - Premium Soundtracks for Creators</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --navy: #001f3f;
+            --dark-navy: #00152c;
+            --electric-blue: #0066ff;
+            --light-blue: #00a8ff;
+            --white: #ffffff;
+            --light: #f8fafc;
+            --creator: #8B5CF6;
+            --success: #28a745;
+            --warning: #FFA500;
+            --danger: #dc3545;
+            --gradient: linear-gradient(135deg, var(--navy) 0%, var(--electric-blue) 100%);
+            --gradient-hover: linear-gradient(135deg, var(--electric-blue) 0%, var(--light-blue) 100%);
+            --creator-gradient: linear-gradient(135deg, var(--creator) 0%, #6D28D9 100%);
+            --shadow: 0 10px 30px rgba(0, 31, 63, 0.1);
+            --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            background: var(--white);
+            color: var(--navy);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Mobile-First Container */
+        .container {
+            width: 100%;
+            max-width: 100%;
+            padding: 0;
+        }
+
+        /* Mobile Header */
+        .mobile-header {
+            background: var(--gradient);
+            color: var(--white);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .brand {
+            font-family: "Montserrat", sans-serif;
+            font-size: 1.8em;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .mobile-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .mobile-nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            font-size: 0.9em;
+            backdrop-filter: blur(10px);
+        }
+
+        .mobile-nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .header-subtitle {
+            font-size: 1em;
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+        }
+
+        /* Mobile Tabs */
+        .mobile-tabs {
+            display: flex;
+            overflow-x: auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px 15px;
+            gap: 5px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            position: sticky;
+            top: 115px;
+            z-index: 99;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .mobile-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .mobile-tab {
+            padding: 12px 18px;
+            cursor: pointer;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--navy);
+            font-size: 0.9em;
+        }
+
+        .mobile-tab.active {
+            background: var(--creator-gradient);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .mobile-tab i {
+            font-size: 1em;
+        }
+
+        /* Content Sections */
+        .content-section {
+            padding: 20px;
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Mobile Instructions */
+        .mobile-instructions {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 20px;
+            box-shadow: var(--card-shadow);
+            border-left: 4px solid var(--creator);
+        }
+
+        .mobile-instructions h3 {
+            margin-bottom: 12px;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--navy);
+        }
+
+        .mobile-instructions p {
+            margin-bottom: 6px;
+            font-size: 0.85em;
+            color: #64748b;
+        }
+
+        /* Mobile Search */
+        .mobile-search {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .mobile-search-input {
+            width: 100%;
+            padding: 16px 20px 16px 50px;
+            border: 1px solid rgba(0, 31, 63, 0.1);
+            border-radius: 12px;
+            font-size: 1em;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .mobile-search-input:focus {
+            outline: none;
+            border-color: var(--creator);
+            box-shadow: 0 3px 15px rgba(139, 92, 246, 0.15);
+        }
+
+        .mobile-search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 1.1em;
+        }
+
+        /* Mobile Music Grid */
+        .mobile-music-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .mobile-music-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 31, 63, 0.05);
+        }
+
+        .mobile-music-card:active {
+            transform: scale(0.98);
+        }
+
+        .mobile-video-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .mobile-video-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .mobile-play-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .mobile-video-container:hover .mobile-play-overlay {
+            opacity: 1;
+        }
+
+        .mobile-play-btn {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--creator);
+            font-size: 1.5em;
+            transition: all 0.3s ease;
+            transform: scale(0.9);
+        }
+
+        .mobile-play-overlay:active .mobile-play-btn {
+            transform: scale(0.95);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .mobile-music-info {
+            padding: 18px;
+        }
+
+        .mobile-music-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .mobile-serial {
+            font-weight: 700;
+            color: var(--creator);
+            background: rgba(139, 92, 246, 0.1);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+        }
+
+        .mobile-title {
+            font-weight: 600;
+            color: var(--navy);
+            font-size: 1.2em;
+            margin-bottom: 5px;
+        }
+
+        .mobile-code-section {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .mobile-code {
+            flex: 1;
+            background: #f8fafc;
+            padding: 12px 15px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-weight: 600;
+            color: var(--navy);
+            border: 1px solid #e2e8f0;
+            font-size: 0.9em;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .mobile-copy-btn {
+            background: var(--creator-gradient);
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            min-width: 100px;
+            box-shadow: 0 3px 10px rgba(139, 92, 246, 0.3);
+            font-size: 0.9em;
+        }
+
+        .mobile-copy-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
+        }
+
+        .mobile-copy-btn.copied {
+            background: var(--success);
+            box-shadow: 0 3px 10px rgba(40, 167, 69, 0.3);
+        }
+
+        .mobile-no-results {
+            text-align: center;
+            padding: 50px 20px;
+            color: #64748b;
+            display: none;
+        }
+
+        .mobile-no-results i {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            color: #94a3b8;
+        }
+
+        .mobile-no-results h3 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            color: var(--navy);
+        }
+
+        /* Guide Section */
+        .mobile-guide-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 25px 20px;
+            margin-bottom: 30px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .mobile-guide-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .mobile-guide-header h2 {
+            color: var(--navy);
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            font-family: "Montserrat", sans-serif;
+            font-weight: 800;
+        }
+
+        .mobile-guide-header p {
+            color: #64748b;
+            font-size: 0.95em;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        .mobile-process-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .mobile-step {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 31, 63, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 31, 63, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mobile-step::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--creator-gradient);
+        }
+
+        .mobile-step:active {
+            transform: translateY(2px);
+            box-shadow: 0 3px 10px rgba(0, 31, 63, 0.08);
+        }
+
+        .mobile-step-number {
+            background: var(--creator-gradient);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-bottom: 15px;
+            font-size: 1em;
+            box-shadow: 0 3px 10px rgba(139, 92, 246, 0.3);
+        }
+
+        .mobile-step-content h4 {
+            color: var(--navy);
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .mobile-step-content p {
+            color: #64748b;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        /* Guidelines Section */
+        .mobile-guidelines-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 25px 20px;
+            margin-bottom: 25px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .mobile-guidelines-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .mobile-guidelines-header i {
+            font-size: 1.5em;
+        }
+
+        .mobile-guidelines-header h3 {
+            color: var(--navy);
+            font-size: 1.3em;
+            font-weight: 700;
+        }
+
+        .mobile-guidelines-content {
+            font-size: 0.95em;
+        }
+
+        .mobile-guideline-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 31, 63, 0.1);
+        }
+
+        .mobile-guideline-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .mobile-guideline-section h4 {
+            color: var(--danger);
+            margin-bottom: 12px;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mobile-guideline-list {
+            padding-left: 20px;
+        }
+
+        .mobile-guideline-list li {
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        /* Mobile Footer */
+        .mobile-footer {
+            text-align: center;
+            background: var(--dark-navy);
+            color: var(--white);
+            padding: 40px 20px 30px;
+            margin-top: 30px;
+        }
+
+        .mobile-footer p {
+            margin: 12px 0;
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .mobile-footer a {
+            color: var(--light-blue);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .mobile-footer a:hover {
+            color: var(--white);
+            text-decoration: underline;
+        }
+
+        /* Desktop Styles */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+
+            .mobile-header {
+                border-radius: 16px;
+                margin: 0 20px 20px;
+                padding: 20px 30px;
+            }
+
+            .brand {
+                font-size: 2.2em;
+            }
+
+            .mobile-nav-btn {
+                padding: 12px 20px;
+                font-size: 1em;
+            }
+
+            .header-subtitle {
+                font-size: 1.1em;
+            }
+
+            .mobile-tabs {
+                border-radius: 12px;
+                margin: 0 20px 20px;
+                padding: 15px 20px;
+                top: 140px;
+            }
+
+            .mobile-tab {
+                padding: 15px 25px;
+                font-size: 1em;
+            }
+
+            .content-section {
+                padding: 20px 30px;
+            }
+
+            .mobile-music-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+                gap: 25px;
+            }
+
+            .mobile-guide-container, .mobile-guidelines-container {
+                padding: 30px;
+            }
+
+            .mobile-process-steps {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 25px;
+            }
+
+            .mobile-step {
+                padding: 25px;
+            }
+
+            .mobile-step-number {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1em;
+            }
+        }
+
+        /* Large Desktop */
+        @media (min-width: 1024px) {
+            .mobile-music-grid {
+                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            }
+        }
+
+        /* Small Mobile Adjustments */
+        @media (max-width: 360px) {
+            .mobile-header {
+                padding: 12px 15px;
+            }
+            
+            .brand {
+                font-size: 1.6em;
+            }
+            
+            .mobile-nav-btn {
+                padding: 8px 12px;
+                font-size: 0.85em;
+            }
+            
+            .mobile-tabs {
+                padding: 8px 12px;
+            }
+            
+            .mobile-tab {
+                padding: 10px 15px;
+                font-size: 0.85em;
+            }
+            
+            .content-section {
+                padding: 15px;
+            }
+            
+            .mobile-video-container {
+                height: 180px;
+            }
+            
+            .mobile-guide-container, .mobile-guidelines-container {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Mobile Header -->
+        <header class="mobile-header">
+            <div class="header-top">
+                <div class="brand">EVERNET</div>
+                <div class="mobile-nav">
+                    <a href="dashboard.html" class="mobile-nav-btn">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                    <a href="index.html" class="mobile-nav-btn">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                </div>
+            </div>
+            <p class="header-subtitle">Premium soundtracks for content creators</p>
+        </header>
+
+        <!-- Mobile Tabs -->
+        <div class="mobile-tabs">
+            <div class="mobile-tab active" data-tab="music">
+                <i class="fas fa-music"></i> Music
+            </div>
+            <div class="mobile-tab" data-tab="guide">
+                <i class="fas fa-play-circle"></i> How to Use
+            </div>
+            <div class="mobile-tab" data-tab="guidelines">
+                <i class="fas fa-file-alt"></i> Guidelines
+            </div>
+        </div>
+
+        <!-- Music Library Section -->
+        <section class="content-section active" id="music-section">
+            <div class="mobile-instructions">
+                <h3><i class="fas fa-info-circle"></i> Quick Guide</h3>
+                <p>* Set volume to 15% or higher for revenue</p>
+                <p>* Videos under 35s may generate less revenue</p>
+                <p>* Copy code and paste in YouTube Shorts</p>
+            </div>
+
+            <div class="mobile-search">
+                <i class="fas fa-search mobile-search-icon"></i>
+                <input type="text" class="mobile-search-input" placeholder="Search tracks...">
+            </div>
+
+            <div class="mobile-music-grid">
+                <!-- Track 1 -->
+                <div class="mobile-music-card">
+                    <div class="mobile-video-container">
+                        <iframe src="https://www.youtube.com/embed/JLIgKnAyLCM" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="mobile-play-overlay">
+                            <div class="mobile-play-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mobile-music-info">
+                        <div class="mobile-music-header">
+                            <div>
+                                <div class="mobile-title">Awakened</div>
+                            </div>
+                            <div class="mobile-serial">1</div>
+                        </div>
+                        <div class="mobile-code-section">
+                            <div class="mobile-code">SE57V2503148</div>
+                            <button class="mobile-copy-btn" onclick="copyCode('SE57V2503148', this)">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Track 2 -->
+                <div class="mobile-music-card">
+                    <div class="mobile-video-container">
+                        <iframe src="https://www.youtube.com/embed/gIL68zSlz_c" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="mobile-play-overlay">
+                            <div class="mobile-play-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mobile-music-info">
+                        <div class="mobile-music-header">
+                            <div>
+                                <div class="mobile-title">Show Me</div>
+                            </div>
+                            <div class="mobile-serial">2</div>
+                        </div>
+                        <div class="mobile-code-section">
+                            <div class="mobile-code">SE57V2503295</div>
+                            <button class="mobile-copy-btn" onclick="copyCode('SE57V2503295', this)">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Track 3 -->
+                <div class="mobile-music-card">
+                    <div class="mobile-video-container">
+                        <iframe src="https://www.youtube.com/embed/55Hf2C-rsFo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="mobile-play-overlay">
+                            <div class="mobile-play-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mobile-music-info">
+                        <div class="mobile-music-header">
+                            <div>
+                                <div class="mobile-title">Day Dreams</div>
+                            </div>
+                            <div class="mobile-serial">3</div>
+                        </div>
+                        <div class="mobile-code-section">
+                            <div class="mobile-code">SE57V2503477</div>
+                            <button class="mobile-copy-btn" onclick="copyCode('SE57V2503477', this)">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Track 4 -->
+                <div class="mobile-music-card">
+                    <div class="mobile-video-container">
+                        <iframe src="https://www.youtube.com/embed/Oj-csero8rE" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="mobile-play-overlay">
+                            <div class="mobile-play-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mobile-music-info">
+                        <div class="mobile-music-header">
+                            <div>
+                                <div class="mobile-title">You</div>
+                            </div>
+                            <div class="mobile-serial">4</div>
+                        </div>
+                        <div class="mobile-code-section">
+                            <div class="mobile-code">SE57V2502504</div>
+                            <button class="mobile-copy-btn" onclick="copyCode('SE57V2502504', this)">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Track 5 -->
+                <div class="mobile-music-card">
+                    <div class="mobile-video-container">
+                        <iframe src="https://www.youtube.com/embed/9zen0EGQDdc" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="mobile-play-overlay">
+                            <div class="mobile-play-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mobile-music-info">
+                        <div class="mobile-music-header">
+                            <div>
+                                <div class="mobile-title">Hope</div>
+                            </div>
+                            <div class="mobile-serial">5</div>
+                        </div>
+                        <div class="mobile-code-section">
+                            <div class="mobile-code">SE57V2502423</div>
+                            <button class="mobile-copy-btn" onclick="copyCode('SE57V2502423', this)">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Track 6 -->
+                <div class="mobile-music-card">
+                    <div class="mobile-video-container">
+                        <iframe src="https://www.youtube.com/embed/7WmaiDOpv0I" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="mobile-play-overlay">
+                            <div class="mobile-play-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mobile-music-info">
+                        <div class="mobile-music-header">
+                            <div>
+                                <div class="mobile-title">Fxn Liar</div>
+                            </div>
+                            <div class="mobile-serial">6</div>
+                        </div>
+                        <div class="mobile-code-section">
+                            <div class="mobile-code">SE57V2502154</div>
+                            <button class="mobile-copy-btn" onclick="copyCode('SE57V2502154', this)">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Track 7 -->
+                <div class="mobile-music-card">
+                    <div class="mobile-video-container">
+                        <iframe src="https://www.youtube.com/embed/6PyUTNnuQi8" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="mobile-play-overlay">
+                            <div class="mobile-play-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mobile-music-info">
+                        <div class="mobile-music-header">
+                            <div>
+                                <div class="mobile-title">Cruel Life</div>
+                            </div>
+                            <div class="mobile-serial">7</div>
+                        </div>
+                        <div class="mobile-code-section">
+                            <div class="mobile-code">SE57V2502284</div>
+                            <button class="mobile-copy-btn" onclick="copyCode('SE57V2502284', this)">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Track 8 -->
+                <div class="mobile-music-card">
+                    <div class="mobile-video-container">
+                        <iframe src="https://www.youtube.com/embed/kVZ3qPRh3mA" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="mobile-play-overlay">
+                            <div class="mobile-play-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mobile-music-info">
+                        <div class="mobile-music-header">
+                            <div>
+                                <div class="mobile-title">Life Line</div>
+                            </div>
+                            <div class="mobile-serial">8</div>
+                        </div>
+                        <div class="mobile-code-section">
+                            <div class="mobile-code">SE57V2504012</div>
+                            <button class="mobile-copy-btn" onclick="copyCode('SE57V2504012', this)">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Track 9 -->
+                <div class="mobile-music-card">
+                    <div class="mobile-video-container">
+                        <iframe src="https://www.youtube.com/embed/vaHFfz5Z1Js" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="mobile-play-overlay">
+                            <div class="mobile-play-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mobile-music-info">
+                        <div class="mobile-music-header">
+                            <div>
+                                <div class="mobile-title">Void</div>
+                            </div>
+                            <div class="mobile-serial">9</div>
+                        </div>
+                        <div class="mobile-code-section">
+                            <div class="mobile-code">SE57V2504133</div>
+                            <button class="mobile-copy-btn" onclick="copyCode('SE57V2504133', this)">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Track 10 -->
+                <div class="mobile-music-card">
+                    <div class="mobile-video-container">
+                        <iframe src="https://www.youtube.com/embed/-PoXo2lhv2I" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="mobile-play-overlay">
+                            <div class="mobile-play-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mobile-music-info">
+                        <div class="mobile-music-header">
+                            <div>
+                                <div class="mobile-title">Timeline</div>
+                            </div>
+                            <div class="mobile-serial">10</div>
+                        </div>
+                        <div class="mobile-code-section">
+                            <div class="mobile-code">SE57V2504118</div>
+                            <button class="mobile-copy-btn" onclick="copyCode('SE57V2504118', this)">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mobile-no-results" id="mobile-no-results">
+                    <i class="fas fa-search"></i>
+                    <h3>No tracks found</h3>
+                    <p>Try adjusting your search terms</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Guide Section -->
+        <section class="content-section" id="guide-section">
+            <div class="mobile-guide-container">
+                <div class="mobile-guide-header">
+                    <h2>How to Use EverNet Music</h2>
+                    <p>Follow these simple steps to add our premium music to your YouTube Shorts</p>
+                </div>
+
+                <div class="mobile-process-steps">
+                    <div class="mobile-step">
+                        <div class="mobile-step-number">1</div>
+                        <div class="mobile-step-content">
+                            <h4>Copy the Audio Code</h4>
+                            <p>Find your preferred track in our library and copy the unique code using the "Copy" button.</p>
+                        </div>
+                    </div>
+
+                    <div class="mobile-step">
+                        <div class="mobile-step-number">2</div>
+                        <div class="mobile-step-content">
+                            <h4>Open YouTube App</h4>
+                            <p>Launch the YouTube app and tap the "+" button at the bottom to create a new Short.</p>
+                        </div>
+                    </div>
+
+                    <div class="mobile-step">
+                        <div class="mobile-step-number">3</div>
+                        <div class="mobile-step-content">
+                            <h4>Select Your Video</h4>
+                            <p>Choose the video you want to upload and then tap "Add Sound" to add background music.</p>
+                        </div>
+                    </div>
+
+                    <div class="mobile-step">
+                        <div class="mobile-step-number">4</div>
+                        <div class="mobile-step-content">
+                            <h4>Paste the Code</h4>
+                            <p>Paste the code you copied from EverNet into the YouTube search bar to find the track.</p>
+                        </div>
+                    </div>
+
+                    <div class="mobile-step">
+                        <div class="mobile-step-number">5</div>
+                        <div class="mobile-step-content">
+                            <h4>Confirm Selection</h4>
+                            <p>Tap the check button at the bottom right to confirm your music selection.</p>
+                        </div>
+                    </div>
+
+                    <div class="mobile-step">
+                        <div class="mobile-step-number">6</div>
+                        <div class="mobile-step-content">
+                            <h4>Adjust Volume</h4>
+                            <p>Tap the volume icon at the top right to access the volume controls.</p>
+                        </div>
+                    </div>
+
+                    <div class="mobile-step">
+                        <div class="mobile-step-number">7</div>
+                        <div class="mobile-step-content">
+                            <h4>Set Minimum Volume</h4>
+                            <p>Ensure the volume is set to at least 15% for revenue eligibility. This is crucial for monetization.</p>
+                        </div>
+                    </div>
+
+                    <div class="mobile-step">
+                        <div class="mobile-step-number">8</div>
+                        <div class="mobile-step-content">
+                            <h4>Upload Your Video</h4>
+                            <p>Add details for your video and publish it to start earning with EverNet.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Guidelines Section -->
+        <section class="content-section" id="guidelines-section">
+            <div class="mobile-instructions">
+                <h3><i class="fas fa-file-alt"></i> EverNet Music Guidelines</h3>
+                <p>Please read carefully to ensure smooth revenue settlement</p>
+            </div>
+
+            <div class="mobile-guidelines-container">
+                <div class="mobile-guidelines-header">
+                    <i class="fas fa-exclamation-triangle" style="color: var(--warning);"></i>
+                    <h3>Content Where Music Cannot Be Used</h3>
+                </div>
+                <div class="mobile-guidelines-content">
+                    <p><strong>(Not Eligible for Revenue Settlement)</strong></p>
+                    
+                    <div class="mobile-guideline-section">
+                        <h4><i class="fas fa-ban"></i> Music-based Content</h4>
+                        <p>If the original video is focused on music (for example: cover songs, instrumental performances, live stage footage, etc.), EverNet music is not allowed.</p>
+                        <p>In other words, if your video already contains music that is not from EverNet, you must not add EverNet tracks.</p>
+                        <p>YouTube may treat this as duplicate or abusive music content, which can lead to:</p>
+                        <ul class="mobile-guideline-list">
+                            <li>Revenue not being recorded</li>
+                            <li>Videos being restricted or flagged</li>
+                            <li>Exclusion from revenue settlement</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mobile-guideline-section">
+                        <h4><i class="fas fa-exclamation-circle"></i> Other Forms of Abusive Content</h4>
+                        <ul class="mobile-guideline-list">
+                            <li>Videos that add music to meaningless or low-effort footage</li>
+                            <li>Repeated uploads of extremely short videos</li>
+                            <li>Any content that violates YouTube's community or monetization policies</li>
+                        </ul>
+                        <p style="margin-top: 10px;">Such content may not be eligible for monetization under YouTube rules.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mobile-guidelines-container">
+                <div class="mobile-guidelines-header">
+                    <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                    <h3>Using Approved Music Only</h3>
+                </div>
+                <div class="mobile-guidelines-content">
+                    <p>EverNet's music library is updated regularly with premium, licensed tracks.</p>
+                    <p>Please use only the music listed on the official EverNet website.</p>
+                    <p>If a track is not listed, revenue may not be counted and the video may be excluded from settlement.</p>
+                    <p style="margin-top: 15px; font-weight: 500;">These guidelines exist to protect creators and ensure stable earnings.</p>
+                    <p style="font-weight: 500;">Please follow them carefully when using the EverNet music service.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Mobile Footer -->
+    <footer class="mobile-footer">
+        <p>Contact our dedicated support team: <a href="mailto:support@evergreenempireltd.com">support@evergreenempireltd.com</a></p>
+        <p>
+            <a href="Terms of Service.html">Terms & Conditions</a> | 
+            <a href="Privacy policy.html">Privacy Policy</a> | 
+            <a href="Creator Agreement.html">Creator Agreement</a>
+        </p>
+        <p>©2025 EverGreen Empire Ltd.</p>
+    </footer>
+
+    <script>
+        // Enhanced Copy Code Function
+        function copyCode(code, button) {
+            navigator.clipboard.writeText(code).then(() => {
+                // Change button to show success
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                button.classList.add('copied');
+                
+                // Reset button after 2 seconds
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                alert('Failed to copy code. Please copy manually: ' + code);
+            });
+        }
+
+        // Tab functionality
+        document.querySelectorAll('.mobile-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and contents
+                document.querySelectorAll('.mobile-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.content-section').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Show corresponding content
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(`${tabId}-section`).classList.add('active');
+            });
+        });
+
+        // Search functionality
+        const searchInput = document.querySelector('.mobile-search-input');
+        const musicCards = document.querySelectorAll('.mobile-music-card');
+        const noResults = document.getElementById('mobile-no-results');
+
+        searchInput.addEventListener('input', () => {
+            const searchTerm = searchInput.value.toLowerCase();
+            let visibleCards = 0;
+            
+            musicCards.forEach(card => {
+                const title = card.querySelector('.mobile-title').textContent.toLowerCase();
+                if (title.includes(searchTerm)) {
+                    card.style.display = 'flex';
+                    visibleCards++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Show/hide no results message
+            if (visibleCards === 0 && searchTerm !== '') {
+                noResults.style.display = 'flex';
+            } else {
+                noResults.style.display = 'none';
+            }
+        });
+
+        // Video play functionality
+        document.querySelectorAll('.mobile-play-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                e.preventDefault();
+                const iframe = overlay.previousElementSibling;
+                const videoUrl = iframe.src;
+                
+                // Check if video is already playing
+                if (videoUrl.includes('autoplay=1')) {
+                    // Pause video
+                    iframe.src = videoUrl.replace('autoplay=1', 'autoplay=0');
+                    overlay.querySelector('.mobile-play-btn i').className = 'fas fa-play';
+                } else {
+                    // Play video
+                    iframe.src = videoUrl.includes('?') ? 
+                        videoUrl + '&autoplay=1' : 
+                        videoUrl + '?autoplay=1';
+                    overlay.querySelector('.mobile-play-btn i').className = 'fas fa-pause';
+                }
+            });
+        });
+
+        // Touch-friendly interactions
+        document.querySelectorAll('.mobile-music-card').forEach(card => {
+            card.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(0.98)';
+            });
+            
+            card.addEventListener('touchend', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
