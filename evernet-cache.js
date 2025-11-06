@@ -45,4 +45,5 @@ window.addEventListener('load', () => {
 // Make function globally available for console use
 window.evernetClearCache = quickCacheBuster;
 
+
 console.log('✅ EVERNET Cache Manager loaded - Use evernetClearCache() to force refresh');
