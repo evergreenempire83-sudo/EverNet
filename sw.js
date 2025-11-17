@@ -1,135 +1,275 @@
-// sw.js - EVERNET Service Worker with Cache Busting
-const APP_VERSION = '1.0.1';
-const CACHE_NAME = `evernet-${APP_VERSION}`;
+// EVERNET Service Worker v1.0.2 - Complete Page Coverage
+const CACHE_NAME = 'evernet-v1.0.2';
+const DYNAMIC_CACHE = 'evernet-dynamic-v1.0.2';
 
-const urlsToCache = [
+// ALL YOUR PAGES AND ASSETS
+const STATIC_ASSETS = [
+  // Main Pages
   '/',
   '/index.html',
+  
+  // Dashboard Section
+  '/dashboard/',
+  '/dashboard/index.html',
+  
+  // About Section
+  '/about/',
+  '/about/index.html',
+  
+  // Authentication Pages
+  '/sign-in/',
+  '/sign-in/index.html',
+  '/sign-up/',
+  '/sign-up/index.html',
+  
+  // Content Pages
+  '/music/',
+  '/music/index.html',
+  '/learn-more/',
+  '/learn-more/index.html',
+  
+  // Legal Pages
+  '/terms-of-service/',
+  '/terms-of-service/index.html',
+  '/privacy-policy/',
+  '/privacy-policy/index.html',
+  '/creator-agreement/',
+  '/creator-agreement/index.html',
+  
+  // Admin Pages
+  '/admin/',
+  '/admin/index.html',
+  
+  // PWA Assets
   '/manifest.json',
+  '/favicon.ico',
   '/icon-192.png',
   '/icon-512.png',
-  '/favicon.ico',
-  '/About Us.html',
-  '/music.html',
-  '/sign-in.html',
-  '/sign-up.html',
-  '/dashboard.html',
-  '/learn more.html',
-  '/Terms of Service.html',
-  '/Privacy policy.html',
-  '/Creator Agreement.html',
-  '/admin.html'
+  
+  // External Dependencies
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
+  'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800;900&display=swap',
+  'https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js',
+  'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js',
+  'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js'
 ];
 
-// Install event - cache all essential files
-self.addEventListener('install', event => {
-  console.log(`🚀 EVERNET Service Worker v${APP_VERSION}: Installing...`);
-  
+// Install event - cache ALL assets
+self.addEventListener('install', (event) => {
+  console.log('🚀 EVERNET Service Worker installing...');
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('📦 EVERNET Service Worker: Caching app shell');
-        return cache.addAll(urlsToCache.map(url => `${url}?v=${APP_VERSION}`));
+      .then((cache) => {
+        console.log('📦 Caching ALL EVERNET pages and assets');
+        return cache.addAll(STATIC_ASSETS.map(url => {
+          // Ensure proper URLs for GitHub Pages
+          return new Request(url, { mode: 'no-cors' });
+        }));
       })
       .then(() => {
-        console.log('✅ EVERNET Service Worker: All files cached successfully');
+        console.log('✅ ALL EVERNET assets cached successfully');
         return self.skipWaiting();
       })
       .catch(error => {
-        console.log('❌ EVERNET Service Worker: Cache failed', error);
+        console.error('❌ Cache installation failed:', error);
       })
   );
 });
 
-// Activate event - clean up old caches
-self.addEventListener('activate', event => {
-  console.log(`🔥 EVERNET Service Worker v${APP_VERSION}: Activated`);
-  
+// Activate event - cleanup old caches
+self.addEventListener('activate', (event) => {
+  console.log('🔄 EVERNET Service Worker activating...');
   event.waitUntil(
-    caches.keys().then(cacheNames => {
+    caches.keys().then((cacheNames) => {
       return Promise.all(
-        cacheNames.map(cache => {
-          if (!cache.includes(APP_VERSION)) {
-            console.log('🗑️ EVERNET Service Worker: Removing old cache', cache);
-            return caches.delete(cache);
+        cacheNames.map((cacheName) => {
+          // Delete any cache that's not current
+          if (!cacheName.startsWith('evernet-v1.0.2') && !cacheName.startsWith('evernet-dynamic-v1.0.2')) {
+            console.log('🗑️ Deleting old cache:', cacheName);
+            return caches.delete(cacheName);
           }
         })
       );
-    })
-    .then(() => {
-      console.log('✅ EVERNET Service Worker: Ready to handle fetches');
+    }).then(() => {
+      console.log('✅ EVERNET Service Worker fully activated');
       return self.clients.claim();
     })
   );
 });
 
-// Fetch event with cache busting
-self.addEventListener('fetch', event => {
-  if (event.request.method !== 'GET') return;
+// Enhanced Fetch Strategy - Smart Caching
+self.addEventListener('fetch', (event) => {
+  const request = event.request;
   
+  // Skip non-GET requests and browser extensions
+  if (request.method !== 'GET' || 
+      request.url.startsWith('chrome-extension://') ||
+      request.url.includes('browser-sync') ||
+      request.url.includes('live-reload')) {
+    return;
+  }
+
   event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        const fetchRequest = event.request.clone();
-        
-        // If cached version exists, return it but update in background
-        if (response) {
-          console.log('📂 EVERNET Service Worker: Serving from cache', event.request.url);
-          
+    caches.match(request)
+      .then((cachedResponse) => {
+        // Always return from cache first for instant loading
+        if (cachedResponse) {
           // Update cache in background
-          fetch(fetchRequest).then(networkResponse => {
-            if (networkResponse && networkResponse.status === 200) {
+          fetchAndCache(request);
+          return cachedResponse;
+        }
+
+        // If not in cache, fetch from network
+        return fetch(request)
+          .then((networkResponse) => {
+            // Cache successful responses
+            if (networkResponse.status === 200) {
               const responseToCache = networkResponse.clone();
-              caches.open(CACHE_NAME)
-                .then(cache => {
-                  cache.put(event.request, responseToCache);
-                  console.log('🔄 EVERNET Service Worker: Cache updated', event.request.url);
+              caches.open(DYNAMIC_CACHE)
+                .then((cache) => {
+                  cache.put(request, responseToCache);
                 });
             }
-          }).catch(() => {
-            console.log('⚠️ EVERNET Service Worker: Background update failed');
-          });
-          
-          return response;
-        }
-        
-        // Otherwise fetch from network
-        console.log('🌐 EVERNET Service Worker: Fetching from network', event.request.url);
-        return fetch(event.request)
-          .then(networkResponse => {
-            if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
-              return networkResponse;
-            }
-            
-            const responseToCache = networkResponse.clone();
-            caches.open(CACHE_NAME)
-              .then(cache => {
-                cache.put(event.request, responseToCache);
-                console.log('💾 EVERNET Service Worker: Cached new resource', event.request.url);
-              });
-            
             return networkResponse;
           })
-          .catch(error => {
-            console.log('❌ EVERNET Service Worker: Network failed', error);
-            return new Response('EVERNET is offline. Please check your connection.', {
-              status: 408,
-              headers: { 'Content-Type': 'text/plain' }
+          .catch(() => {
+            // If both cache and network fail, serve offline page
+            if (request.destination === 'document') {
+              return caches.match('/');
+            }
+            return new Response('EVERNET is offline', {
+              status: 503,
+              statusText: 'Service Unavailable'
             });
           });
       })
   );
 });
 
-// Handle version updates
-self.addEventListener('message', event => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
-  
-  if (event.data && event.data.type === 'GET_VERSION') {
-    event.ports[0].postMessage(APP_VERSION);
+// Helper function to fetch and cache in background
+function fetchAndCache(request) {
+  fetch(request)
+    .then((response) => {
+      if (response.status === 200) {
+        const responseClone = response.clone();
+        caches.open(DYNAMIC_CACHE)
+          .then((cache) => {
+            cache.put(request, responseClone);
+          });
+      }
+    })
+    .catch(() => {
+      // Silent fail - we already have cached version
+    });
+}
+
+// Background Sync for offline actions
+self.addEventListener('sync', (event) => {
+  if (event.tag === 'background-sync') {
+    console.log('🔄 Background sync triggered');
+    event.waitUntil(doBackgroundSync());
   }
 });
 
-console.log(`👋 EVERNET Service Worker v${APP_VERSION}: Loaded successfully`);
+async function doBackgroundSync() {
+  // Handle any pending background tasks
+  const clients = await self.clients.matchAll();
+  clients.forEach(client => {
+    client.postMessage({
+      type: 'BACKGROUND_SYNC_COMPLETE',
+      timestamp: new Date().toISOString()
+    });
+  });
+}
+
+// Listen for messages from main thread
+self.addEventListener('message', (event) => {
+  const data = event.data;
+  
+  switch (data.type) {
+    case 'SKIP_WAITING':
+      self.skipWaiting();
+      break;
+      
+    case 'CLEAR_CACHE':
+      caches.keys().then((cacheNames) => {
+        return Promise.all(
+          cacheNames.map((cacheName) => {
+            return caches.delete(cacheName);
+          })
+        );
+      }).then(() => {
+        event.ports[0].postMessage({ success: true });
+      });
+      break;
+      
+    case 'GET_CACHE_STATUS':
+      caches.keys().then((cacheNames) => {
+        const status = {
+          totalCaches: cacheNames.length,
+          cacheNames: cacheNames,
+          version: '1.0.2'
+        };
+        event.ports[0].postMessage(status);
+      });
+      break;
+      
+    case 'CHECK_FOR_UPDATES':
+      // Force update check
+      self.registration.update();
+      event.ports[0].postMessage({ checking: true });
+      break;
+  }
+});
+
+// Handle push notifications
+self.addEventListener('push', (event) => {
+  if (!event.data) return;
+  
+  const data = event.data.json();
+  const options = {
+    body: data.body || 'New update from EVERNET',
+    icon: '/icon-192.png',
+    badge: '/icon-192.png',
+    vibrate: [100, 50, 100],
+    data: {
+      url: data.url || '/'
+    },
+    actions: [
+      {
+        action: 'open',
+        title: 'Open EVERNET'
+      },
+      {
+        action: 'close',
+        title: 'Close'
+      }
+    ]
+  };
+  
+  event.waitUntil(
+    self.registration.showNotification(data.title || 'EVERNET', options)
+  );
+});
+
+// Handle notification clicks
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  
+  if (event.action === 'open') {
+    event.waitUntil(
+      clients.matchAll({ type: 'window' }).then((clientList) => {
+        for (const client of clientList) {
+          if (client.url === '/' && 'focus' in client) {
+            return client.focus();
+          }
+        }
+        if (clients.openWindow) {
+          return clients.openWindow('/');
+        }
+      })
+    );
+  }
+});
+
+console.log('🎯 EVERNET Service Worker loaded - All pages covered');
