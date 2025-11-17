@@ -9,10 +9,10 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="EVERNET">
-  <link rel="apple-touch-icon" href="/icon-192.png?v=1.0.2">
+  <link rel="apple-touch-icon" href="/icon-192.png?v=1.0.4">
 
   <!-- Updated Manifest with Cache Busting -->
-  <link rel="manifest" href="/manifest.json?v=1.0.2">
+  <link rel="manifest" href="/manifest.json?v=1.0.4">
 
   <!-- Theme Color for Different Browsers -->
   <meta name="theme-color" content="#0074E4" media="(prefers-color-scheme: light)">
@@ -23,14 +23,14 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <meta name="version" content="1.0.2">
+  <meta name="version" content="1.0.4">
   <meta name="build-date" content="2024-01-15">
   
   <title>EVERNET - Music Monetization for Creators</title>
   
   <!-- Favicon with Cache Busting -->
-  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=1.0.2">
-  <link rel="apple-touch-icon" href="/icon-192.png?v=1.0.2">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=1.0.4">
+  <link rel="apple-touch-icon" href="/icon-192.png?v=1.0.4">
   
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
   <!-- Firebase SDK -->
@@ -71,6 +71,114 @@
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
+    }
+
+    /* Enhanced PWA Install Banner */
+    .pwa-install-banner {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #0074E4, #00a8ff);
+      color: white;
+      padding: 20px 25px;
+      border-radius: 15px;
+      box-shadow: 0 10px 40px rgba(0, 116, 228, 0.4);
+      z-index: 10000;
+      display: none;
+      align-items: center;
+      gap: 15px;
+      max-width: 90%;
+      width: 450px;
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      animation: slideUpBanner 0.5s ease-out;
+    }
+
+    @keyframes slideUpBanner {
+      from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(100px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+
+    .pwa-install-banner.show {
+      display: flex;
+    }
+
+    .pwa-icon {
+      font-size: 2em;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 10px;
+      border-radius: 12px;
+    }
+
+    .pwa-content {
+      flex: 1;
+    }
+
+    .pwa-title {
+      font-weight: bold;
+      font-size: 1.1em;
+      margin-bottom: 5px;
+    }
+
+    .pwa-description {
+      font-size: 0.9em;
+      opacity: 0.9;
+    }
+
+    .pwa-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .pwa-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9em;
+    }
+
+    .pwa-btn.install {
+      background: white;
+      color: #0074E4;
+    }
+
+    .pwa-btn.install:hover {
+      background: #f8fafc;
+      transform: translateY(-2px);
+    }
+
+    .pwa-btn.dismiss {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+
+    .pwa-btn.dismiss:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .pwa-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.2em;
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 50%;
+      transition: background 0.3s ease;
+    }
+
+    .pwa-close:hover {
+      background: rgba(255, 255, 255, 0.2);
     }
 
     /* Enhanced Header Styles */
@@ -347,6 +455,12 @@
         padding: 10px 16px;
         font-size: 0.85em;
       }
+
+      /* PWA Banner Desktop */
+      .pwa-install-banner {
+        width: 500px;
+        padding: 25px 30px;
+      }
     }
 
     /* Large Desktop */
@@ -377,6 +491,20 @@
 
       .nav-links {
         width: 90%;
+      }
+
+      .pwa-install-banner {
+        padding: 15px 20px;
+      }
+
+      .pwa-buttons {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .pwa-btn {
+        padding: 8px 16px;
+        font-size: 0.85em;
       }
     }
 
@@ -1227,6 +1355,24 @@
 </head>
 
 <body>
+  <!-- PWA Install Banner -->
+  <div id="pwaInstallBanner" class="pwa-install-banner">
+    <div class="pwa-icon">
+      <i class="fas fa-download"></i>
+    </div>
+    <div class="pwa-content">
+      <div class="pwa-title">Install EVERNET App</div>
+      <div class="pwa-description">Get the full app experience with offline access and faster loading</div>
+    </div>
+    <div class="pwa-buttons">
+      <button class="pwa-btn install" onclick="installPWA()">Install</button>
+      <button class="pwa-btn dismiss" onclick="dismissPWA()">Later</button>
+    </div>
+    <button class="pwa-close" onclick="dismissPWA()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
   <!-- Main Content -->
   <div id="main-content">
     <!-- Animated Background -->
@@ -1472,10 +1618,10 @@
   <!-- EVERNET CACHE SYSTEM -->
   <!-- ==================== -->
   <script>
-    // EVERNET Advanced Cache Manager v1.0.2
+    // EVERNET Advanced Cache Manager v1.0.4
     class EverNetCacheManager {
       constructor() {
-        this.currentVersion = '1.0.3';
+        this.currentVersion = '1.0.4';
         this.storageKey = 'evernet-cache-version';
         this.lastUpdateKey = 'evernet-last-update';
         this.updateInterval = 1 * 60 * 60 * 1000; // 1 hour check
@@ -1694,7 +1840,7 @@
     // Register Service Worker with version-based cache busting
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
-        const version = '1.0.2';
+        const version = '1.0.4';
         navigator.serviceWorker.register('/sw.js?v=' + version)
           .then(function(registration) {
             console.log('🎉 EVERNET ServiceWorker registered successfully with scope: ', registration.scope);
@@ -1719,87 +1865,107 @@
     }
   </script>
 
-  <!-- PWA Install Prompt Handler -->
+  <!-- Enhanced PWA Install Prompt Handler -->
   <script>
-    // PWA Install Prompt
+    // Enhanced PWA Install Prompt
     let deferredPrompt;
-    let installButton;
+    let installBanner;
 
     window.addEventListener('beforeinstallprompt', (e) => {
-      console.log('📱 PWA Install Prompt triggered');
-      // Prevent the mini-infobar from appearing on mobile
-      e.preventDefault();
-      // Stash the event so it can be triggered later
-      deferredPrompt = e;
-      
-      // Show install button
-      showInstallPromo();
+        console.log('📱 PWA Install Prompt triggered');
+        // Prevent the mini-infobar from appearing on mobile
+        e.preventDefault();
+        // Stash the event so it can be triggered later
+        deferredPrompt = e;
+        
+        // Show our custom install banner after a short delay
+        setTimeout(() => {
+            showInstallBanner();
+        }, 3000);
     });
 
-    function showInstallPromo() {
-      // Check if we're not already in standalone mode
-      if (!window.matchMedia('(display-mode: standalone)').matches) {
-        installButton = document.createElement('button');
-        installButton.innerHTML = '📱 Install EVERNET App';
-        installButton.style.cssText = `
-          position: fixed;
-          bottom: 20px;
-          right: 20px;
-          background: linear-gradient(135deg, #0074E4, #00a8ff);
-          color: white;
-          border: none;
-          padding: 12px 20px;
-          border-radius: 25px;
-          font-weight: bold;
-          cursor: pointer;
-          z-index: 10000;
-          box-shadow: 0 4px 15px rgba(0, 116, 228, 0.3);
-          font-size: 14px;
-          transition: all 0.3s ease;
-        `;
-        installButton.onclick = installPWA;
-        installButton.onmouseenter = () => installButton.style.transform = 'scale(1.05)';
-        installButton.onmouseleave = () => installButton.style.transform = 'scale(1)';
-        document.body.appendChild(installButton);
-        
-        console.log('📱 Install button added to page');
-      }
+    function showInstallBanner() {
+        // Check if we're not already in standalone mode and banner not already dismissed
+        if (!window.matchMedia('(display-mode: standalone)').matches && 
+            !localStorage.getItem('evernet-pwa-dismissed')) {
+            
+            // Create prominent install banner
+            installBanner = document.getElementById('pwaInstallBanner');
+            installBanner.classList.add('show');
+            
+            console.log('📱 PWA Install Banner displayed');
+        }
     }
 
     async function installPWA() {
-      if (deferredPrompt) {
-        console.log('📱 Installing EVERNET PWA...');
-        // Show the install prompt
-        deferredPrompt.prompt();
-        
-        // Wait for the user to respond to the prompt
-        const { outcome } = await deferredPrompt.userChoice;
-        
-        console.log(`📱 User response: ${outcome}`);
-        
-        if (outcome === 'accepted') {
-          console.log('✅ EVERNET PWA installed successfully!');
-          if (installButton) {
-            installButton.remove();
-          }
+        if (deferredPrompt) {
+            console.log('📱 Installing EVERNET PWA...');
+            
+            // Show loading state
+            const installBtn = document.querySelector('.pwa-btn.install');
+            installBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Installing...';
+            installBtn.disabled = true;
+            
+            // Show the install prompt
+            deferredPrompt.prompt();
+            
+            // Wait for the user to respond to the prompt
+            const { outcome } = await deferredPrompt.userChoice;
+            
+            console.log(`📱 User response: ${outcome}`);
+            
+            if (outcome === 'accepted') {
+                console.log('✅ EVERNET PWA installed successfully!');
+                showNotification('EVERNET app installed successfully!', 'success');
+                installBanner.classList.remove('show');
+            } else {
+                // Reset button if user cancels
+                installBtn.innerHTML = 'Install';
+                installBtn.disabled = false;
+            }
+            
+            // Clear the saved prompt since it can't be used again
+            deferredPrompt = null;
         }
-        
-        // Clear the saved prompt since it can't be used again
-        deferredPrompt = null;
-      }
+    }
+
+    function dismissPWA() {
+        if (installBanner) {
+            installBanner.classList.remove('show');
+            // Remember dismissal for 7 days
+            localStorage.setItem('evernet-pwa-dismissed', 'true');
+            setTimeout(() => {
+                localStorage.removeItem('evernet-pwa-dismissed');
+            }, 7 * 24 * 60 * 60 * 1000); // 7 days
+        }
     }
 
     window.addEventListener('appinstalled', (evt) => {
-      console.log('EVERNET was successfully installed as PWA!');
-      if (installButton) {
-        installButton.remove();
-      }
+        console.log('EVERNET was successfully installed as PWA!');
+        if (installBanner) {
+            installBanner.classList.remove('show');
+        }
     });
 
     // Check if already installed
     if (window.matchMedia('(display-mode: standalone)').matches) {
-      console.log(' EVERNET is running as installed PWA');
+        console.log('📱 EVERNET is running as installed PWA');
     }
+
+    // Auto-show banner on page load if conditions are met
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if we should show the banner (not installed, not dismissed recently)
+        if (!window.matchMedia('(display-mode: standalone)').matches && 
+            !localStorage.getItem('evernet-pwa-dismissed')) {
+            
+            // Show banner after 5 seconds
+            setTimeout(() => {
+                if (deferredPrompt) {
+                    showInstallBanner();
+                }
+            }, 5000);
+        }
+    });
   </script>
 
   <script>
@@ -1953,4 +2119,3 @@
   </script>
 </body>
   </html>
-
