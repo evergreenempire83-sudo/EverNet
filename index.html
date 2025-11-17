@@ -1247,10 +1247,10 @@
         <div class="nav-links" id="navMenu">
           <button class="close-menu" onclick="closeMenu()"><i class="fas fa-times"></i></button>
           <a href="#" onclick="closeMenu()"><i class="fas fa-home"></i>Home</a>
-          <a href="About Us.html" onclick="closeMenu()"><i class="fas fa-info-circle"></i>About</a>
-          <a href="music.html" onclick="closeMenu()"><i class="fas fa-music"></i>Music Library</a>
-          <a href="sign-in.html" id="loginLink"><i class="fas fa-sign-in-alt"></i>Login</a>
-          <a href="sign-up.html" id="signupLink"><i class="fas fa-user-plus"></i>Creator Signup</a>
+          <a href="About/" onclick="closeMenu()"><i class="fas fa-info-circle"></i>About</a>
+          <a href="music/" onclick="closeMenu()"><i class="fas fa-music"></i>Music Library</a>
+          <a href="sign-in/" id="loginLink"><i class="fas fa-sign-in-alt"></i>Login</a>
+          <a href="sign-up/" id="signupLink"><i class="fas fa-user-plus"></i>Creator Signup</a>
           <a href="#contact" onclick="closeMenu()"><i class="fas fa-envelope"></i>Contact</a>
           <div class="user-info" id="userInfo" style="display: none;">
             <span class="user-email" id="userEmail"></span>
@@ -1467,7 +1467,7 @@
     // EVERNET Cache Management System
     class EverNetCacheManager {
       constructor() {
-        this.currentVersion = '1.0.1';
+        this.currentVersion = '1.0.2';
         this.storageKey = 'evernet-version';
         this.init();
       }
@@ -1882,3 +1882,4 @@
 </body>
 
 </html>
+
