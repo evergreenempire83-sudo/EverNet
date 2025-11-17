@@ -355,10 +355,10 @@
     </button>
 
     <div class="links">
-      <a href="forgot-password.html">Forgot your password?</a>
+      <a href="forgot-password/">Forgot your password?</a>
       <br>
       <span style="color: #64748b;">Don't have an account? </span>
-      <a href="sign-up.html">Sign up</a>
+      <a href="sign-up/">Sign up</a>
     </div>
   </div>
 
@@ -424,12 +424,12 @@
           if (userData.role === 'admin') {
             showNotification('Welcome back, Admin!', 'success');
             setTimeout(() => {
-              window.location.href = 'admin-portal.html';
+              window.location.href = 'admin-portal/';
             }, 1500);
           } else {
             showNotification('Welcome back!', 'success');
             setTimeout(() => {
-              window.location.href = 'dashboard.html';
+              window.location.href = 'dashboard/';
             }, 1500);
           }
         } else {
@@ -443,7 +443,7 @@
           
           // Redirect to sign-up page after a short delay
           setTimeout(() => {
-            window.location.href = 'sign-up.html';
+            window.location.href = 'sign-up/';
           }, 2000);
         }
         
@@ -596,3 +596,4 @@
   </script>
 </body>
 </html>
+
