@@ -1,24 +1,27 @@
 {
-  "name": "EVERNET",
-  "short_name": "EverNet",
-  "description": "Turn your views into Royalty",
-  "start_url": "/",
+  "name": "EVERNET - Music Monetization",
+  "short_name": "EVERNET",
+  "description": "Turn Every View Into Revenue - Premium music monetization for creators",
+  "start_url": "/?source=pwa",
   "display": "standalone",
   "background_color": "#001f3f",
   "theme_color": "#0074E4",
-  "orientation": "portrait",
+  "orientation": "portrait-primary",
   "scope": "/",
+  "lang": "en",
   "categories": ["business", "entertainment", "music"],
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "/icon-192.png?v=1.0.2",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "icon-512.png",
+      "src": "/icon-512.png?v=1.0.2",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
