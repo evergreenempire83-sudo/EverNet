@@ -4,27 +4,33 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <!-- CACHE BUSTING META TAGS ADDED -->
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <meta name="version" content="1.0.1">
-  <meta name="build-date" content="2024-01-15">
-  <!-- END CACHE BUSTING META TAGS -->
-  
-  <title>EVERNET - Music Monetization for Creators</title>
-  
-  <!-- PWA Manifest -->
-  <link rel="manifest" href="/manifest.json?v=1.0.1">
-  <meta name="theme-color" content="#0074E4">
+  <!-- Modern PWA Meta Tags -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="EVERNET">
+  <link rel="apple-touch-icon" href="/icon-192.png?v=1.0.2">
+
+  <!-- Updated Manifest with Cache Busting -->
+  <link rel="manifest" href="/manifest.json?v=1.0.2">
+
+  <!-- Theme Color for Different Browsers -->
+  <meta name="theme-color" content="#0074E4" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#001f3f" media="(prefers-color-scheme: dark)">
+  <meta name="msapplication-TileColor" content="#0074E4">
+
+  <!-- Cache Control Headers -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="version" content="1.0.2">
+  <meta name="build-date" content="2024-01-15">
   
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="favicon.ico?v=1.0.1">
-  <link rel="apple-touch-icon" href="icon-192.png?v=1.0.1">
+  <title>EVERNET - Music Monetization for Creators</title>
+  
+  <!-- Favicon with Cache Busting -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=1.0.2">
+  <link rel="apple-touch-icon" href="/icon-192.png?v=1.0.2">
   
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
   <!-- Firebase SDK -->
@@ -1240,17 +1246,17 @@
     <!-- Enhanced Mobile-First Header -->
     <header>
       <button class="menu-icon" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
-      <a href="#" class="brand">
+      <a href="/" class="brand">
         EVERNET
       </a>
       <nav>
         <div class="nav-links" id="navMenu">
           <button class="close-menu" onclick="closeMenu()"><i class="fas fa-times"></i></button>
-          <a href="#" onclick="closeMenu()"><i class="fas fa-home"></i>Home</a>
-          <a href="About/" onclick="closeMenu()"><i class="fas fa-info-circle"></i>About</a>
-          <a href="music/" onclick="closeMenu()"><i class="fas fa-music"></i>Music Library</a>
-          <a href="sign-in/" id="loginLink"><i class="fas fa-sign-in-alt"></i>Login</a>
-          <a href="sign-up/" id="signupLink"><i class="fas fa-user-plus"></i>Creator Signup</a>
+          <a href="/" onclick="closeMenu()"><i class="fas fa-home"></i>Home</a>
+          <a href="/about/" onclick="closeMenu()"><i class="fas fa-info-circle"></i>About</a>
+          <a href="/music/" onclick="closeMenu()"><i class="fas fa-music"></i>Music Library</a>
+          <a href="/sign-in/" id="loginLink"><i class="fas fa-sign-in-alt"></i>Login</a>
+          <a href="/sign-up/" id="signupLink"><i class="fas fa-user-plus"></i>Creator Signup</a>
           <a href="#contact" onclick="closeMenu()"><i class="fas fa-envelope"></i>Contact</a>
           <div class="user-info" id="userInfo" style="display: none;">
             <span class="user-email" id="userEmail"></span>
@@ -1266,8 +1272,8 @@
         <h1>Turn Every View Into Revenue</h1>
         <p>EVERNET transforms your YouTube Shorts into revenue-earning assets with exclusive music and video content. No copyright issues. No demonetization. Just clean earnings on every view.</p>
         <div id="heroButtons">
-          <a href="sign-up.html" class="btn main">Start Earning Today</a>
-          <a href="learn more.html" class="btn learn-more">Discover How It Works</a>
+          <a href="/sign-up/" class="btn main">Start Earning Today</a>
+          <a href="/learn-more/" class="btn learn-more">Discover How It Works</a>
         </div>
         
         <!-- Stats Preview for Logged-in Users -->
@@ -1290,8 +1296,8 @@
         </div>
         
         <div id="dashboardButton" style="display: none; margin-top: 30px;">
-          <a href="dashboard.html" class="btn success">Go to Dashboard</a>
-          <a href="admin.html" class="btn main" id="adminButton" style="display: none;">Admin Portal</a>
+          <a href="/dashboard/" class="btn success">Go to Dashboard</a>
+          <a href="/admin/" class="btn main" id="adminButton" style="display: none;">Admin Portal</a>
         </div>
       </div>
     </section>
@@ -1398,7 +1404,7 @@
       </div>
       
       <div style="margin-top: 40px;">
-        <a href="sign up.html" class="btn main">Access Full Premium Library</a>
+        <a href="/sign-up/" class="btn main">Access Full Premium Library</a>
       </div>
     </section>
 
@@ -1435,9 +1441,9 @@
     <footer id="contact">
       <p>Contact our dedicated support team: <a href="mailto:support@evergreenempireltd.com">support@evergreenempireltd.com</a></p>
       <p>
-        <a href="Terms of Service.html">Terms & Conditions</a> | 
-        <a href="Privacy policy.html">Privacy Policy</a> | 
-        <a href="Creator Agreement.html">Creator Agreement</a>
+        <a href="/terms-of-service/">Terms & Conditions</a> | 
+        <a href="/privacy-policy/">Privacy Policy</a> | 
+        <a href="/creator-agreement/">Creator Agreement</a>
       </p>
       <p>©2025 EverGreen Empire Ltd.</p>
     </footer>
@@ -1462,84 +1468,99 @@
     const db = firebase.firestore();
   </script>
 
-  <!-- CACHE BUSTING SYSTEM ADDED -->
+  <!-- ==================== -->
+  <!-- EVERNET CACHE SYSTEM -->
+  <!-- ==================== -->
   <script>
-    // EVERNET Cache Management System
+    // EVERNET Advanced Cache Manager v1.0.2
     class EverNetCacheManager {
       constructor() {
         this.currentVersion = '1.0.2';
-        this.storageKey = 'evernet-version';
+        this.storageKey = 'evernet-cache-version';
+        this.lastUpdateKey = 'evernet-last-update';
+        this.updateInterval = 1 * 60 * 60 * 1000; // 1 hour check
         this.init();
       }
       
-      init() {
+      async init() {
         console.log(`🚀 EVERNET Cache Manager v${this.currentVersion} initialized`);
-        this.checkForUpdates();
+        await this.checkForUpdates();
+        this.setupAutoUpdate();
         this.addVersionToResources();
+        this.setupServiceWorkerMessaging();
       }
       
-      // Check if update is needed
       async checkForUpdates() {
         const storedVersion = localStorage.getItem(this.storageKey);
+        const lastUpdate = localStorage.getItem(this.lastUpdateKey);
+        const now = Date.now();
         
-        if (storedVersion !== this.currentVersion) {
-          console.log(`🔄 EVERNET: New version detected (${storedVersion} → ${this.currentVersion})`);
-          
-          // Show update notification
-          this.showUpdateNotification();
-          
-          // Clear all caches
-          await this.clearAllCaches();
-          localStorage.setItem(this.storageKey, this.currentVersion);
-          
-          // Force reload if user is online
-          if (navigator.onLine) {
-            setTimeout(() => {
-              window.location.reload(true);
-            }, 2000);
-          }
-          
-          return true;
+        // Force update if more than 24 hours passed
+        const shouldForceUpdate = lastUpdate && (now - parseInt(lastUpdate)) > 24 * 60 * 60 * 1000;
+        
+        if (storedVersion !== this.currentVersion || shouldForceUpdate) {
+          console.log(`🔄 EVERNET: Update detected (${storedVersion} → ${this.currentVersion})`);
+          await this.performUpdate();
+        } else {
+          console.log(`✅ EVERNET: Running latest version (${this.currentVersion})`);
         }
-        
-        console.log(`✅ EVERNET: Running latest version (${this.currentVersion})`);
-        return false;
       }
       
-      // Clear all caches
+      async performUpdate() {
+        // Show update notification
+        this.showUpdateNotification();
+        
+        // Clear all caches
+        await this.clearAllCaches();
+        
+        // Update version info
+        localStorage.setItem(this.storageKey, this.currentVersion);
+        localStorage.setItem(this.lastUpdateKey, Date.now().toString());
+        
+        // Force service worker update
+        await this.updateServiceWorker();
+        
+        // Reload if online
+        if (navigator.onLine) {
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        }
+      }
+      
       async clearAllCaches() {
         try {
           console.log('🗑️ EVERNET: Clearing all caches...');
           
-          // Clear service worker cache
+          // Clear service worker caches
           if ('caches' in window) {
             const cacheNames = await caches.keys();
             await Promise.all(
               cacheNames.map(cacheName => {
-                console.log(`🗑️ EVERNET: Deleting cache ${cacheName}`);
+                console.log(`🗑️ Deleting cache: ${cacheName}`);
                 return caches.delete(cacheName);
               })
             );
           }
           
-          // Clear localStorage (except auth data)
+          // Clear localStorage (keep auth data)
           this.clearLocalStorage();
           
           // Clear sessionStorage
           sessionStorage.clear();
           
-          console.log('✅ EVERNET: All caches cleared successfully');
+          console.log('✅ EVERNET: All caches cleared');
           
         } catch (error) {
           console.error('❌ EVERNET: Error clearing caches', error);
         }
       }
       
-      // Clear localStorage but keep auth data
       clearLocalStorage() {
         const keepKeys = [
           'firebase:authUser:',
-          'evernet-version',
+          'evernet-cache-version',
+          'evernet-last-update',
           'user-preference-'
         ];
         
@@ -1551,22 +1572,47 @@
         });
       }
       
-      // Add version parameter to static resources
+      async updateServiceWorker() {
+        if ('serviceWorker' in navigator) {
+          const registration = await navigator.serviceWorker.ready;
+          
+          // Send skip waiting message
+          if (registration.waiting) {
+            registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+          }
+          
+          // Force update
+          await registration.update();
+        }
+      }
+      
+      setupAutoUpdate() {
+        // Check for updates periodically
+        setInterval(() => {
+          this.checkForUpdates();
+        }, this.updateInterval);
+        
+        // Check when coming online
+        window.addEventListener('online', () => {
+          this.checkForUpdates();
+        });
+      }
+      
       addVersionToResources() {
         const version = this.currentVersion;
         
-        // Add version to CSS links
-        const links = document.querySelectorAll('link[rel="stylesheet"]');
-        links.forEach(link => {
+        // Add version to local CSS
+        const localLinks = document.querySelectorAll('link[rel="stylesheet"]');
+        localLinks.forEach(link => {
           const href = link.getAttribute('href');
           if (href && !href.includes('?') && !href.startsWith('http')) {
             link.href = `${href}?v=${version}`;
           }
         });
         
-        // Add version to local script tags
-        const scripts = document.querySelectorAll('script[src]');
-        scripts.forEach(script => {
+        // Add version to local scripts
+        const localScripts = document.querySelectorAll('script[src]');
+        localScripts.forEach(script => {
           const src = script.getAttribute('src');
           if (src && !src.includes('?') && !src.startsWith('http')) {
             script.src = `${src}?v=${version}`;
@@ -1574,8 +1620,28 @@
         });
       }
       
-      // Show update notification
-      showUpdateNotification() {
+      setupServiceWorkerMessaging() {
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.addEventListener('message', (event) => {
+            const { type, data } = event.data;
+            
+            switch (type) {
+              case 'UPDATE_AVAILABLE':
+                this.showUpdateNotification('New update available! Refreshing...');
+                setTimeout(() => {
+                  window.location.reload();
+                }, 2000);
+                break;
+                
+              case 'BACKGROUND_SYNC_COMPLETE':
+                console.log('Background sync completed:', data);
+                break;
+            }
+          });
+        }
+      }
+      
+      showUpdateNotification(message = 'EVERNET Updated! Refreshing for latest features...') {
         const notification = document.createElement('div');
         notification.innerHTML = `
           <div style="
@@ -1590,8 +1656,10 @@
             font-weight: bold;
             z-index: 10001;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            font-family: 'Poppins', sans-serif;
           ">
-             EVERNET Updated! Refreshing for latest features...
+            <i class="fas fa-sync-alt" style="margin-right: 8px;"></i>
+            ${message}
           </div>
         `;
         document.body.appendChild(notification);
@@ -1601,28 +1669,32 @@
         }, 5000);
       }
       
-      // Force clear cache (call this after deployments)
+      // Public method to force cache clear
       async forceClearCache() {
         console.log('🔄 EVERNET: Manual cache clearance triggered');
         await this.clearAllCaches();
         localStorage.setItem(this.storageKey, '');
-        window.location.reload(true);
+        this.showUpdateNotification('Cache cleared! Refreshing...');
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       }
     }
 
     // Initialize cache manager
     const everNetCache = new EverNetCacheManager();
-    
-    // Make it globally available for console use
+
+    // Make it globally available
     window.evernetClearCache = () => everNetCache.forceClearCache();
+    window.evernetVersion = everNetCache.currentVersion;
   </script>
 
-  <!-- Service Worker Registration for PWA with Cache Busting -->
+  <!-- Service Worker Registration -->
   <script>
     // Register Service Worker with version-based cache busting
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
-        const version = '1.0.1';
+        const version = '1.0.2';
         navigator.serviceWorker.register('/sw.js?v=' + version)
           .then(function(registration) {
             console.log('🎉 EVERNET ServiceWorker registered successfully with scope: ', registration.scope);
@@ -1823,7 +1895,7 @@
         await auth.signOut();
         showNotification('Successfully logged out', 'success');
         setTimeout(() => {
-          window.location.href = 'index.html';
+          window.location.href = '/';
         }, 1000);
       } catch (error) {
         showNotification('Error logging out', 'error');
@@ -1880,6 +1952,4 @@
     });
   </script>
 </body>
-
-</html>
-
+  </html>
