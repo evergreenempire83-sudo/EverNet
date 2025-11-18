@@ -149,6 +149,10 @@
             font-weight: 600;
             box-shadow: var(--shadow);
             transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .btn-dashboard:hover {
@@ -552,7 +556,7 @@
                 <span>Creator Chat</span>
             </a>
             <div class="user-info">
-                <a href="dashboard/" class="btn btn-dashboard">
+                <a href="/dashboard/" class="btn-dashboard">
                     <i class="fas fa-tachometer-alt"></i> <span>Dashboard</span>
                 </a>
                 <div class="user-avatar" id="userAvatar">C</div>
@@ -713,7 +717,7 @@
 
         // Redirect to login page
         function redirectToLogin() {
-            window.location.href = 'dashboard.html';
+            window.location.href = '/sign-in/';
         }
 
         // Initialize chat functionality
@@ -1014,4 +1018,3 @@
     </script>
 </body>
 </html>
-
