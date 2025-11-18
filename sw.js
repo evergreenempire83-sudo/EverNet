@@ -1,6 +1,6 @@
 // EVERNET Service Worker v1.0.2 - Complete Page Coverage
-const CACHE_NAME = 'evernet-v1.0.4';
-const DYNAMIC_CACHE = 'evernet-dynamic-v1.0.4';
+const CACHE_NAME = 'evernet-v1.0.5';
+const DYNAMIC_CACHE = 'evernet-dynamic-v1.0.5';
 
 // ALL YOUR PAGES AND ASSETS
 const STATIC_ASSETS = [
@@ -273,5 +273,6 @@ self.addEventListener('notificationclick', (event) => {
 });
 
 console.log('🎯 EVERNET Service Worker loaded - All pages covered');
+
 
 
