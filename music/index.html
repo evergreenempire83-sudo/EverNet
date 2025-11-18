@@ -4,8 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EVERNET Music Library - Premium Soundtracks for Creators</title>
+    
+    <!-- ADDED PWA META TAGS FROM SECOND PORTAL -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="version" content="1.0.1">
+    <link rel="manifest" href="/manifest.json?v=1.0.1">
+    <meta name="theme-color" content="#001f3f">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="EVERNET Music">
+    <link rel="icon" type="image/x-icon" href="favicon.ico?v=1.0.1">
+    <link rel="apple-touch-icon" href="icon-192.png?v=1.0.1">
+    <!-- END PWA META TAGS -->
+    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase SDK ADDED FROM SECOND PORTAL -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
     <style>
         :root {
             --navy: #001f3f;
@@ -38,16 +60,16 @@
             line-height: 1.6;
             overflow-x: hidden;
             min-height: 100vh;
+            /* PWA Fullscreen Support ADDED FROM SECOND PORTAL */
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
 
-        /* Mobile-First Container */
-        .container {
-            width: 100%;
-            max-width: 100%;
-            padding: 0;
-        }
-
-        /* Mobile Header */
+        /* IMPROVED HEADER FROM SECOND PORTAL */
         .mobile-header {
             background: var(--gradient);
             color: var(--white);
@@ -56,6 +78,11 @@
             top: 0;
             z-index: 100;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(20px);
+            /* PWA Safe Area Support */
+            padding-top: max(15px, env(safe-area-inset-top));
+            padding-left: calc(20px + env(safe-area-inset-left));
+            padding-right: calc(20px + env(safe-area-inset-right));
         }
 
         .header-top {
@@ -71,6 +98,17 @@
             font-weight: 900;
             letter-spacing: 1px;
             text-transform: uppercase;
+            background: linear-gradient(135deg, var(--white) 0%, rgba(255,255,255,0.9) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .brand:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.1);
         }
 
         .mobile-nav {
@@ -97,12 +135,56 @@
 
         .mobile-nav-btn:hover {
             background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
         }
 
         .header-subtitle {
             font-size: 1em;
             color: rgba(255, 255, 255, 0.9);
             text-align: center;
+        }
+
+        /* USER INFO SECTION ADDED FROM SECOND PORTAL */
+        .user-info {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .user-email {
+            font-size: 0.9em;
+            color: var(--white);
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 12px;
+            border-radius: 15px;
+            text-align: center;
+            font-weight: 500;
+            word-break: break-all;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--navy);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85em;
+            transition: all 0.3s ease;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .logout-btn:hover {
+            background: var(--white);
+            transform: translateY(-1px);
         }
 
         /* Mobile Tabs */
@@ -118,6 +200,7 @@
             top: 115px;
             z-index: 99;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(10px);
         }
 
         .mobile-tabs::-webkit-scrollbar {
@@ -165,6 +248,39 @@
             to { opacity: 1; }
         }
 
+        /* NOTIFICATION SYSTEM ADDED FROM SECOND PORTAL */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 500;
+            z-index: 10000;
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+            max-width: 300px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            font-size: 0.9em;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+
+        .notification.error {
+            background: linear-gradient(135deg, #dc3545, #e83e8c);
+        }
+
+        .notification.info {
+            background: linear-gradient(135deg, #17a2b8, #6f42c1);
+        }
+
         /* Mobile Instructions */
         .mobile-instructions {
             background: rgba(255, 255, 255, 0.95);
@@ -173,6 +289,7 @@
             margin-bottom: 20px;
             box-shadow: var(--card-shadow);
             border-left: 4px solid var(--creator);
+            backdrop-filter: blur(10px);
         }
 
         .mobile-instructions h3 {
@@ -205,6 +322,7 @@
             box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
             background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
         }
 
         .mobile-search-input:focus {
@@ -237,6 +355,7 @@
             box-shadow: var(--card-shadow);
             transition: all 0.3s ease;
             border: 1px solid rgba(0, 31, 63, 0.05);
+            backdrop-filter: blur(10px);
         }
 
         .mobile-music-card:active {
@@ -396,6 +515,7 @@
             padding: 25px 20px;
             margin-bottom: 30px;
             box-shadow: var(--card-shadow);
+            backdrop-filter: blur(10px);
         }
 
         .mobile-guide-header {
@@ -485,6 +605,7 @@
             padding: 25px 20px;
             margin-bottom: 25px;
             box-shadow: var(--card-shadow);
+            backdrop-filter: blur(10px);
         }
 
         .mobile-guidelines-header {
@@ -635,6 +756,30 @@
                 height: 40px;
                 font-size: 1.1em;
             }
+
+            /* USER INFO DESKTOP STYLES */
+            .user-info {
+                flex-direction: row;
+                gap: 12px;
+                margin-top: 0;
+                padding-top: 0;
+                border-top: none;
+                border-left: 1px solid rgba(255, 255, 255, 0.2);
+                padding-left: 15px;
+                margin-left: 15px;
+            }
+
+            .user-email {
+                max-width: 180px;
+                text-align: left;
+                font-size: 0.85em;
+            }
+
+            .logout-btn {
+                width: auto;
+                padding: 8px 16px;
+                font-size: 0.85em;
+            }
         }
 
         /* Large Desktop */
@@ -684,7 +829,7 @@
 </head>
 <body>
     <div class="container">
-        <!-- Mobile Header -->
+        <!-- IMPROVED Mobile Header with User Info -->
         <header class="mobile-header">
             <div class="header-top">
                 <div class="brand">EVERNET</div>
@@ -692,12 +837,20 @@
                     <a href="dashboard/" class="mobile-nav-btn">
                         <i class="fas fa-tachometer-alt"></i> Dashboard
                     </a>
-                    <a href="index.html" class="mobile-nav-btn">
+                    <a href="/" class="mobile-nav-btn">
                         <i class="fas fa-home"></i> Home
                     </a>
                 </div>
             </div>
             <p class="header-subtitle">Premium soundtracks for content creators</p>
+            
+            <!-- USER INFO SECTION ADDED FROM SECOND PORTAL -->
+            <div class="user-info" id="userInfo">
+                <span class="user-email" id="userEmail"></span>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
         </header>
 
         <!-- Mobile Tabs -->
@@ -712,6 +865,9 @@
                 <i class="fas fa-file-alt"></i> Guidelines
             </div>
         </div>
+
+        <!-- NOTIFICATION SYSTEM ADDED FROM SECOND PORTAL -->
+        <div id="notification" class="notification"></div>
 
         <!-- Music Library Section -->
         <section class="content-section active" id="music-section">
@@ -1138,6 +1294,210 @@
         <p>©2025 EverGreen Empire Ltd.</p>
     </footer>
 
+    <!-- FIREBASE CONFIGURATION ADDED FROM SECOND PORTAL -->
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAuSEqhLenwrEz-qrIn1drjAugy1YSkDlI",
+            authDomain: "creators-portal-428c5.firebaseapp.com",
+            projectId: "creators-portal-428c5",
+            storageBucket: "creators-portal-428c5.firebasestorage.app",
+            messagingSenderId: "499280036303",
+            appId: "1:499280036303:web:b4d80d3b7fe1291381d2ba",
+            measurementId: "G-CYWGD80FS5"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+    </script>
+
+    <!-- CACHE BUSTING SYSTEM ADDED FROM SECOND PORTAL -->
+    <script>
+        // EVERNET Cache Management System
+        class EverNetCacheManager {
+            constructor() {
+                this.currentVersion = '1.0.1';
+                this.storageKey = 'evernet-version';
+                this.init();
+            }
+            
+            init() {
+                console.log(`🚀 EVERNET Cache Manager v${this.currentVersion} initialized`);
+                this.checkForUpdates();
+                this.addVersionToResources();
+            }
+            
+            // Check if update is needed
+            async checkForUpdates() {
+                const storedVersion = localStorage.getItem(this.storageKey);
+                
+                if (storedVersion !== this.currentVersion) {
+                    console.log(`🔄 EVERNET: New version detected (${storedVersion} → ${this.currentVersion})`);
+                    
+                    // Show update notification
+                    this.showUpdateNotification();
+                    
+                    // Clear all caches
+                    await this.clearAllCaches();
+                    localStorage.setItem(this.storageKey, this.currentVersion);
+                    
+                    // Force reload if user is online
+                    if (navigator.onLine) {
+                        setTimeout(() => {
+                            window.location.reload(true);
+                        }, 2000);
+                    }
+                    
+                    return true;
+                }
+                
+                console.log(`✅ EVERNET: Running latest version (${this.currentVersion})`);
+                return false;
+            }
+            
+            // Clear all caches
+            async clearAllCaches() {
+                try {
+                    console.log('🗑️ EVERNET: Clearing all caches...');
+                    
+                    // Clear service worker cache
+                    if ('caches' in window) {
+                        const cacheNames = await caches.keys();
+                        await Promise.all(
+                            cacheNames.map(cacheName => {
+                                console.log(`🗑️ EVERNET: Deleting cache ${cacheName}`);
+                                return caches.delete(cacheName);
+                            })
+                        );
+                    }
+                    
+                    // Clear localStorage (except auth data)
+                    this.clearLocalStorage();
+                    
+                    // Clear sessionStorage
+                    sessionStorage.clear();
+                    
+                    console.log('✅ EVERNET: All caches cleared successfully');
+                    
+                } catch (error) {
+                    console.error('❌ EVERNET: Error clearing caches', error);
+                }
+            }
+            
+            // Clear localStorage but keep auth data
+            clearLocalStorage() {
+                const keepKeys = [
+                    'firebase:authUser:',
+                    'evernet-version',
+                    'user-preference-'
+                ];
+                
+                Object.keys(localStorage).forEach(key => {
+                    const shouldKeep = keepKeys.some(keepKey => key.startsWith(keepKey));
+                    if (!shouldKeep) {
+                        localStorage.removeItem(key);
+                    }
+                });
+            }
+            
+            // Add version parameter to static resources
+            addVersionToResources() {
+                const version = this.currentVersion;
+                
+                // Add version to CSS links
+                const links = document.querySelectorAll('link[rel="stylesheet"]');
+                links.forEach(link => {
+                    const href = link.getAttribute('href');
+                    if (href && !href.includes('?') && !href.startsWith('http')) {
+                        link.href = `${href}?v=${version}`;
+                    }
+                });
+                
+                // Add version to local script tags
+                const scripts = document.querySelectorAll('script[src]');
+                scripts.forEach(script => {
+                    const src = script.getAttribute('src');
+                    if (src && !src.includes('?') && !src.startsWith('http')) {
+                        script.src = `${src}?v=${version}`;
+                    }
+                });
+            }
+            
+            // Show update notification
+            showUpdateNotification() {
+                const notification = document.createElement('div');
+                notification.innerHTML = `
+                    <div style="
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        background: linear-gradient(135deg, #0074E4, #00a8ff);
+                        color: white;
+                        padding: 15px;
+                        text-align: center;
+                        font-weight: bold;
+                        z-index: 10001;
+                        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+                    ">
+                        EVERNET Updated! Refreshing for latest features...
+                    </div>
+                `;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 5000);
+            }
+            
+            // Force clear cache (call this after deployments)
+            async forceClearCache() {
+                console.log('🔄 EVERNET: Manual cache clearance triggered');
+                await this.clearAllCaches();
+                localStorage.setItem(this.storageKey, '');
+                window.location.reload(true);
+            }
+        }
+
+        // Initialize cache manager
+        const everNetCache = new EverNetCacheManager();
+        
+        // Make it globally available for console use
+        window.evernetClearCache = () => everNetCache.forceClearCache();
+    </script>
+
+    <!-- SERVICE WORKER REGISTRATION ADDED FROM SECOND PORTAL -->
+    <script>
+        // Register Service Worker with version-based cache busting
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                const version = '1.0.1';
+                navigator.serviceWorker.register('/sw.js?v=' + version)
+                    .then(function(registration) {
+                        console.log('🎉 EVERNET ServiceWorker registered successfully with scope: ', registration.scope);
+                        
+                        // Check for updates every hour
+                        setInterval(() => {
+                            registration.update();
+                            console.log('🔄 EVERNET: Checking for Service Worker updates...');
+                        }, 60 * 60 * 1000);
+                        
+                        // Check if PWA is already installed
+                        if (window.matchMedia('(display-mode: standalone)').matches) {
+                            console.log('🚀 EVERNET is running as PWA');
+                        }
+                    })
+                    .catch(function(error) {
+                        console.log('❌ EVERNET ServiceWorker registration failed: ', error);
+                    });
+            });
+        } else {
+            console.log('❌ Service workers are not supported in this browser');
+        }
+    </script>
+
     <script>
         // Enhanced Copy Code Function
         function copyCode(code, button) {
@@ -1147,6 +1507,9 @@
                 button.innerHTML = '<i class="fas fa-check"></i> Copied!';
                 button.classList.add('copied');
                 
+                // Show notification
+                showNotification('Code copied to clipboard!', 'success');
+                
                 // Reset button after 2 seconds
                 setTimeout(() => {
                     button.innerHTML = originalText;
@@ -1154,8 +1517,19 @@
                 }, 2000);
             }).catch(err => {
                 console.error('Failed to copy: ', err);
-                alert('Failed to copy code. Please copy manually: ' + code);
+                showNotification('Failed to copy code. Please copy manually: ' + code, 'error');
             });
+        }
+
+        // NOTIFICATION SYSTEM FROM SECOND PORTAL
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type} show`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
         }
 
         // Tab functionality
@@ -1233,7 +1607,53 @@
                 this.style.transform = 'scale(1)';
             });
         });
+
+        // USER AUTHENTICATION SYSTEM FROM SECOND PORTAL
+        async function updateUI() {
+            const user = auth.currentUser;
+            const userInfo = document.getElementById('userInfo');
+            const userEmail = document.getElementById('userEmail');
+
+            if (user) {
+                // User is logged in
+                userInfo.style.display = 'flex';
+                userEmail.textContent = user.email;
+                showNotification('Welcome back to EVERNET!', 'success');
+            } else {
+                // User is not logged in
+                userInfo.style.display = 'none';
+            }
+        }
+
+        // Enhanced Logout Function
+        async function logout() {
+            try {
+                await auth.signOut();
+                showNotification('Successfully logged out', 'success');
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1000);
+            } catch (error) {
+                showNotification('Error logging out', 'error');
+                console.error('Logout error:', error);
+            }
+        }
+
+        // Enhanced Initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            // Listen for auth state changes
+            auth.onAuthStateChanged((user) => {
+                updateUI();
+            });
+            
+            updateUI();
+        });
+
+        // Enhanced Global Error Handler
+        window.addEventListener('error', (event) => {
+            console.error('Global error:', event.error);
+            showNotification('An unexpected error occurred', 'error');
+        });
     </script>
 </body>
-</html>
-
+    </html>
