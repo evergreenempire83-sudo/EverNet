@@ -505,7 +505,7 @@
       background: var(--navy);
     }
 
-    /* Vimeo Background Video */
+    /* Vimeo Background Video - FIXED */
     .vimeo-background {
       position: absolute;
       top: 0;
@@ -524,6 +524,7 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+      pointer-events: none; /* Prevents interaction with video controls */
     }
 
     .overlay {
@@ -1167,11 +1168,11 @@
       </div>
     </header>
 
-    <!-- Hero Section with Vimeo Video -->
+    <!-- Hero Section with Vimeo Video - FIXED -->
     <section class="hero">
-      <!-- Vimeo Background Video -->
+      <!-- Vimeo Background Video - FIXED UNMUTE ISSUE -->
       <div class="vimeo-background">
-        <iframe src="https://player.vimeo.com/video/1139205332?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479&amp;autoplay=1&amp;muted=1&amp;loop=1" 
+        <iframe src="https://player.vimeo.com/video/1139205332?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479&amp;autoplay=1&amp;muted=1&amp;loop=1&amp;background=1&amp;controls=0&amp;byline=0&amp;title=0&amp;portrait=0" 
                 frameborder="0" 
                 allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" 
                 referrerpolicy="strict-origin-when-cross-origin" 
@@ -1473,6 +1474,3 @@
   </script>
 </body>
   </html>
-
-
-
