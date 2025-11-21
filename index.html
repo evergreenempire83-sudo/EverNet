@@ -56,7 +56,6 @@
       color: var(--navy);
       overflow-x: hidden;
       line-height: 1.7;
-      /* PWA Fullscreen Support */
       -webkit-touch-callout: none;
       -webkit-user-select: none;
       -khtml-user-select: none;
@@ -337,7 +336,7 @@
       }
     }
 
-    /* Hero Section with Video Background */
+    /* Hero Section with Self-Hosted Video */
     .hero {
       position: relative;
       height: 100vh;
@@ -347,7 +346,7 @@
       background: var(--navy); /* Fallback background */
     }
 
-    /* Background Video */
+    /* Self-Hosted Background Video */
     .hero video {
       position: absolute;
       top: 0;
@@ -763,7 +762,7 @@
             <a href="#" onclick="closeMenu()"><i class="fas fa-home"></i>Home</a>
             <a href="#what-is" onclick="closeMenu()"><i class="fas fa-info-circle"></i>About</a>
             <a href="music.html" onclick="closeMenu()"><i class="fas fa-music"></i>Music Library</a>
-            <a href="sign-up.html" id="signupLink"><i class="fas fa-user-plus"></i>Creator Signup</a>
+            <!-- Sign Up REMOVED from dropdown -->
             <a href="#contact" onclick="closeMenu()"><i class="fas fa-envelope"></i>Contact</a>
             <div class="user-info" id="userInfo" style="display: none;">
               <span class="user-email" id="userEmail"></span>
@@ -774,11 +773,11 @@
       </div>
     </header>
 
-    <!-- Hero Section with Video Background -->
+    <!-- Hero Section with Self-Hosted Video -->
     <section class="hero">
-      <!-- Background Video -->
+      <!-- Self-Hosted Background Video -->
       <video autoplay muted loop playsinline>
-        <source src="https://drive.google.com/uc?export=download&id=12wTFKn8xOMK8ZqFvZ36vktMSjGsKLPdR" type="video/mp4">
+        <source src="videos/hero-video.mp4" type="video/mp4">
         Your browser does not support the video tag.
       </video>
 
@@ -787,7 +786,8 @@
       <!-- HERO TEXT -->
       <div class="hero-content">
         <h1>Where creators are rewarded for passion and value creation.</h1>
-        <a href="sign-up.html" class="cta-btn">Start Now</a>
+        <!-- Start Now linked to /sign-up/ -->
+        <a href="/sign-up/" class="cta-btn">Start Now</a>
       </div>
     </section>
 
@@ -930,20 +930,17 @@
     async function updateUI() {
       const user = auth.currentUser;
       const loginLink = document.getElementById('loginLink');
-      const signupLink = document.getElementById('signupLink');
       const userInfo = document.getElementById('userInfo');
       const userEmail = document.getElementById('userEmail');
 
       if (user) {
         // User is logged in
         loginLink.style.display = 'none';
-        signupLink.style.display = 'none';
         userInfo.style.display = 'flex';
         userEmail.textContent = user.email;
       } else {
         // User is not logged in
         loginLink.style.display = 'flex';
-        signupLink.style.display = 'block';
         userInfo.style.display = 'none';
       }
     }
@@ -998,4 +995,4 @@
     }
   </script>
 </body>
-  </html>
+</html>
