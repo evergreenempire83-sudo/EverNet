@@ -8,9 +8,13 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <meta name="version" content="1.0.6">
+  <meta name="version" content="1.0.7">
   
   <title>EVERNET - Music Monetization for Creators</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="EVERNET - Music monetization platform where creators earn revenue from YouTube Shorts using premium music library">
+  <meta name="keywords" content="music monetization, YouTube Shorts, creator revenue, premium music, content creation">
   
   <!-- PWA Manifest -->
   <link rel="manifest" href="/manifest.json?v=1.0.1">
@@ -30,6 +34,87 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- EVERNET Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "EVERNET",
+    "url": "https://evernet.evergreenempireltd.com",
+    "logo": "https://evernet.evergreenempireltd.com/logo.png",
+    "description": "Music monetization platform for creators - turn YouTube Shorts into revenue-earning assets with premium music library",
+    "email": "info@evergreenempireltd.com",
+    "sameAs": [
+      "https://twitter.com/evernet",
+      "https://instagram.com/evernet",
+      "https://youtube.com/evernet"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "email": "info@evergreenempireltd.com",
+      "contactType": "customer service",
+      "areaServed": "Worldwide",
+      "availableLanguage": ["English"]
+    }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "EVERNET",
+    "url": "https://evernet.evergreenempireltd.com",
+    "description": "Music monetization platform where creators earn revenue from YouTube Shorts using premium music library",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://evernet.evergreenempireltd.com/search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Site Navigation",
+    "description": "Main navigation menu for EVERNET platform",
+    "itemListElement": [
+      {
+        "@type": "SiteNavigationElement",
+        "position": 1,
+        "name": "Login",
+        "url": "https://evernet.evergreenempireltd.com/sign-in/"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "position": 2,
+        "name": "Sign Up",
+        "url": "https://evernet.evergreenempireltd.com/sign-up/"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "position": 3,
+        "name": "Music Library",
+        "url": "https://evernet.evergreenempireltd.com/music/"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "position": 4,
+        "name": "Terms of Service",
+        "url": "https://evernet.evergreenempireltd.com/Terms-of-service/"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "position": 5,
+        "name": "Contact",
+        "url": "mailto:info@evergreenempireltd.com"
+      }
+    ]
+  }
+  </script>
   
   <style>
     :root {
@@ -1172,7 +1257,7 @@
           <h3>Platform</h3>
           <ul>
             <li><a href="#what-is">How It Works</a></li>
-            <li><a href="music.html">Music Library</a></li>
+            <li><a href="/music/">Music Library</a></li>
             <li><a href="/sign-up/">Creator Signup</a></li>
             <li><a href="#">Success Stories</a></li>
           </ul>
@@ -1181,7 +1266,7 @@
         <div class="footer-links">
           <h3>Company</h3>
           <ul>
-            <li><a href="about.html">About Us</a></li>
+            <li><a href="/about/">About Us</a></li>
             <li><a href="#">Careers</a></li>
             <li><a href="#">Press Kit</a></li>
             <li><a href="#">Blog</a></li>
@@ -1191,9 +1276,9 @@
         <div class="footer-links">
           <h3>Support</h3>
           <ul>
-            <li><a href="mailto:support@evergreenempireltd.com">Contact Us</a></li>
+            <li><a href="mailto:info@evergreenempireltd.com">Contact Us</a></li>
             <li><a href="#">Help Center</a></li>
-            <li><a href="Creator Agreement.html">Creator Agreement</a></li>
+            <li><a href="/Creator Agreement/">Creator Agreement</a></li>
             <li><a href="#">Status</a></li>
           </ul>
         </div>
@@ -1204,8 +1289,8 @@
           © 2024 EverGreen Empire Ltd. All rights reserved.
         </div>
         <div class="footer-legal">
-          <a href="Privacy policy.html">Privacy Policy</a>
-          <a href="Terms of Service.html">Terms of Service</a>
+          <a href="/Privacy policy/">Privacy Policy</a>
+          <a href="/Terms-of-service/">Terms of Service</a>
           <a href="#">Cookie Policy</a>
         </div>
       </div>
@@ -1371,4 +1456,3 @@
   </script>
 </body>
   </html>
-
