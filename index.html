@@ -336,25 +336,35 @@
       }
     }
 
-    /* Hero Section with Self-Hosted Video */
+    /* Hero Section with Vimeo Video */
     .hero {
       position: relative;
       height: 100vh;
       width: 100%;
       overflow: hidden;
       color: white;
-      background: var(--navy); /* Fallback background */
+      background: var(--navy);
     }
 
-    /* Self-Hosted Background Video */
-    .hero video {
+    /* Vimeo Background Video */
+    .vimeo-background {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      object-fit: cover;
       z-index: 0;
+    }
+
+    .vimeo-background iframe {
+      width: 100vw;
+      height: 56.25vw; /* 16:9 aspect ratio */
+      min-height: 100vh;
+      min-width: 177.77vh; /* 16:9 aspect ratio */
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
 
     .overlay {
@@ -414,6 +424,50 @@
       box-shadow: 0 6px 18px rgba(0,0,0,0.25);
       z-index: 50;
       text-decoration: none;
+    }
+
+    /* Modern PWA Install Button */
+    #installPWA {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      background: linear-gradient(135deg, var(--electric-blue) 0%, var(--light-blue) 100%);
+      color: white;
+      border: none;
+      padding: 14px 20px;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(0, 102, 255, 0.4);
+      display: none;
+      align-items: center;
+      gap: 10px;
+      z-index: 1000;
+      transition: all 0.3s ease;
+      font-size: 0.9em;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    #installPWA.show {
+      display: flex;
+      animation: slideInUp 0.5s ease;
+    }
+
+    #installPWA:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(0, 102, 255, 0.5);
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* Notification System */
@@ -642,17 +696,16 @@
       line-height: 1.6;
     }
 
-    /* Mobile Footer */
-    footer {
-      text-align: center;
-      background: var(--dark-navy);
+    /* World-Class Modern Footer */
+    .modern-footer {
+      background: linear-gradient(135deg, var(--dark-navy) 0%, #000814 100%);
       color: var(--white);
-      padding: 40px 20px 30px;
+      padding: 80px 5% 40px;
       position: relative;
       overflow: hidden;
     }
 
-    footer::before {
+    .modern-footer::before {
       content: '';
       position: absolute;
       top: 0;
@@ -662,22 +715,117 @@
       background: linear-gradient(90deg, transparent, var(--electric-blue), transparent);
     }
 
-    footer p {
-      margin: 12px 0;
-      font-size: 0.9em;
-      color: rgba(255, 255, 255, 0.8);
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 60px;
     }
 
-    footer a {
-      color: var(--light-blue);
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .footer-logo {
+      font-family: "Montserrat", sans-serif;
+      font-size: 2em;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--electric-blue) 0%, var(--light-blue) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .footer-description {
+      color: rgba(255,255,255,0.7);
+      line-height: 1.6;
+      font-size: 0.95em;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+    }
+
+    .social-link {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
       text-decoration: none;
       transition: all 0.3s ease;
-      font-weight: 500;
+      backdrop-filter: blur(10px);
     }
 
-    footer a:hover {
-      color: var(--white);
-      text-decoration: underline;
+    .social-link:hover {
+      background: var(--electric-blue);
+      transform: translateY(-2px);
+    }
+
+    .footer-links h3 {
+      color: white;
+      margin-bottom: 20px;
+      font-size: 1.1em;
+      font-weight: 600;
+    }
+
+    .footer-links ul {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 12px;
+    }
+
+    .footer-links a {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-size: 0.9em;
+    }
+
+    .footer-links a:hover {
+      color: var(--light-blue);
+      padding-left: 5px;
+    }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 60px auto 0;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .copyright {
+      color: rgba(255,255,255,0.5);
+      font-size: 0.9em;
+    }
+
+    .footer-legal {
+      display: flex;
+      gap: 25px;
+    }
+
+    .footer-legal a {
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      font-size: 0.9em;
+      transition: color 0.3s ease;
+    }
+
+    .footer-legal a:hover {
+      color: var(--light-blue);
     }
 
     /* Desktop Styles for other sections */
@@ -717,13 +865,9 @@
       h2 {
         font-size: clamp(2em, 5vw, 3.2em);
       }
-
-      footer {
-        padding: 60px 20px 40px;
-      }
     }
 
-    /* Mobile styles for header-right */
+    /* Mobile styles */
     @media (max-width: 767px) {
       .header-right {
         gap: 15px;
@@ -733,11 +877,38 @@
         padding: 8px 16px;
         font-size: 0.8em;
       }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        text-align: center;
+      }
+
+      .social-links {
+        justify-content: center;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      #installPWA {
+        bottom: 80px;
+        right: 15px;
+        font-size: 0.8em;
+        padding: 12px 16px;
+      }
     }
   </style>
 </head>
 
 <body>
+  <!-- Modern PWA Install Button -->
+  <button id="installPWA">
+    <i class="fas fa-download"></i> Install App
+  </button>
+
   <!-- Main Content -->
   <div id="main-content">
     <!-- Notification System -->
@@ -773,13 +944,17 @@
       </div>
     </header>
 
-    <!-- Hero Section with Self-Hosted Video -->
+    <!-- Hero Section with Vimeo Video -->
     <section class="hero">
-      <!-- Self-Hosted Background Video -->
-      <video autoplay muted loop playsinline>
-        <source src="videos/hero-video.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
+      <!-- Vimeo Background Video -->
+      <div class="vimeo-background">
+        <iframe src="https://player.vimeo.com/video/1139205332?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479&amp;autoplay=1&amp;muted=1&amp;loop=1" 
+                frameborder="0" 
+                allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" 
+                referrerpolicy="strict-origin-when-cross-origin" 
+                title="hero-video">
+        </iframe>
+      </div>
 
       <div class="overlay"></div>
 
@@ -855,15 +1030,64 @@
       </div>
     </section>
 
-    <!-- Mobile Footer -->
-    <footer id="contact">
-      <p>Contact our dedicated support team: <a href="mailto:support@evergreenempireltd.com">support@evergreenempireltd.com</a></p>
-      <p>
-        <a href="Terms of Service.html">Terms & Conditions</a> | 
-        <a href="Privacy policy.html">Privacy Policy</a> | 
-        <a href="Creator Agreement.html">Creator Agreement</a>
-      </p>
-      <p>©2025 EverGreen Empire Ltd.</p>
+    <!-- World-Class Footer -->
+    <footer class="modern-footer" id="contact">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <div class="footer-logo">EVERNET</div>
+          <p class="footer-description">
+            Transforming creator monetization through innovative music licensing and revenue sharing. 
+            Join thousands of creators already earning with EVERNET.
+          </p>
+          <div class="social-links">
+            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-links">
+          <h3>Platform</h3>
+          <ul>
+            <li><a href="#what-is">How It Works</a></li>
+            <li><a href="music.html">Music Library</a></li>
+            <li><a href="/sign-up/">Creator Signup</a></li>
+            <li><a href="#">Success Stories</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links">
+          <h3>Company</h3>
+          <ul>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press Kit</a></li>
+            <li><a href="#">Blog</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links">
+          <h3>Support</h3>
+          <ul>
+            <li><a href="mailto:support@evergreenempireltd.com">Contact Us</a></li>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="Creator Agreement.html">Creator Agreement</a></li>
+            <li><a href="#">Status</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="copyright">
+          © 2024 EverGreen Empire Ltd. All rights reserved.
+        </div>
+        <div class="footer-legal">
+          <a href="Privacy policy.html">Privacy Policy</a>
+          <a href="Terms of Service.html">Terms of Service</a>
+          <a href="#">Cookie Policy</a>
+        </div>
+      </div>
     </footer>
   </div>
 
@@ -873,6 +1097,9 @@
       <path d="M12 3C7 3 3 6.8 3 11C3 13 4 15 5.5 16.6V21L10.3 19.1C11 19.3 11.9 19.4 12.9 19.4C17.9 19.4 22 15.6 22 11C22 6.8 18 3 12 3Z"/>
     </svg>
   </a>
+
+  <!-- Vimeo Player API -->
+  <script src="https://player.vimeo.com/api/player.js"></script>
 
   <!-- Firebase Configuration -->
   <script>
@@ -959,6 +1186,40 @@
       }
     }
 
+    // Modern PWA Installation
+    let deferredPrompt;
+    const installBtn = document.getElementById('installPWA');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.classList.add('show');
+      
+      // Auto-hide after 15 seconds
+      setTimeout(() => {
+        installBtn.classList.remove('show');
+      }, 15000);
+    });
+
+    installBtn.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        
+        if (outcome === 'accepted') {
+          installBtn.style.display = 'none';
+          showNotification('EVERNET installed successfully!', 'success');
+        }
+        
+        deferredPrompt = null;
+      }
+    });
+
+    window.addEventListener('appinstalled', () => {
+      installBtn.style.display = 'none';
+      deferredPrompt = null;
+    });
+
     // Enhanced Initialization
     document.addEventListener('DOMContentLoaded', function() {
       // Listen for auth state changes
@@ -971,14 +1232,6 @@
       });
       
       updateUI();
-    });
-
-    // PWA Install Prompt
-    let deferredPrompt;
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
     });
 
     // Service Worker Registration
@@ -995,4 +1248,4 @@
     }
   </script>
 </body>
-</html>
+  </html>
