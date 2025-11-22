@@ -53,6 +53,113 @@
             font-family: "Poppins", sans-serif;
         }
 
+        /* Loading Screen Styles */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-logo {
+            font-family: "Montserrat", sans-serif;
+            font-size: 3.5em;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--white) 0%, rgba(255,255,255,0.9) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .loading-subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1em;
+            margin-bottom: 40px;
+            text-align: center;
+            max-width: 80%;
+        }
+
+        .loading-animation {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .loading-bar {
+            width: 12px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            animation: loading 1.5s ease-in-out infinite;
+        }
+
+        .loading-bar:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .loading-bar:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .loading-bar:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+
+        .loading-bar:nth-child(5) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes loading {
+            0%, 100% {
+                transform: scaleY(0.5);
+                background: rgba(255, 255, 255, 0.3);
+            }
+            50% {
+                transform: scaleY(1.5);
+                background: rgba(255, 255, 255, 0.9);
+            }
+        }
+
+        .loading-progress {
+            width: 200px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .loading-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--white);
+            border-radius: 3px;
+            transition: width 3s ease-in-out;
+        }
+
+        .loading-text {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9em;
+            text-align: center;
+        }
+
         body {
             background: var(--white);
             color: var(--navy);
@@ -640,6 +747,14 @@
 
         /* Desktop Styles */
         @media (min-width: 768px) {
+            .loading-logo {
+                font-size: 4.5em;
+            }
+            
+            .loading-subtitle {
+                font-size: 1.3em;
+            }
+            
             .mobile-header {
                 padding: 15px 20px;
                 margin: 0 15px 15px;
@@ -716,6 +831,23 @@
     </style>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-logo">EVERNET</div>
+        <div class="loading-subtitle">Premium Soundtracks for Content Creators</div>
+        <div class="loading-animation">
+            <div class="loading-bar"></div>
+            <div class="loading-bar"></div>
+            <div class="loading-bar"></div>
+            <div class="loading-bar"></div>
+            <div class="loading-bar"></div>
+        </div>
+        <div class="loading-progress">
+            <div class="loading-progress-bar" id="loadingProgressBar"></div>
+        </div>
+        <div class="loading-text">Loading your music library...</div>
+    </div>
+
     <div class="container">
         <!-- Mobile Header -->
         <header class="mobile-header">
@@ -942,10 +1074,55 @@
     </script>
 
     <script>
-        // Music Data with working image URLs
+        // Music Data with new tracks at the top
         const musicData = [
             {
                 id: 1,
+                name: "I'll be fine",
+                artist: "IAkeys & Dasha Blake",
+                theme: "Emotional, Energetic",
+                audioUrl: "https://vinxbbpboupirnyxwghz.supabase.co/storage/v1/object/public/Ever-Music/I%20WILL%20bE%20fine.wav",
+                code: "SE57V2513703",
+                thumbnail: "https://vinxbbpboupirnyxwghz.supabase.co/storage/v1/object/public/Ever-Music/InShot_20251120_182952291.jpg"
+            },
+            {
+                id: 2,
+                name: "Tekno",
+                artist: "Roel Jnr",
+                theme: "Electronic",
+                audioUrl: "https://vinxbbpboupirnyxwghz.supabase.co/storage/v1/object/public/Ever-Music/Tekno.wav",
+                code: "SE57V2513732",
+                thumbnail: "https://vinxbbpboupirnyxwghz.supabase.co/storage/v1/object/public/Ever-Music/InShot_20251121_120810952.jpg"
+            },
+            {
+                id: 3,
+                name: "Time Traveling",
+                artist: "Roel Jnr",
+                theme: "Energetic",
+                audioUrl: "https://vinxbbpboupirnyxwghz.supabase.co/storage/v1/object/public/Ever-Music/Traveling.wav",
+                code: "SE57V2513733",
+                thumbnail: "https://vinxbbpboupirnyxwghz.supabase.co/storage/v1/object/public/Ever-Music/InShot_20251121_120810952.jpg"
+            },
+            {
+                id: 4,
+                name: "Warrior cry",
+                artist: "Roel Jnr",
+                theme: "Cinematic",
+                audioUrl: "https://vinxbbpboupirnyxwghz.supabase.co/storage/v1/object/public/Ever-Music/Warrior%20Cry.mp3",
+                code: "SE57V2513735",
+                thumbnail: "https://vinxbbpboupirnyxwghz.supabase.co/storage/v1/object/public/Ever-Music/InShot_20251121_120810952.jpg"
+            },
+            {
+                id: 5,
+                name: "Sora",
+                artist: "Roel Jnr",
+                theme: "Energetic",
+                audioUrl: "https://vinxbbpboupirnyxwghz.supabase.co/storage/v1/object/public/Ever-Music/Sora.wav",
+                code: "SE57V2513734",
+                thumbnail: "https://vinxbbpboupirnyxwghz.supabase.co/storage/v1/object/public/Ever-Music/InShot_20251121_120810952.jpg"
+            },
+            {
+                id: 6,
                 name: "Morning Therapy",
                 artist: "Roel Jnr",
                 theme: "Energetic",
@@ -954,7 +1131,7 @@
                 thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVLxXX5m4h90DhBjFIY-XdrXGKvxvefSFJVCTd3NqGQA&s"
             },
             {
-                id: 2,
+                id: 7,
                 name: "Life Line",
                 artist: "lxrd vynl",
                 theme: "Energetic",
@@ -963,7 +1140,7 @@
                 thumbnail: "https://lh3.googleusercontent.com/Xf9IDuLhXjrnqJ8SqVnqUhinS9fIek90fyKt6Qt23LAu1r22zOQ-euw3v1T82-lX1_j9STczJMsKqPwS"
             },
             {
-                id: 3,
+                id: 8,
                 name: "Timeline",
                 artist: "Fredrick Amna",
                 theme: "Inspirational",
@@ -972,7 +1149,7 @@
                 thumbnail: "https://lh3.googleusercontent.com/EYq-b_NMoAcOCs-bNi5_3DsCBgBsFezMw7qjcmVHGa68Q594m0XdRFW68A1Xv5dDF813Cde_GHTocoGGwA"
             },
             {
-                id: 4,
+                id: 9,
                 name: "Show Me (Instrumental)",
                 artist: "IAkeys",
                 theme: "Emotional",
@@ -981,7 +1158,7 @@
                 thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQn-jvLsYP6jcm7K6TpjvPJ_R0vXYsS75er2tyqxfZaMg&s=10"
             },
             {
-                id: 5,
+                id: 10,
                 name: "Voild",
                 artist: "Xiava Dinma",
                 theme: "Inspirational",
@@ -990,7 +1167,7 @@
                 thumbnail: "https://lh3.googleusercontent.com/0ma-fBR2StrdbzRQnb_TpQU5U2K4Ej5_qAL06HlX5HwwcY3xgikrAe6IQgxGF3Noa3ToqvMqF6yxGpY"
             },
             {
-                id: 6,
+                id: 11,
                 name: "Hope (Instrumental)",
                 artist: "Juno Wild",
                 theme: "Emotional",
@@ -1002,6 +1179,26 @@
 
         let currentAudio = null;
         let currentPlayingBtn = null;
+
+        // Loading Screen Functionality
+        function initializeLoadingScreen() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            const progressBar = document.getElementById('loadingProgressBar');
+            
+            // Start the progress bar animation
+            setTimeout(() => {
+                progressBar.style.width = '100%';
+            }, 100);
+            
+            // Hide loading screen after 3 seconds
+            setTimeout(() => {
+                loadingScreen.classList.add('hidden');
+                // Initialize music player after loading screen is hidden
+                setTimeout(() => {
+                    initializeMusicPlayer();
+                }, 500);
+            }, 3000);
+        }
 
         // Initialize Music Player
         function initializeMusicPlayer() {
@@ -1177,7 +1374,8 @@
 
         // Initialize when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
-            initializeMusicPlayer();
+            // Start the loading screen
+            initializeLoadingScreen();
             
             auth.onAuthStateChanged((user) => {
                 updateUI();
@@ -1188,4 +1386,3 @@
     </script>
 </body>
     </html>
-
