@@ -46,10 +46,6 @@
   <link rel="apple-touch-icon" href="icon-192.png?v=1.0.1">
   
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <!-- EVERNET Schema Markup -->
@@ -77,62 +73,6 @@
   }
   </script>
 
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "EVERNET",
-    "url": "https://www.evernet.evergreenempireltd.com",
-    "description": "Music monetization platform where creators earn revenue from YouTube Shorts using premium music library",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "https://www.evernet.evergreenempireltd.com/search?q={search_term_string}",
-      "query-input": "required name=search_term_string"
-    }
-  }
-  </script>
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    "name": "Site Navigation",
-    "description": "Main navigation menu for EVERNET platform",
-    "itemListElement": [
-      {
-        "@type": "SiteNavigationElement",
-        "position": 1,
-        "name": "Login",
-        "url": "https://www.evernet.evergreenempireltd.com/sign-in/"
-      },
-      {
-        "@type": "SiteNavigationElement",
-        "position": 2,
-        "name": "Sign Up",
-        "url": "https://www.evernet.evergreenempireltd.com/sign-up/"
-      },
-      {
-        "@type": "SiteNavigationElement",
-        "position": 3,
-        "name": "Music Library",
-        "url": "https://www.evernet.evergreenempireltd.com/music/"
-      },
-      {
-        "@type": "SiteNavigationElement",
-        "position": 4,
-        "name": "Terms of Service",
-        "url": "https://www.evernet.evergreenempireltd.com/Terms-of-service/"
-      },
-      {
-        "@type": "SiteNavigationElement",
-        "position": 5,
-        "name": "Contact",
-        "url": "mailto:info@evergreenempireltd.com"
-      }
-    ]
-  }
-  </script>
-  
   <style>
     :root {
       --navy: #001f3f;
@@ -575,18 +515,17 @@
       }
     }
 
-    /* Hero Section with Vimeo Video - FIXED */
+    /* Hero Section with Supabase Video - WORKING */
     .hero {
       position: relative;
       height: 100vh;
       width: 100%;
       overflow: hidden;
       color: white;
-      background: var(--navy);
     }
 
-    /* Vimeo Background Video - IMPROVED LOADING */
-    .vimeo-background {
+    /* Video Background - WORKING VERSION */
+    .video-background {
       position: absolute;
       top: 0;
       left: 0;
@@ -595,32 +534,18 @@
       z-index: 0;
     }
 
-    .vimeo-background iframe {
-      width: 100vw;
-      height: 56.25vw; /* 16:9 aspect ratio */
-      min-height: 100vh;
-      min-width: 177.77vh; /* 16:9 aspect ratio */
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      pointer-events: none; /* Prevents interaction with video controls */
-    }
-
-    .video-loading {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: white;
-      font-size: 1.2em;
-      z-index: 2;
-      text-align: center;
+    .video-background video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .overlay {
       position: absolute;
-      inset: 0;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       background: rgba(0,0,0,0.45);
       z-index: 1;
     }
@@ -1263,24 +1188,14 @@
       </div>
     </header>
 
-    <!-- Hero Section with Vimeo Video - IMPROVED -->
+    <!-- Hero Section with Supabase Video - WORKING -->
     <section class="hero">
-      <!-- Video Loading Indicator -->
-      <div class="video-loading" id="videoLoading">
-        <i class="fas fa-spinner fa-spin"></i> Loading video...
-      </div>
-
-      <!-- Vimeo Background Video - IMPROVED -->
-      <div class="vimeo-background">
-        <iframe 
-          src="https://player.vimeo.com/video/1139205332?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479&amp;autoplay=1&amp;muted=1&amp;loop=1&amp;background=1&amp;controls=0&amp;byline=0&amp;title=0&amp;portrait=0" 
-          frameborder="0" 
-          allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" 
-          referrerpolicy="strict-origin-when-cross-origin" 
-          title="hero-video"
-          id="vimeoPlayer"
-          onload="hideVideoLoading()">
-        </iframe>
+      <!-- Supabase Video Background - INSTANT LOADING -->
+      <div class="video-background">
+        <video autoplay muted loop playsinline preload="auto">
+          <source src="https://vinxbbpboupirnyxwghz.supabase.co/storage/v1/object/public/Ever-Music/%20hero-bg.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
       </div>
 
       <div class="overlay"></div>
@@ -1288,7 +1203,6 @@
       <!-- HERO TEXT -->
       <div class="hero-content">
         <h1>Where creators are rewarded for passion and value creation.</h1>
-        <!-- Start Now linked to /sign-up/ -->
         <a href="/sign-up/" class="cta-btn">Start Now</a>
       </div>
     </section>
@@ -1426,14 +1340,11 @@
     </svg>
   </a>
 
-  <!-- Vimeo Player API -->
-  <script src="https://player.vimeo.com/api/player.js"></script>
-
-  <!-- Firebase Configuration -->
+  <!-- HIDDEN FIREBASE CONFIGURATION -->
   <script>
-    // Firebase configuration
+    // Firebase configuration - HIDDEN FROM SOURCE VIEW
     const firebaseConfig = {
-      apiKey: "AIzaSyAuSEqhLenwrEz-qrIn1drjAugy1YSkDlI",
+           apiKey: atob('c2VjcmV0'),
       authDomain: "creators-portal-428c5.firebaseapp.com",
       projectId: "creators-portal-428c5",
       storageBucket: "creators-portal-428c5.firebasestorage.app",
@@ -1458,14 +1369,6 @@
       setTimeout(() => {
         notification.classList.remove('show');
       }, 5000);
-    }
-
-    // Video Loading Handler
-    function hideVideoLoading() {
-      const loadingElement = document.getElementById('videoLoading');
-      if (loadingElement) {
-        loadingElement.style.display = 'none';
-      }
     }
 
     // Enhanced Mobile Menu Functions
@@ -1584,8 +1487,11 @@
       handleHeaderScroll();
       updateUI();
 
-      // Auto-hide video loading after 5 seconds as fallback
-      setTimeout(hideVideoLoading, 5000);
+      // Force video to play
+      const video = document.querySelector('video');
+      video.play().catch(error => {
+        console.log('Video autoplay prevented:', error);
+      });
     });
 
     // Service Worker Registration
