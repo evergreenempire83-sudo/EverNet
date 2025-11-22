@@ -736,6 +736,38 @@
       background: linear-gradient(135deg, #17a2b8, #6f42c1);
     }
 
+    /* Welcome Banner for Dashboard */
+    .welcome-banner {
+      background: linear-gradient(135deg, var(--electric-blue) 0%, var(--light-blue) 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      display: none;
+      align-items: center;
+      gap: 15px;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .welcome-icon {
+      font-size: 2em;
+    }
+
+    .welcome-text h2 {
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+
+    .welcome-text p {
+      opacity: 0.9;
+    }
+
     /* Mobile Sections */
     section {
       padding: 60px 5%;
@@ -1149,6 +1181,17 @@
     <i class="fas fa-download"></i> Install App
   </button>
 
+  <!-- Welcome Banner for Dashboard -->
+  <div class="welcome-banner" id="welcomeBanner">
+    <div class="welcome-icon">
+      <i class="fas fa-hand-wave"></i>
+    </div>
+    <div class="welcome-text">
+      <h2 id="welcomeMessage">Welcome back!</h2>
+      <p id="welcomeSubtext">We're glad to see you again.</p>
+    </div>
+  </div>
+
   <!-- Main Content -->
   <div id="main-content">
     <!-- Notification System -->
@@ -1321,11 +1364,15 @@
     </svg>
   </a>
 
-  <!-- HIDDEN FIREBASE CONFIGURATION -->
+  <!-- Firebase Configuration -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  
   <script>
-    // Firebase configuration - HIDDEN FROM SOURCE VIEW
+    // Firebase configuration
     const firebaseConfig = {
-           apiKey: atob('c2VjcmV0'),
+      apiKey: "AIzaSyAuSEqhLenwrEz-qrIn1drjAugy1YSkDlI",
       authDomain: "creators-portal-428c5.firebaseapp.com",
       projectId: "creators-portal-428c5",
       storageBucket: "creators-portal-428c5.firebasestorage.app",
@@ -1335,7 +1382,7 @@
     };
 
     // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
   </script>
@@ -1383,6 +1430,30 @@
       }
     }
 
+    // Check if user is on dashboard and show welcome message
+    function checkDashboardAndWelcome() {
+      const isOnDashboard = window.location.pathname === '/dashboard/' || 
+                           window.location.pathname.includes('/dashboard');
+      
+      if (isOnDashboard && auth.currentUser) {
+        const userName = auth.currentUser.displayName || auth.currentUser.email.split('@')[0];
+        const welcomeMessage = document.getElementById('welcomeMessage');
+        const welcomeSubtext = document.getElementById('welcomeSubtext');
+        const welcomeBanner = document.getElementById('welcomeBanner');
+        
+        welcomeMessage.textContent = `Welcome back, ${userName}!`;
+        welcomeSubtext.textContent = `We're glad to see you again. Ready to create something amazing today?`;
+        welcomeBanner.style.display = 'flex';
+        
+        // Show welcome notification if just logged in
+        const justLoggedIn = sessionStorage.getItem('just_logged_in');
+        if (justLoggedIn) {
+          showNotification(`Welcome to your dashboard, ${userName}!`, 'success');
+          sessionStorage.removeItem('just_logged_in');
+        }
+      }
+    }
+
     // Enhanced UI Update with Dashboard Detection
     async function updateUI() {
       const user = auth.currentUser;
@@ -1397,12 +1468,25 @@
         dashboardBtn.style.display = 'flex';
         userInfo.style.display = 'flex';
         userEmail.textContent = user.email;
-        showNotification(`Welcome back, ${user.email.split('@')[0]}!`, 'success');
+        
+        // Check if we're on the dashboard page
+        checkDashboardAndWelcome();
       } else {
         // User is not logged in - Show Login, hide Dashboard
         loginLink.style.display = 'flex';
         dashboardBtn.style.display = 'none';
         userInfo.style.display = 'none';
+        
+        // Hide welcome banner if not logged in
+        document.getElementById('welcomeBanner').style.display = 'none';
+        
+        // If on dashboard but not logged in, redirect to login
+        if (window.location.pathname === '/dashboard/' || window.location.pathname.includes('/dashboard')) {
+          showNotification('Please log in to access the dashboard', 'error');
+          setTimeout(() => {
+            window.location.href = '/sign-in/';
+          }, 2000);
+        }
       }
     }
 
@@ -1412,7 +1496,7 @@
         await auth.signOut();
         showNotification('Successfully logged out', 'success');
         setTimeout(() => {
-          window.location.href = 'index.html';
+          window.location.href = '/';
         }, 1000);
       } catch (error) {
         showNotification('Error logging out', 'error');
@@ -1459,6 +1543,11 @@
       // Listen for auth state changes
       auth.onAuthStateChanged((user) => {
         updateUI();
+        
+        // If user just logged in and is on dashboard, set flag for welcome message
+        if (user && (window.location.pathname === '/dashboard/' || window.location.pathname.includes('/dashboard'))) {
+          sessionStorage.setItem('just_logged_in', 'true');
+        }
       });
       
       // Add scroll event listener for header
@@ -1473,6 +1562,9 @@
       video.play().catch(error => {
         console.log('Video autoplay prevented:', error);
       });
+
+      // Check dashboard on page load
+      checkDashboardAndWelcome();
     });
 
     // Service Worker Registration
@@ -1487,8 +1579,16 @@
           });
       });
     }
+
+    // Listen for URL changes to detect dashboard access
+    window.addEventListener('popstate', checkDashboardAndWelcome);
+    
+    // Override pushState to detect navigation to dashboard
+    const originalPushState = history.pushState;
+    history.pushState = function() {
+      originalPushState.apply(this, arguments);
+      setTimeout(checkDashboardAndWelcome, 100);
+    };
   </script>
 </body>
-  </html>
-
-
+    </html>
