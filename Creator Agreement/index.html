@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EVERNET Creator Agreement</title>
+  <title>Creator Agreement - EVERNET</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -14,15 +14,7 @@
       --light-blue: #00a8ff;
       --white: #ffffff;
       --light: #f8fafc;
-      --creator: #8B5CF6;
-      --success: #28a745;
-      --warning: #FFA500;
-      --danger: #dc3545;
-      --gradient: linear-gradient(135deg, var(--navy) 0%, var(--electric-blue) 100%);
-      --gradient-hover: linear-gradient(135deg, var(--electric-blue) 0%, var(--light-blue) 100%);
-      --creator-gradient: linear-gradient(135deg, var(--creator) 0%, #6D28D9 100%);
-      --shadow: 0 10px 30px rgba(0, 31, 63, 0.1);
-      --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      --shadow: rgba(0, 31, 63, 0.1);
     }
 
     * {
@@ -39,669 +31,420 @@
       overflow-x: hidden;
     }
 
-    /* Animated Background */
-    .animated-bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -2;
-      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f8fafc 100%);
-      overflow: hidden;
-    }
-
-    .floating-shapes {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-    }
-
-    .shape {
-      position: absolute;
-      background: rgba(0, 102, 255, 0.05);
-      border-radius: 50%;
-      animation: float 20s infinite linear;
-    }
-
-    .shape:nth-child(1) {
-      width: 300px;
-      height: 300px;
-      top: 10%;
-      left: 5%;
-      animation-delay: 0s;
-    }
-
-    .shape:nth-child(2) {
-      width: 200px;
-      height: 200px;
-      top: 60%;
-      left: 80%;
-      animation-delay: -5s;
-    }
-
-    .shape:nth-child(3) {
-      width: 150px;
-      height: 150px;
-      top: 80%;
-      left: 10%;
-      animation-delay: -10s;
-    }
-
-    .shape:nth-child(4) {
-      width: 250px;
-      height: 250px;
-      top: 20%;
-      left: 70%;
-      animation-delay: -15s;
-    }
-
-    @keyframes float {
-      0%, 100% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 0.1;
-      }
-      25% {
-        transform: translateY(-20px) rotate(90deg);
-        opacity: 0.2;
-      }
-      50% {
-        transform: translateY(0) rotate(180deg);
-        opacity: 0.1;
-      }
-      75% {
-        transform: translateY(20px) rotate(270deg);
-        opacity: 0.2;
-      }
-    }
-
-    .grid-lines {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background-image: 
-          linear-gradient(rgba(0, 102, 255, 0.03) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(0, 102, 255, 0.03) 1px, transparent 1px);
-      background-size: 50px 50px;
-      animation: gridMove 20s linear infinite;
-    }
-
-    @keyframes gridMove {
-      0% {
-        transform: translate(0, 0);
-      }
-      100% {
-        transform: translate(50px, 50px);
-      }
-    }
-
     .container {
-      max-width: 1200px;
+      max-width: 1000px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 40px 20px;
     }
 
-    /* Mobile-First Header */
-    header {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(20px);
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
-      padding: 15px 5%;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      display: flex;
+    .back-btn {
+      display: inline-flex;
       align-items: center;
-      justify-content: space-between;
-      min-height: 70px;
-      border-bottom: 1px solid rgba(0, 31, 63, 0.05);
+      gap: 8px;
+      color: var(--electric-blue);
+      text-decoration: none;
+      font-weight: 500;
       margin-bottom: 30px;
+      transition: all 0.3s ease;
     }
 
-    .brand {
+    .back-btn:hover {
+      transform: translateX(-5px);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .logo {
       font-family: "Montserrat", sans-serif;
-      font-size: 1.6em;
+      font-size: 2.5em;
       font-weight: 900;
-      color: var(--navy);
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      white-space: nowrap;
       background: linear-gradient(135deg, var(--electric-blue) 0%, var(--light-blue) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-clip: text;
-      z-index: 1002;
+      margin-bottom: 15px;
     }
 
-    .menu-icon {
-      display: block;
-      font-size: 1.5em;
-      color: var(--navy);
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 8px;
-      transition: all 0.3s ease;
-      z-index: 1001;
-    }
-
-    .menu-icon:hover {
-      color: var(--electric-blue);
-    }
-
-    .nav-links {
-      display: none;
-      flex-direction: column;
-      background: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(20px);
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 85%;
-      height: 100vh;
-      box-shadow: 10px 0 50px rgba(0, 0, 0, 0.1);
-      padding: 80px 25px 40px;
-      z-index: 999;
-      gap: 0;
-    }
-
-    .nav-links.show {
-      display: flex;
-      animation: slideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-    }
-
-    @keyframes slideIn {
-      from { transform: translateX(-100%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
-
-    .nav-links a {
-      text-decoration: none;
-      color: var(--navy);
-      font-weight: 500;
-      font-size: 1.1em;
-      transition: all 0.3s ease;
-      padding: 18px 0;
-      border-bottom: 1px solid rgba(0, 31, 63, 0.05);
-      width: 100%;
-      border-radius: 0;
-    }
-
-    .nav-links a:hover {
-      color: var(--electric-blue);
-      background: rgba(0, 102, 255, 0.08);
-    }
-
-    /* Hero Section */
-    .hero-section {
-      text-align: center;
-      margin-bottom: 50px;
-      padding: 40px 0;
-    }
-
-    .hero-title {
+    .page-title {
       font-family: "Montserrat", sans-serif;
-      font-size: 2.5em;
+      font-size: 2.8em;
       color: var(--navy);
       margin-bottom: 15px;
-      font-weight: 900;
-      letter-spacing: -0.5px;
+      font-weight: 800;
     }
 
-    .hero-subtitle {
+    .last-updated {
+      color: #64748b;
+      font-size: 1em;
+      margin-bottom: 10px;
+    }
+
+    .intro-text {
       font-size: 1.1em;
-      color: rgba(0, 31, 63, 0.8);
+      color: #4a5568;
       max-width: 700px;
       margin: 0 auto;
-      font-weight: 400;
     }
 
-    /* Content Cards */
     .content-card {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      padding: 30px;
+      background: var(--white);
+      border-radius: 15px;
+      padding: 40px;
+      box-shadow: 0 10px 30px rgba(0, 31, 63, 0.08);
+      border: 1px solid rgba(0, 31, 63, 0.05);
       margin-bottom: 30px;
-      box-shadow: var(--shadow);
-      border-left: 4px solid var(--creator);
     }
 
-    .content-header {
-      display: flex;
-      align-items: center;
-      gap: 15px;
+    .section-title {
+      font-family: "Montserrat", sans-serif;
+      font-size: 1.8em;
+      color: var(--electric-blue);
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid rgba(0, 102, 255, 0.1);
+    }
+
+    .section-content {
+      color: #4a5568;
       margin-bottom: 25px;
     }
 
-    .content-header i {
-      font-size: 1.8em;
-      color: var(--creator);
-    }
-
-    .content-header h2 {
-      color: var(--navy);
-      font-size: 1.8em;
-      font-weight: 800;
-      font-family: "Montserrat", sans-serif;
-    }
-
-    .content-body p {
-      line-height: 1.7;
-      font-size: 1.05em;
-      margin-bottom: 20px;
-      color: rgba(0, 31, 63, 0.8);
-    }
-
-    /* Important Note */
-    .important-note {
-      background: rgba(255, 248, 225, 0.9);
-      border-left: 4px solid var(--warning);
-      padding: 25px;
-      margin: 30px 0;
-      border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(255, 165, 0, 0.1);
-    }
-
-    .important-note h4 {
-      color: var(--navy);
+    .section-content p {
       margin-bottom: 15px;
-      font-size: 1.3em;
-      display: flex;
-      align-items: center;
-      gap: 10px;
     }
 
-    .important-note h4 i {
-      color: var(--warning);
+    .highlight {
+      background: linear-gradient(135deg, var(--electric-blue) 0%, var(--light-blue) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
     }
 
-    /* Section Styling */
-    .section {
-      margin-bottom: 40px;
-    }
-
-    .section h3 {
-      color: var(--creator);
-      font-size: 1.4em;
-      margin-top: 30px;
-      margin-bottom: 15px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 600;
-    }
-
-    .section h3 i {
-      font-size: 1.2em;
-    }
-
-    .section ul {
-      margin-left: 25px;
-      margin-bottom: 20px;
-    }
-
-    .section ul li {
-      margin: 12px 0;
-      font-size: 1.05em;
-      color: rgba(0, 31, 63, 0.8);
-      line-height: 1.6;
-      position: relative;
-      padding-left: 10px;
-    }
-
-    .section ul li:before {
-      content: "";
-      color: var(--creator);
-      font-weight: bold;
-      display: inline-block;
-      width: 1em;
-      margin-left: -1em;
-    }
-
-    /* Highlight Box */
-    .highlight-box {
-      background: rgba(139, 92, 246, 0.05);
-      border-radius: 15px;
-      padding: 25px;
+    .info-box {
+      background: rgba(0, 102, 255, 0.05);
+      border-left: 4px solid var(--electric-blue);
+      padding: 20px;
+      border-radius: 8px;
       margin: 25px 0;
-      border: 1px solid rgba(139, 92, 246, 0.1);
     }
 
-    .highlight-box h4 {
-      color: var(--creator);
-      margin-bottom: 15px;
-      font-size: 1.2em;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    .warning-box {
+      background: rgba(255, 193, 7, 0.1);
+      border-left: 4px solid #ffc107;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 25px 0;
     }
 
-    /* Footer */
-    footer {
+    ul {
+      padding-left: 20px;
+      margin-bottom: 20px;
+    }
+
+    li {
+      margin-bottom: 10px;
+    }
+
+    .contact-info {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--dark-navy) 100%);
+      color: var(--white);
+      padding: 40px;
+      border-radius: 15px;
       text-align: center;
-      background: var(--dark-navy);
+      margin-top: 40px;
+    }
+
+    .contact-title {
+      font-family: "Montserrat", sans-serif;
+      font-size: 1.8em;
+      margin-bottom: 20px;
+    }
+
+    .contact-email {
+      font-size: 1.2em;
+      margin-bottom: 25px;
+    }
+
+    .contact-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--electric-blue) 0%, var(--light-blue) 100%);
       color: var(--white);
-      padding: 40px 20px 30px;
-      position: relative;
-      overflow: hidden;
-      margin-top: 50px;
-    }
-
-    footer::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--electric-blue), transparent);
-    }
-
-    footer p {
-      margin: 12px 0;
-      font-size: 0.9em;
-      color: rgba(255, 255, 255, 0.8);
-    }
-
-    footer a {
-      color: var(--light-blue);
+      padding: 12px 30px;
+      border-radius: 50px;
       text-decoration: none;
+      font-weight: 600;
       transition: all 0.3s ease;
-      font-weight: 500;
+      box-shadow: 0 4px 15px rgba(0, 102, 255, 0.3);
     }
 
-    footer a:hover {
-      color: var(--white);
-      text-decoration: underline;
+    .contact-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 102, 255, 0.4);
     }
 
-    /* Desktop Styles */
-    @media (min-width: 768px) {
-      header {
-        padding: 18px 6%;
-        min-height: 80px;
-      }
-
-      .brand {
-        font-size: 1.9em;
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-      }
-
-      .menu-icon {
-        display: none;
-      }
-
-      .nav-links {
-        display: flex;
-        flex-direction: row;
-        background: transparent;
-        backdrop-filter: none;
-        position: static;
-        width: auto;
-        height: auto;
-        box-shadow: none;
-        padding: 0;
-        gap: clamp(15px, 2vw, 25px);
-      }
-
-      .nav-links a {
-        padding: 8px 16px;
-        border-bottom: none;
-        font-size: 0.95em;
-        width: auto;
-        border-radius: 8px;
-      }
-
-      .nav-links a::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        width: 0;
-        height: 2px;
-        background: var(--electric-blue);
-        transition: all 0.3s ease;
-        transform: translateX(-50%);
-      }
-
-      .nav-links a:hover::after {
-        width: 80%;
-      }
-
-      .hero-section {
-        padding: 60px 0;
-      }
-
-      .hero-title {
-        font-size: 3.5em;
-      }
-
-      .hero-subtitle {
-        font-size: 1.3em;
-      }
-
-      .content-card {
-        padding: 40px;
-      }
-
-      footer {
-        padding: 60px 20px 40px;
-      }
+    .agreement-section {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      border-radius: 15px;
+      padding: 30px;
+      margin: 30px 0;
+      text-align: center;
     }
 
-    /* Large Desktop */
-    @media (min-width: 1200px) {
+    .agreement-text {
+      font-size: 1.1em;
+      margin-bottom: 20px;
+    }
+
+    .revenue-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+
+    .revenue-table th {
+      background: rgba(0, 102, 255, 0.1);
+      padding: 15px;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 2px solid var(--electric-blue);
+    }
+
+    .revenue-table td {
+      padding: 12px 15px;
+      border-bottom: 1px solid rgba(0, 31, 63, 0.1);
+    }
+
+    .revenue-table tr:hover {
+      background: rgba(0, 102, 255, 0.05);
+    }
+
+    @media (max-width: 768px) {
       .container {
-        max-width: 1400px;
-        margin: 0 auto;
+        padding: 20px 15px;
+      }
+      
+      .page-title {
+        font-size: 2.2em;
+      }
+      
+      .content-card {
+        padding: 25px 20px;
+      }
+      
+      .section-title {
+        font-size: 1.5em;
+      }
+      
+      .revenue-table {
+        font-size: 0.9em;
+      }
+      
+      .revenue-table th,
+      .revenue-table td {
+        padding: 8px 10px;
       }
     }
   </style>
 </head>
-
 <body>
-  <!-- Animated Background -->
-  <div class="animated-bg">
-    <div class="floating-shapes">
-      <div class="shape"></div>
-      <div class="shape"></div>
-      <div class="shape"></div>
-      <div class="shape"></div>
-    </div>
-    <div class="grid-lines"></div>
-  </div>
-
   <div class="container">
-    <!-- Mobile-First Header -->
-    <header>
-      <button class="menu-icon" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
-      <nav>
-        <div class="nav-links" id="navMenu">
-          <a href="index.html" onclick="closeMenu()">Home</a>
-          <a href="About Us.html" onclick="closeMenu()">About</a>
-          <a href="music.html" onclick="closeMenu()">Music Library</a>
-          <a href="sign-in.html" onclick="closeMenu()">Login</a>
-          <a href="sign-up.html" onclick="closeMenu()">Creator Signup</a>
-          <a href="#contact" onclick="closeMenu()">Contact</a>
-        </div>
-      </nav>
-      <div class="brand">EVERNET</div>
-    </header>
-
-    <!-- Hero Section -->
-    <div class="hero-section">
-      <h1 class="hero-title">CREATOR AGREEMENT</h1>
-      <p class="hero-subtitle">Official partnership terms between EVERNET Ltd and content creators</p>
+    <a href="/" class="back-btn">
+      <i class="fas fa-arrow-left"></i> Back to Home
+    </a>
+    
+    <div class="header">
+      <div class="logo">EVERNET</div>
+      <h1 class="page-title">Creator Agreement</h1>
+      <p class="last-updated">Effective Date: January 1, 2024</p>
+      <p class="intro-text">This Creator Agreement governs your use of EVERNET's music monetization platform and outlines the terms of our partnership.</p>
     </div>
-
-    <!-- Main Content -->
+    
+    <div class="agreement-section">
+      <p class="agreement-text">By registering as a EVERNET creator, you acknowledge that you have read, understood, and agree to be bound by this Creator Agreement.</p>
+    </div>
+    
     <div class="content-card">
-      <div class="content-header">
-        <i class="fas fa-file-contract"></i>
-        <h2>Creator Agreement</h2>
-      </div>
-      
-      <div class="content-body">
-        <p>This Creator Agreement ("Agreement") is entered into between <strong>EVERNET Ltd</strong> ("Company") and the content creator ("Creator"). By signing up for the EVERNET Creator Program, you agree to the terms outlined below.</p>
-
-        <div class="important-note">
-          <h4><i class="fas fa-exclamation-circle"></i> Important Payment Information</h4>
-          <p><strong>Your first revenue payment takes 90 days to process</strong> because we collect royalties from multiple platforms worldwide, not just YouTube. While YouTube pays in 45 days, other platforms like Spotify, Apple Music, and TikTok take longer. We wait until we have collected all your royalties before distributing your 30% share.</p>
-          <p><strong>Your Success = Our Success:</strong> We earn when you earn. The more you use our sounds daily across all platforms, the more revenue we generate together. Consistent usage maximizes your earnings potential across our entire distribution network.</p>
-        </div>
-
-        <div class="section">
-          <h3><i class="fas fa-list-alt"></i> 1. Program Overview</h3>
-          <p>The EVERNET Creator Program provides creators with access to a curated music library for use in their content across <strong>all major platforms including YouTube, TikTok, Instagram, Spotify, and more</strong>. In exchange, creators receive 30% of the total revenue generated from tracks used in their eligible content across all platforms.</p>
-        </div>
-
-        <div class="section">
-          <h3><i class="fas fa-user-check"></i> 2. Creator Eligibility</h3>
-          <ul>
-            <li>Creator must be at least 18 years of age or have parental/guardian consent.</li>
-            <li>Creator must own or manage active content channels on multiple platforms (YouTube, TikTok, Instagram, etc.)</li>
-            <li>Creator must comply with all platform-specific content guidelines and copyright policies.</li>
-            <li>Creator must provide accurate information during registration and maintain updated contact details.</li>
-          </ul>
-        </div>
-
-        <div class="section">
-          <h3><i class="fas fa-music"></i> 3. Music Usage Rights & Strategy</h3>
-          <ul>
-            <li>EVERNET grants Creator a non-exclusive, non-transferable license to use provided music tracks in content published on all verified platforms.</li>
-            <li><strong>Daily Usage Recommended:</strong> For optimal earnings, creators should incorporate EVERNET sounds into their daily content across multiple platforms.</li>
-            <li>Music may not be redistributed, sold, or used outside of approved content without explicit written permission.</li>
-            <li>Creator may not claim ownership of the music or register it with any content ID system.</li>
-            <li>All music remains the intellectual property of EVERNET Ltd.</li>
-          </ul>
-        </div>
-
-        <div class="section">
-          <h3><i class="fas fa-money-bill-wave"></i> 4. Multi-Platform Revenue Sharing & Payments</h3>
-          <ul>
-            <li>Creator will receive <strong>30% of net revenue</strong> generated from their content using EVERNET music <strong>across all platforms</strong>.</li>
-            <li><strong>First Payment Timeline:</strong> Initial payment will be processed within <strong>90 days</strong> of first eligible use to allow for global royalty collection from all platforms.</li>
-            <li><strong>Why 90 Days?</strong> While YouTube pays in 45 days, other platforms (Spotify, Apple Music, TikTok, etc.) have longer payment cycles. We consolidate all your earnings before distribution.</li>
-            <li>Subsequent payments will be made monthly after the initial payment cycle.</li>
-            <li>Minimum payout threshold: 50.</li>
-            <li>Payments will be made via Payoneer, TransferWise, or direct bank transfer.</li>
-          </ul>
-        </div>
-
-        <div class="section">
-          <h3><i class="fas fa-video"></i> 5. Content Requirements & Platform Strategy</h3>
-          <ul>
-            <li>Creator must use EVERNET in original content across multiple platforms to maximize revenue potential.</li>
-            <li>Content must comply with all applicable laws and platform guidelines.</li>
-            <li>Creator must not use EVERNET music in content that is defamatory, illegal, or promotes hate speech.</li>
-            <li>Creator is encouraged to use sounds consistently across platforms - your daily usage drives collective success.</li>
-          </ul>
-        </div>
-
-        <div class="section">
-          <h3><i class="fas fa-chart-line"></i> 6. Tracking & Reporting</h3>
-          <p>EVERNET will track usage and revenue through our proprietary multi-platform system. Creators will have access to a dashboard showing real-time statistics, including views, estimated revenue across all platforms, and payment status.</p>
-        </div>
-
-        <div class="section">
-          <h3><i class="fas fa-hourglass-end"></i> 7. Term & Termination</h3>
-          <ul>
-            <li>This Agreement remains in effect until terminated by either party with 30 days written notice.</li>
-            <li>EVERNET may terminate immediately for violation of terms.</li>
-            <li>Upon termination, Creator must cease using EVERNET music in new content.</li>
-            <li>Outstanding payments will be processed according to the payment schedule.</li>
-          </ul>
-        </div>
-
-        <div class="highlight-box">
-          <h4><i class="fas fa-handshake"></i> Partnership Mindset</h4>
-          <p>We operate on a partnership model: <strong>Your success is our success</strong>. The more you use our sounds daily across platforms, the more revenue we generate together. We're invested in your growth and provide resources to help you maximize your earnings across our entire distribution network.</p>
-        </div>
-
-        <div class="section">
-          <h3><i class="fas fa-lock"></i> 8. Confidentiality</h3>
-          <p>Creator agrees to keep confidential any proprietary information, including revenue details, business strategies, and unreleased music shared by EVERNET.</p>
-        </div>
-
-        <div class="section">
-          <h3><i class="fas fa-shield-alt"></i> 9. Indemnification</h3>
-          <p>Creator agrees to indemnify and hold harmless EVERNET from any claims, damages, or losses arising from Creator's content or violation of this Agreement.</p>
-        </div>
-
-        <div class="section">
-          <h3><i class="fas fa-balance-scale"></i> 10. Dispute Resolution</h3>
-          <p>Any disputes arising from this Agreement will be resolved through mediation before pursuing legal action. This Agreement is governed by the laws of the United Kingdom.</p>
-        </div>
-
-        <div class="section">
-          <h3><i class="fas fa-edit"></i> 11. Amendments</h3>
-          <p>EVERNET reserves the right to modify this Agreement with 30 days notice to creators. Continued participation after changes constitutes acceptance of the modified terms.</p>
-        </div>
-
-        <div class="section">
-          <h3><i class="fas fa-check-circle"></i> 12. Acceptance</h3>
-          <p>By checking the agreement box during registration, Creator acknowledges they have read, understood, and agree to be bound by all terms of this Creator Agreement, including the 90-day initial payment period and multi-platform revenue model.</p>
-        </div>
-
-        <div class="important-note">
-          <p><strong>Effective Date:</strong> January 1, 2025</p>
-          <p><strong>Last Updated:</strong> January 1, 2025</p>
+      <h2 class="section-title">1. Partnership Overview</h2>
+      <div class="section-content">
+        <p>This Agreement establishes a partnership between you (the "Creator") and EVERNET for the purpose of music monetization through digital content creation.</p>
+        
+        <div class="info-box">
+          <p><span class="highlight">Partnership Benefits:</span> As a EVERNET creator, you gain access to our premium music library, revenue sharing opportunities, and professional creator tools to enhance your content and maximize earnings.</p>
         </div>
       </div>
+    </div>
+    
+    <div class="content-card">
+      <h2 class="section-title">2. Creator Eligibility & Requirements</h2>
+      <div class="section-content">
+        <p>To qualify as a EVERNET creator, you must meet the following requirements:</p>
+        <ul>
+          <li>Be at least 18 years of age</li>
+          <li>Own and operate an active YouTube channel with monetization enabled</li>
+          <li>Have a minimum of 1,000 subscribers on your YouTube channel</li>
+          <li>Consistently create original content that complies with platform guidelines</li>
+          <li>Maintain good standing with YouTube's Partner Program</li>
+        </ul>
+        
+        <div class="warning-box">
+          <p><span class="highlight">Important:</span> EVERNET reserves the right to approve or deny creator applications based on content quality, channel performance, and alignment with our brand values.</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="content-card">
+      <h2 class="section-title">3. Music Licensing Terms</h2>
+      <div class="section-content">
+        <p>EVERNET grants you a non-exclusive, worldwide license to use our music library in your content under the following conditions:</p>
+        
+        <div class="info-box">
+          <p><span class="highlight">Permitted Uses:</span></p>
+          <ul>
+            <li>Background music in YouTube videos, Shorts, and live streams</li>
+            <li>Music for branded content and sponsored videos</li>
+            <li>Content across multiple platforms (with proper attribution)</li>
+            <li>Commercial content where you maintain ownership</li>
+          </ul>
+        </div>
+        
+        <div class="warning-box">
+          <p><span class="highlight">Restricted Uses:</span></p>
+          <ul>
+            <li>Reselling or redistricting EVERNET music as standalone audio</li>
+            <li>Using music in content that violates platform guidelines</li>
+            <li>Claiming ownership or authorship of EVERNET music</li>
+            <li>Using music in content that promotes hate speech, violence, or illegal activities</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="content-card">
+      <h2 class="section-title">4. Revenue Sharing Model</h2>
+      <div class="section-content">
+        <p>EVERNET operates on a transparent revenue sharing model designed to maximize creator earnings:</p>
+        
+        <table class="revenue-table">
+          <thead>
+            <tr>
+              <th>Content Type</th>
+              <th>Creator Share</th>
+              <th>EVERNET Share</th>
+              <th>Platform Fees</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>YouTube Shorts</td>
+              <td>70%</td>
+              <td>20%</td>
+              <td>10%</td>
+            </tr>
+            <tr>
+              <td>YouTube Long-form</td>
+              <td>60%</td>
+              <td>25%</td>
+              <td>15%</td>
+            </tr>
+            <tr>
+              <td>Custom Music Projects</td>
+              <td>50%</td>
+              <td>40%</td>
+              <td>10%</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <div class="info-box">
+          <p><span class="highlight">Payment Terms:</span> Revenue is calculated monthly based on tracked music usage. Payments are processed on the 15th of each month for the previous month's earnings, with a minimum payout threshold of $50.</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="content-card">
+      <h2 class="section-title">5. Content & Usage Tracking</h2>
+      <div class="section-content">
+        <p>EVERNET utilizes advanced tracking technology to monitor music usage and calculate revenue shares:</p>
+        <ul>
+          <li>Automated content ID matching across platforms</li>
+          <li>Real-time usage analytics in your creator dashboard</li>
+          <li>Monthly detailed earnings reports</li>
+          <li>Dispute resolution process for tracking inaccuracies</li>
+        </ul>
+        
+        <div class="info-box">
+          <p><span class="highlight">Transparency Commitment:</span> You have 24/7 access to your usage data and can dispute any tracking discrepancies within 30 days of report generation.</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="content-card">
+      <h2 class="section-title">6. Creator Obligations</h2>
+      <div class="section-content">
+        <p>As a EVERNET creator, you agree to:</p>
+        <ul>
+          <li>Use EVERNET music only in content you create and own</li>
+          <li>Maintain the quality and integrity of your content</li>
+          <li>Attribute EVERNET music when required by platform guidelines</li>
+          <li>Report any technical issues or tracking problems promptly</li>
+          <li>Comply with all platform terms of service and community guidelines</li>
+          <li>Update your channel information as it changes</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="content-card">
+      <h2 class="section-title">7. EVERNET Support & Resources</h2>
+      <div class="section-content">
+        <p>As part of our partnership, EVERNET provides:</p>
+        <ul>
+          <li>Dedicated creator support team</li>
+          <li>Regular music library updates and new releases</li>
+          <li>Creator education resources and best practices</li>
+          <li>Early access to new features and tools</li>
+          <li>Networking opportunities with other EVERNET creators</li>
+        </ul>
+        
+        <div class="info-box">
+          <p><span class="highlight">Custom Music Requests:</span> Active creators may request custom music compositions for their channels, subject to availability and creative alignment.</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="content-card">
+      <h2 class="section-title">8. Term & Termination</h2>
+      <div class="section-content">
+        <p>This Agreement remains in effect until terminated by either party:</p>
+        <ul>
+          <li>You may terminate with 30 days written notice</li>
+          <li>EVERNET may terminate for violation of terms with immediate effect</li>
+          <li>Upon termination, you must cease using EVERNET music in new content</li>
+          <li>Existing content with EVERNET music may remain published</li>
+          <li>Final revenue payments will be processed within 60 days of termination</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="content-card">
+      <h2 class="section-title">9. Amendments</h2>
+      <div class="section-content">
+        <p>EVERNET may update this Creator Agreement to reflect changes in our services or legal requirements:</p>
+        <ul>
+          <li>Material changes will be communicated 30 days in advance</li>
+          <li>Continued use of EVERNET services constitutes acceptance of changes</li>
+          <li>You may terminate the Agreement if you do not accept changes</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="contact-info">
+      <h3 class="contact-title">Ready to Join EVERNET?</h3>
+      <p class="contact-email">Apply to become a EVERNET creator or get answers to your questions:</p>
+      <p class="contact-email">Email: info@evergreenempireltd.com</p>
+      <a href="mailto:info@evergreenempireltd.com" class="contact-btn">Apply Now</a>
     </div>
   </div>
-
-  <!-- Footer -->
-  <footer id="contact">
-    <p>Contact our dedicated support team: <a href="mailto:support@evernet.com">support@evernet.com</a></p>
-    <p>
-      <a href="Terms of Service/">Terms & Conditions</a> | 
-      <a href="Privacy policy/">Privacy Policy</a> | 
-      <a href="Creator Agreement/">Creator Agreement</a>
-    </p>
-    <p>©2025 EverGreen Empire Ltd. All rights reserved.</p>
-  </footer>
-
-  <script>
-    // Mobile Menu Functions
-    function toggleMenu() {
-      const nav = document.getElementById('navMenu');
-      nav.classList.toggle('show');
-    }
-
-    function closeMenu() {
-      const nav = document.getElementById('navMenu');
-      nav.classList.remove('show');
-    }
-
-    // Close menu when clicking outside
-    document.addEventListener('click', function(event) {
-      const nav = document.getElementById('navMenu');
-      const menuIcon = document.querySelector('.menu-icon');
-      
-      if (!nav.contains(event.target) && !menuIcon.contains(event.target) && nav.classList.contains('show')) {
-        closeMenu();
-      }
-    });
-
-    // Smooth scrolling for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
-          closeMenu();
-        }
-      });
-    });
-  </script>
 </body>
-</html>
-
+  </html>
