@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Referrals - EverNet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --success: #10b981;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --border: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 70px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--card);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1.2rem;
+            text-decoration: none;
+        }
+
+        .user-email {
+            font-size: 0.9rem;
+            color: #64748b;
+            background: #f1f5f9;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+
+        /* Main Content */
+        .container {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            margin: 20px 0 30px 0;
+            font-size: 1.8rem;
+        }
+
+        /* Referral Card */
+        .referral-card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .referral-code-box {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .code {
+            font-family: monospace;
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .stat {
+            background: var(--card);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        /* Referrals List */
+        .referrals-list {
+            background: var(--card);
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            margin-top: 20px;
+        }
+
+        .list-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+        }
+
+        .list-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            gap: 8px;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Footer Nav */
+        .footer-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            border-top: 1px solid var(--border);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 0.8rem;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .code {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .list-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #64748b;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <a href="https://www.evernet.evergreenempireltd.com/dashboard/" class="logo">EverNet</a>
+            <div class="user-email" id="userEmail">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1 class="page-title">My Referrals</h1>
+
+        <!-- Referral Card -->
+        <div class="referral-card">
+            <h2 style="margin-bottom: 15px;">Your Referral Code</h2>
+            <p style="color: #64748b; margin-bottom: 15px;">
+                Share this code with friends to earn 3% of their earnings
+            </p>
+            
+            <div class="referral-code-box">
+                <div class="code" id="referralCode">Generating...</div>
+                <button class="btn btn-outline" onclick="copyCode()">
+                    <i class="fas fa-copy"></i> Copy Code
+                </button>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value" id="totalReferrals">0</div>
+                    <div class="stat-label">Total Referrals</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="earnings">$0.00</div>
+                    <div class="stat-label">Earned</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="pending">$0.00</div>
+                    <div class="stat-label">Pending</div>
+                </div>
+            </div>
+
+            <!-- Invite Button -->
+            <a href="https://www.evernet.evergreenempireltd.com/sign-up/" target="_blank" class="btn btn-primary">
+                <i class="fas fa-user-plus"></i> Invite Friends to Sign Up
+            </a>
+        </div>
+
+        <!-- Referrals List -->
+        <div class="referrals-list">
+            <div class="list-header">My Referred Users</div>
+            <div id="referralsContainer">
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading referrals...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <div class="footer-nav">
+        <a href="https://www.evernet.evergreenempireltd.com/dashboard/" class="nav-item">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="#" class="nav-item active">
+            <i class="fas fa-share-alt"></i>
+            <span>Referrals</span>
+        </a>
+        <a href="#" class="nav-item" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </a>
+    </div>
+
+    <script>
+        // Firebase Config - Your existing config
+        const firebaseConfig = {
+            apiKey: "AIzaSyAuSEqhLenwrEz-qrIn1drjAugy1YSkDlI",
+            authDomain: "creators-portal-428c5.firebaseapp.com",
+            projectId: "creators-portal-428c5",
+            storageBucket: "creators-portal-428c5.firebasestorage.app",
+            messagingSenderId: "499280036303",
+            appId: "1:499280036303:web:b4d80d3b7fe1291381d2ba"
+        };
+
+        // Initialize Firebase
+        let app, auth, db;
+        
+        try {
+            app = firebase.initializeApp(firebaseConfig);
+            auth = firebase.auth();
+            db = firebase.firestore();
+        } catch (error) {
+            app = firebase.app();
+            auth = firebase.auth();
+            db = firebase.firestore();
+        }
+
+        // Main function
+        async function init() {
+            // Check auth
+            auth.onAuthStateChanged(async (user) => {
+                if (user) {
+                    document.getElementById('userEmail').textContent = user.email;
+                    await loadUserData(user.uid);
+                } else {
+                    window.location.href = 'https://www.evernet.evergreenempireltd.com/';
+                }
+            });
+        }
+
+        // Load user data from your Firebase structure
+        async function loadUserData(userId) {
+            try {
+                console.log("Loading user data for:", userId);
+                
+                // Get user document from your 'users' collection
+                const userDoc = await db.collection('users').doc(userId).get();
+                
+                if (userDoc.exists) {
+                    const userData = userDoc.data();
+                    console.log("User data:", userData);
+                    
+                    // Get or create referral code
+                    let referralCode = userData.referralCode;
+                    
+                    if (!referralCode) {
+                        // Generate a referral code from user ID
+                        referralCode = 'EVER' + userId.substring(0, 6).toUpperCase();
+                        
+                        // Save it to user document
+                        await db.collection('users').doc(userId).update({
+                            referralCode: referralCode,
+                            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                    }
+                    
+                    document.getElementById('referralCode').textContent = referralCode;
+                    
+                    // Load referral stats based on your structure
+                    await loadReferralStats(userId, referralCode);
+                    
+                } else {
+                    console.log("User document not found");
+                    document.getElementById('referralCode').textContent = "ERROR";
+                }
+                
+            } catch (error) {
+                console.error("Error loading user data:", error);
+                document.getElementById('referralCode').textContent = "ERROR";
+            }
+        }
+
+        // Load referral stats from your Firebase structure
+        async function loadReferralStats(userId, referralCode) {
+            try {
+                console.log("Loading referral stats for user:", userId);
+                
+                // Get all users who were referred by this user
+                // Using 'referredBy' field in your users collection
+                const referralsSnapshot = await db.collection('users')
+                    .where('referredBy', '==', userId)
+                    .get();
+                
+                console.log("Referrals found:", referralsSnapshot.size);
+                
+                // Update total referrals count
+                const totalReferrals = referralsSnapshot.size;
+                document.getElementById('totalReferrals').textContent = totalReferrals;
+                
+                // Calculate earnings from referred users
+                let totalEarnings = 0;
+                let pendingEarnings = 0;
+                
+                // Get all creator videos to calculate earnings
+                const videosSnapshot = await db.collection('creatorVideos').get();
+                
+                // Create a map of user earnings from videos
+                const userEarningsMap = {};
+                
+                videosSnapshot.forEach(doc => {
+                    const video = doc.data();
+                    const creatorId = video.creatorId;
+                    const earnings = video.creatorPayout || 0;
+                    
+                    if (!userEarningsMap[creatorId]) {
+                        userEarningsMap[creatorId] = 0;
+                    }
+                    userEarningsMap[creatorId] += earnings;
+                });
+                
+                // Calculate referral earnings for each referred user
+                for (const doc of referralsSnapshot.docs) {
+                    const referredUser = doc.data();
+                    const referredUserId = doc.id;
+                    
+                    // Get referred user's total earnings from videos
+                    const userEarnings = userEarningsMap[referredUserId] || 0;
+                    
+                    // Calculate 3% of their earnings
+                    const referralBonus = userEarnings * 0.03;
+                    
+                    totalEarnings += referralBonus;
+                    
+                    // Check if referral bonus has been paid
+                    // You might need to add a 'referralPaid' field to track this
+                    const referralPaid = referredUser.referralPaid || false;
+                    if (!referralPaid) {
+                        pendingEarnings += referralBonus;
+                    }
+                }
+                
+                // Update display
+                document.getElementById('earnings').textContent = '$' + totalEarnings.toFixed(2);
+                document.getElementById('pending').textContent = '$' + pendingEarnings.toFixed(2);
+                
+                // Load referrals list
+                await loadReferralsList(referralsSnapshot);
+                
+            } catch (error) {
+                console.error("Error loading referral stats:", error);
+                document.getElementById('earnings').textContent = "$0.00";
+                document.getElementById('pending').textContent = "$0.00";
+            }
+        }
+
+        // Load referrals list
+        async function loadReferralsList(snapshot) {
+            const container = document.getElementById('referralsContainer');
+            
+            if (snapshot.empty) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-users"></i>
+                        <p>No referrals yet</p>
+                        <p style="font-size: 0.9rem; margin-top: 10px;">Share your code to invite friends</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            try {
+                let html = '';
+                
+                // Get all creator videos to calculate earnings per user
+                const videosSnapshot = await db.collection('creatorVideos').get();
+                const userEarningsMap = {};
+                
+                videosSnapshot.forEach(doc => {
+                    const video = doc.data();
+                    const creatorId = video.creatorId;
+                    const earnings = video.creatorPayout || 0;
+                    
+                    if (!userEarningsMap[creatorId]) {
+                        userEarningsMap[creatorId] = 0;
+                    }
+                    userEarningsMap[creatorId] += earnings;
+                });
+                
+                snapshot.forEach(doc => {
+                    const user = doc.data();
+                    const userId = doc.id;
+                    const joinDate = user.createdAt?.toDate ? user.createdAt.toDate() : new Date();
+                    const userEarnings = userEarningsMap[userId] || 0;
+                    const referralEarnings = userEarnings * 0.03;
+                    const avatarLetter = user.email?.charAt(0).toUpperCase() || 'U';
+                    
+                    html += `
+                        <div class="list-item">
+                            <div>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="width: 35px; height: 35px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                                        ${avatarLetter}
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: 500;">${user.email || 'User'}</div>
+                                        <div style="font-size: 0.8rem; color: #64748b;">
+                                            Joined ${joinDate.toLocaleDateString()}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-weight: 500; color: var(--success);">+$${referralEarnings.toFixed(2)}</div>
+                                <div style="font-size: 0.8rem; color: #64748b;">3% of earnings</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                container.innerHTML = html;
+                
+            } catch (error) {
+                console.error("Error loading referrals list:", error);
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Error loading referrals</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Copy code function
+        function copyCode() {
+            const code = document.getElementById('referralCode').textContent;
+            if (code === "Generating..." || code === "ERROR") {
+                alert("Please wait for code to load");
+                return;
+            }
+            
+            navigator.clipboard.writeText(code)
+                .then(() => {
+                    alert('Referral code copied!');
+                })
+                .catch(err => {
+                    alert('Failed to copy code');
+                });
+        }
+
+        // Logout function
+        function logout() {
+            auth.signOut()
+                .then(() => {
+                    window.location.href = 'https://www.evernet.evergreenempireltd.com/';
+                })
+                .catch(error => {
+                    console.error('Logout error:', error);
+                });
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
