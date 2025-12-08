@@ -1,0 +1,2270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EverNet -Withdrawal/Report</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    /* ========== ENHANCED WORLD-CLASS THEME ========== */
+    :root {
+      --navy: #0a1f44;
+      --navy-accent: #1e40af;
+      --navy-light: #3b82f6;
+      --navy-gradient: linear-gradient(135deg, #0a1f44 0%, #1e40af 100%);
+      --gold: #d4af37;
+      --gold-light: #fbbf24;
+      --gold-gradient: linear-gradient(135deg, #d4af37 0%, #fbbf24 100%);
+      --white: #ffffff;
+      --white-off: #f8fafc;
+      --gray-light: #e2e8f0;
+      --gray: #94a3b8;
+      --gray-dark: #64748b;
+      --success: #10b981;
+      --success-light: #d1fae5;
+      --warning: #f59e0b;
+      --warning-light: #fef3c7;
+      --danger: #ef4444;
+      --danger-light: #fee2e2;
+      --info: #3b82f6;
+      --info-light: #dbeafe;
+      --creator: #8b5cf6;
+      --creator-light: #ede9fe;
+      --radius: 10px;
+      --radius-lg: 16px;
+      --radius-sm: 6px;
+      --shadow: 0 4px 20px rgba(10, 31, 68, 0.08);
+      --shadow-lg: 0 10px 40px rgba(10, 31, 68, 0.12);
+      --shadow-hover: 0 20px 60px rgba(10, 31, 68, 0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Inter", sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      color: var(--navy);
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 300px;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-accent) 100%);
+      clip-path: polygon(0 0, 100% 0, 100% 50%, 0 100%);
+      z-index: -1;
+      opacity: 0.05;
+    }
+
+    /* ========== ENHANCED HEADER ========== */
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 20px rgba(10, 31, 68, 0.08);
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 72px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: translateY(-1px);
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--navy-gradient);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-weight: 800;
+      font-size: 16px;
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logo-icon::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.2) 50%, transparent 70%);
+      animation: shine 3s infinite linear;
+    }
+
+    @keyframes shine {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .logo-text {
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--navy);
+      letter-spacing: -0.5px;
+    }
+
+    .logo-text span {
+      background: var(--gold-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 800;
+    }
+
+    /* USER INFO - ENHANCED */
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .creator-name {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(139, 92, 246, 0.1);
+      border-radius: 8px;
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      font-weight: 600;
+      color: var(--navy);
+      font-size: 13px;
+      min-width: 180px;
+      transition: all 0.3s ease;
+    }
+
+    .creator-name:hover {
+      background: rgba(139, 92, 246, 0.15);
+      transform: translateY(-1px);
+    }
+
+    .creator-name i {
+      color: var(--creator);
+      font-size: 16px;
+    }
+
+    .dashboard-btn {
+      background: var(--navy-gradient);
+      color: var(--white);
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      text-decoration: none;
+      border: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.3);
+    }
+
+    .dashboard-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(26, 86, 219, 0.4);
+    }
+
+    /* ========== MAIN LAYOUT - ENHANCED ========== */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* ========== HORIZONTAL TABS - ENHANCED ========== */
+    .payment-tabs {
+      display: flex;
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 6px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(226, 232, 240, 0.6);
+      gap: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .payment-tabs::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--gold-gradient);
+    }
+
+    .payment-tab {
+      flex: 1;
+      padding: 14px 20px;
+      background: none;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      color: var(--gray-dark);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 13px;
+      white-space: nowrap;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .payment-tab::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--navy-gradient);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .payment-tab.active {
+      background: var(--navy-gradient);
+      color: var(--white);
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.2);
+    }
+
+    .payment-tab.active i {
+      transform: scale(1.1);
+    }
+
+    .payment-tab i {
+      transition: transform 0.3s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .payment-tab span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .payment-tab:hover:not(.active) {
+      background: rgba(10, 31, 68, 0.05);
+      color: var(--navy);
+      transform: translateY(-1px);
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ========== ENHANCED BALANCE SECTION ========== */
+    .balance-section {
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .balance-section::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .balance-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .balance-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(226, 232, 240, 0.6);
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .balance-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--gold-gradient);
+    }
+
+    .balance-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .balance-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      color: var(--gray-dark);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .balance-label i {
+      font-size: 14px;
+    }
+
+    .balance-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 4px;
+      line-height: 1.2;
+    }
+
+    .balance-subtitle {
+      color: var(--gray);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    /* ========== MONTH NAVIGATION - ENHANCED ========== */
+    .month-navigation {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--white);
+      padding: 16px 24px;
+      border-radius: var(--radius-lg);
+      margin-bottom: 20px;
+      border: 1px solid rgba(226, 232, 240, 0.6);
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+
+    .month-navigation::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 24px;
+      right: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gray-light), transparent);
+    }
+
+    .month-nav-btn {
+      background: var(--navy-gradient);
+      color: white;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(26, 86, 219, 0.2);
+    }
+
+    .month-nav-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 12px rgba(26, 86, 219, 0.3);
+    }
+
+    .current-month {
+      font-weight: 700;
+      color: var(--navy);
+      text-align: center;
+      min-width: 200px;
+      font-size: 15px;
+      background: rgba(10, 31, 68, 0.05);
+      padding: 8px 20px;
+      border-radius: 8px;
+      border: 1px solid rgba(10, 31, 68, 0.1);
+    }
+
+    .month-select {
+      padding: 10px 16px;
+      border: 1px solid var(--gray-light);
+      border-radius: 8px;
+      background: var(--white);
+      color: var(--navy);
+      font-size: 13px;
+      min-width: 160px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .month-select:focus {
+      outline: none;
+      border-color: var(--navy-light);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    /* ========== ENHANCED REPORTS SECTION ========== */
+    .reports-section {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(226, 232, 240, 0.6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .reports-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gold-gradient);
+    }
+
+    .section-header {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title i {
+      color: var(--gold);
+      font-size: 18px;
+    }
+
+    /* ========== ENHANCED REPORTS TABLE ========== */
+    .table-container {
+      overflow-x: auto;
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-light);
+      max-height: 400px;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .table-container::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    .table-container::-webkit-scrollbar-track {
+      background: var(--gray-light);
+      border-radius: 3px;
+    }
+
+    .table-container::-webkit-scrollbar-thumb {
+      background: var(--navy);
+      border-radius: 3px;
+    }
+
+    .table-container::-webkit-scrollbar-thumb:hover {
+      background: var(--navy-accent);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 800px;
+    }
+
+    th {
+      background: linear-gradient(to bottom, var(--white-off), #f1f5f9);
+      padding: 14px 20px;
+      text-align: left;
+      font-weight: 700;
+      color: var(--navy);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid var(--gray-light);
+      position: sticky;
+      top: 0;
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(241, 245, 249, 0.8);
+      font-size: 13px;
+      color: var(--navy);
+      font-weight: 500;
+    }
+
+    tr {
+      transition: all 0.3s ease;
+    }
+
+    tr:hover {
+      background: rgba(10, 31, 68, 0.03);
+      transform: translateX(2px);
+    }
+
+    .status-badge {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      display: inline-block;
+      letter-spacing: 0.3px;
+    }
+
+    .status-locked {
+      background: linear-gradient(135deg, var(--warning-light), #fed7aa);
+      color: var(--warning);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+
+    .status-available {
+      background: linear-gradient(135deg, var(--success-light), #a7f3d0);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .status-paid {
+      background: linear-gradient(135deg, var(--info-light), #bfdbfe);
+      color: var(--info);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    .status-pending {
+      background: linear-gradient(135deg, var(--creator-light), #ddd6fe);
+      color: var(--creator);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+    }
+
+    /* ========== ENHANCED WITHDRAWAL SECTION ========== */
+    .withdrawal-section {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(226, 232, 240, 0.6);
+      position: relative;
+    }
+
+    .withdrawal-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gold-gradient);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--navy);
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .form-label i {
+      color: var(--gold);
+      font-size: 12px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--gray-light);
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--navy);
+      background: var(--white);
+      transition: all 0.3s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--navy-light);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    /* ========== MINIMAL BANK DETAILS ========== */
+    .bank-section {
+      background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-top: 16px;
+      border: 1px solid var(--gray-light);
+    }
+
+    /* Fee Instructions - RED COLOR */
+    .fee-instructions {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05));
+      border-radius: var(--radius);
+      padding: 16px;
+      margin: 16px 0;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    .fee-instructions h4 {
+      color: var(--danger);
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .fee-instructions p {
+      color: var(--danger);
+      font-size: 11px;
+      margin-bottom: 4px;
+      line-height: 1.5;
+      font-weight: 500;
+    }
+
+    /* Payment Schedule */
+    .payment-schedule {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+      border-radius: var(--radius);
+      padding: 16px;
+      margin: 16px 0;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .payment-schedule h4 {
+      color: var(--success);
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .payment-schedule p {
+      color: var(--success);
+      font-size: 11px;
+      line-height: 1.5;
+      font-weight: 500;
+    }
+
+    /* ========== ENHANCED LOADING & EMPTY STATES ========== */
+    .loading {
+      padding: 40px 24px;
+      text-align: center;
+    }
+
+    .loading-spinner {
+      border: 3px solid rgba(59, 130, 246, 0.1);
+      border-top: 3px solid var(--navy-light);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 16px;
+      position: relative;
+    }
+
+    .loading-spinner::after {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: -3px;
+      right: -3px;
+      bottom: -3px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      border-top: 3px solid var(--gold);
+      animation: spin 1.5s linear infinite reverse;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--gray);
+      position: relative;
+    }
+
+    .empty-state i {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.3;
+      background: var(--navy-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .empty-state h4 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--navy);
+    }
+
+    .empty-state p {
+      font-size: 13px;
+      color: var(--gray);
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    /* ========== SUBMIT BUTTON ========== */
+    .submit-btn {
+      background: var(--navy-gradient);
+      color: var(--white);
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 14px;
+      border: none;
+      transition: all 0.3s ease;
+      width: 100%;
+      margin-top: 24px;
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .submit-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(26, 86, 219, 0.4);
+    }
+
+    .submit-btn:hover::before {
+      left: 100%;
+    }
+
+    /* ========== RESPONSIVE DESIGN ========== */
+    @media (max-width: 1024px) {
+      .balance-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header-container {
+        flex-direction: column;
+        gap: 16px;
+        padding: 16px;
+        height: auto;
+      }
+      
+      .user-info {
+        width: 100%;
+        justify-content: space-between;
+      }
+      
+      .balance-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .payment-tab {
+        padding: 12px 16px;
+        font-size: 12px;
+      }
+      
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      
+      .month-navigation {
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      
+      .current-month {
+        order: 1;
+        min-width: 100%;
+      }
+      
+      .month-select {
+        order: 2;
+        min-width: 100%;
+      }
+      
+      .month-nav-btn {
+        order: 3;
+      }
+    }
+
+    @media (max-width: 480px) {
+      main {
+        padding: 16px;
+      }
+      
+      .payment-tab {
+        padding: 10px 12px;
+        font-size: 11px;
+      }
+      
+      .balance-card {
+        padding: 16px;
+      }
+      
+      .reports-section, .withdrawal-section {
+        padding: 20px;
+      }
+      
+      .balance-value {
+        font-size: 24px;
+      }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <a href="#" class="logo">
+        <div class="logo-icon">W/P</div>
+        <div class="logo-text">Evernet<span>Withrawal/Report</span></div>
+      </a>
+      
+      <div class="user-info" id="userInfo" style="display: none;">
+        <div class="creator-name">
+          <i class="fas fa-user-circle"></i>
+          <span id="creatorName">Loading...</span>
+        </div>
+        <a href="/dashboard/" class="dashboard-btn">
+          <i class="fas fa-arrow-left"></i>
+          Dashboard
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Loading -->
+    <div id="loadingScreen" class="loading">
+      <div class="loading-spinner"></div>
+      <p>Loading payment portal...</p>
+    </div>
+
+    <!-- Creator Content -->
+    <div id="creatorContent" style="display: none;">
+      <!-- Horizontal Tabs -->
+      <div class="payment-tabs">
+        <button class="payment-tab active" onclick="switchTab('reports')">
+          <i class="fas fa-file-alt"></i>
+          Monthly Reports
+        </button>
+        <button class="payment-tab" onclick="switchTab('withdraw')">
+          <i class="fas fa-money-bill-wave"></i>
+          Withdraw
+        </button>
+        <button class="payment-tab" onclick="switchTab('transactions')">
+          <i class="fas fa-history"></i>
+          History
+        </button>
+      </div>
+
+      <!-- Balance Overview -->
+      <section class="balance-section">
+        <div class="balance-grid">
+          <div class="balance-card">
+            <div class="balance-label">
+              <i class="fas fa-money-bill-wave"></i>
+              Total Earnings
+            </div>
+            <div class="balance-value" id="totalEarnings">$0.00</div>
+            <div class="balance-subtitle">Lifetime earnings</div>
+          </div>
+          
+          <div class="balance-card">
+            <div class="balance-label">
+              <i class="fas fa-unlock"></i>
+              Available Now
+            </div>
+            <div class="balance-value" id="availableBalance" style="color: var(--success);">$0.00</div>
+            <div class="balance-subtitle">Ready for withdrawal</div>
+          </div>
+          
+          <div class="balance-card">
+            <div class="balance-label">
+              <i class="fas fa-lock"></i>
+              Locked
+            </div>
+            <div class="balance-value" id="lockedBalance" style="color: var(--warning);">$0.00</div>
+            <div class="balance-subtitle">Available in 3 months</div>
+          </div>
+          
+          <div class="balance-card">
+            <div class="balance-label">
+              <i class="fas fa-history"></i>
+              Withdrawn
+            </div>
+            <div class="balance-value" id="totalWithdrawn">$0.00</div>
+            <div class="balance-subtitle">Total withdrawn</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 1: MONTHLY REPORTS -->
+      <div id="reportsTab" class="tab-content active">
+        <section class="reports-section">
+          <div class="section-header">
+            <div class="section-title">
+              <i class="fas fa-file-invoice-dollar"></i>
+              Monthly Earnings Reports
+            </div>
+          </div>
+
+          <!-- Month Navigation -->
+          <div class="month-navigation">
+            <button class="month-nav-btn" onclick="changeMonth(-1)">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            
+            <div class="current-month" id="currentMonthDisplay">
+              Loading...
+            </div>
+            
+            <select class="month-select" id="monthSelect" onchange="selectMonth(this.value)">
+              <option value="">Select Month</option>
+            </select>
+            
+            <button class="month-nav-btn" onclick="changeMonth(1)">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+
+          <!-- Reports Table -->
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Month</th>
+                  <th>Status</th>
+                  <th>Views</th>
+                  <th>Earnings</th>
+                  <th>Withdrawn</th>
+                  <th>Balance</th>
+                  <th>Available</th>
+                </tr>
+              </thead>
+              <tbody id="reportsTable">
+                <tr>
+                  <td colspan="7">
+                    <div class="loading">
+                      <div class="loading-spinner"></div>
+                      <p>Loading reports...</p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <!-- TAB 2: WITHDRAWAL FORM -->
+      <div id="withdrawTab" class="tab-content">
+        <section class="withdrawal-section">
+          <div class="section-header">
+            <div class="section-title">
+              <i class="fas fa-paper-plane"></i>
+              Request Withdrawal
+            </div>
+          </div>
+          
+          <!-- Fee Instructions -->
+          <div class="fee-instructions">
+            <h4><i class="fas fa-exclamation-circle"></i> Important Information</h4>
+            <p>• Withdrawal requests can be made starting from $20 USD.</p>
+            <p>• Amounts less than $20 USD will be carried over to the next month.</p>
+            <p>• The fees incurred during the transfer process are to be borne by the recipient.</p>
+            <p>• Bank transfer fee: $18 USD regardless of the amount.</p>
+            <p>• PayPal transfer fee: Charged according to PayPal's fee rate.</p>
+          </div>
+          
+          <!-- Payment Schedule -->
+          <div class="payment-schedule">
+            <h4><i class="fas fa-calendar-check"></i> Payment Schedule</h4>
+            <p>• Payments are processed on the 22nd of every month.</p>
+            <p>• If the 22nd falls on a weekend, payment is processed on the following Monday.</p>
+          </div>
+          
+          <form id="withdrawalForm">
+            <div class="form-group">
+              <label class="form-label">
+                <i class="fas fa-dollar-sign"></i>
+                Withdrawal Amount (USD)
+              </label>
+              <div style="position: relative;">
+                <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--gray); font-weight: 600;">$</span>
+                <input 
+                  type="number" 
+                  class="form-input" 
+                  id="withdrawalAmount" 
+                  step="0.01" 
+                  min="20" 
+                  placeholder="20.00"
+                  required
+                  style="padding-left: 30px;"
+                >
+              </div>
+              <div style="text-align: right; margin-top: 8px;">
+                <small style="color: var(--gray); font-size: 11px; font-weight: 500;">
+                  Available: <span id="maxWithdrawAmount" style="font-weight: 700; color: var(--success);">$0.00</span>
+                </small>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">
+                <i class="fas fa-credit-card"></i>
+                Payment Method
+              </label>
+              <select class="form-input" id="paymentMethod" onchange="updatePaymentMethod()" required>
+                <option value="">Select payment method</option>
+                <option value="paypal">PayPal</option>
+                <option value="bank">Bank Transfer (USA Only)</option>
+              </select>
+            </div>
+
+            <!-- PayPal Details -->
+            <div id="paypalDetails" style="display: none;" class="bank-section">
+              <div class="form-group">
+                <label class="form-label">
+                  <i class="fab fa-paypal"></i>
+                  PayPal Email
+                </label>
+                <input 
+                  type="email" 
+                  class="form-input" 
+                  id="paypalEmail" 
+                  placeholder="your.email@example.com"
+                  required
+                >
+                <small style="color: var(--gray); font-size: 11px; margin-top: 4px; display: block;">
+                  Enter the email associated with your PayPal account
+                </small>
+              </div>
+            </div>
+
+            <!-- Bank Transfer Details - MINIMAL FORM -->
+            <div id="bankDetails" style="display: none;" class="bank-section">
+              <div class="form-group">
+                <label class="form-label">
+                  <i class="fas fa-user"></i>
+                  Account Holder Full Name
+                </label>
+                <input 
+                  type="text" 
+                  class="form-input" 
+                  id="accountHolderName" 
+                  placeholder="Full name as on bank account"
+                  required
+                >
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">
+                  <i class="fas fa-university"></i>
+                  Bank Name
+                </label>
+                <input 
+                  type="text" 
+                  class="form-input" 
+                  id="bankName" 
+                  placeholder="e.g., Chase Bank, Bank of America"
+                  required
+                >
+              </div>
+              
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">
+                    <i class="fas fa-code"></i>
+                    SWIFT/BIC Code
+                  </label>
+                  <input 
+                    type="text" 
+                    class="form-input" 
+                    id="swiftCode" 
+                    placeholder="SWIFT/BIC code"
+                    required
+                  >
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">
+                    <i class="fas fa-hashtag"></i>
+                    Routing Number (ABA)
+                  </label>
+                  <input 
+                    type="text" 
+                    class="form-input" 
+                    id="routingNumber" 
+                    placeholder="9-digit routing number"
+                    required
+                  >
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">
+                  <i class="fas fa-id-card"></i>
+                  Account Number
+                </label>
+                <input 
+                  type="text" 
+                  class="form-input" 
+                  id="accountNumber" 
+                  placeholder="Account number"
+                  required
+                >
+              </div>
+              
+              <div style="background: rgba(5, 150, 105, 0.05); padding: 12px; border-radius: 6px; margin-top: 12px; border-left: 3px solid var(--success);">
+                <div style="font-weight: 700; color: var(--success); font-size: 11px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+                  <i class="fas fa-shield-alt"></i> Security Notice
+                </div>
+                <div style="font-size: 10px; color: var(--gray-dark); line-height: 1.4; font-weight: 500;">
+                  Your bank details are encrypted and stored securely. We never share your financial information with third parties.
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="submit-btn">
+              <i class="fas fa-paper-plane"></i>
+              Submit Withdrawal Request
+            </button>
+          </form>
+        </section>
+      </div>
+
+      <!-- TAB 3: TRANSACTION HISTORY -->
+      <div id="transactionsTab" class="tab-content">
+        <section class="reports-section">
+          <div class="section-header">
+            <div class="section-title">
+              <i class="fas fa-history"></i>
+              Transaction History
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Description</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="transactionsTable">
+                <tr>
+                  <td colspan="5">
+                    <div class="loading">
+                      <div class="loading-spinner"></div>
+                      <p>Loading history...</p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+   <!-- Firebase Configuration -->
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyAuSEqhLenwrEz-qrIn1drjAugy1YSkDlI",
+    authDomain: "creators-portal-428c5.firebaseapp.com",
+    projectId: "creators-portal-428c5",
+    storageBucket: "creators-portal-428c5.firebasestorage.app",
+    messagingSenderId: "499280036303",
+    appId: "1:499280036303:web:b4d80d3b7fe1291381d2ba",
+    measurementId: "G-CYWGD80FS5"
+  };
+
+  // Initialize Firebase
+  let app, auth, db;
+  try {
+    app = firebase.initializeApp(firebaseConfig);
+    auth = firebase.auth();
+    db = firebase.firestore();
+    console.log('✅ Firebase initialized successfully');
+  } catch (error) {
+    console.log('⚠️ Firebase already initialized');
+    app = firebase.app();
+    auth = firebase.auth();
+    db = firebase.firestore();
+  }
+</script>
+
+<!-- Application JavaScript -->
+<script>
+  let currentUser = null;
+  let userData = null;
+  let monthlyReports = [];
+  let withdrawalRequests = [];
+  let transactions = [];
+  let currentDisplayMonth = new Date();
+  let availableMonths = [];
+
+  // Notification system
+  function showNotification(message, type = 'info') {
+    // Create notification element if it doesn't exist
+    let notificationEl = document.getElementById('notification');
+    if (!notificationEl) {
+      notificationEl = document.createElement('div');
+      notificationEl.id = 'notification';
+      notificationEl.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 12px 24px;
+        border-radius: 8px;
+        color: white;
+        font-weight: 500;
+        z-index: 10000;
+        opacity: 0;
+        transform: translateX(100%);
+        transition: all 0.3s ease;
+        max-width: 320px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        font-size: 14px;
+      `;
+      document.body.appendChild(notificationEl);
+    }
+
+    // Set notification color
+    const colors = {
+      success: '#10b981',
+      error: '#ef4444',
+      warning: '#f59e0b',
+      info: '#3b82f6'
+    };
+    
+    notificationEl.style.background = colors[type] || colors.info;
+    notificationEl.textContent = message;
+    
+    // Show notification
+    notificationEl.style.opacity = '1';
+    notificationEl.style.transform = 'translateX(0)';
+    
+    // Hide after 5 seconds
+    setTimeout(() => {
+      notificationEl.style.opacity = '0';
+      notificationEl.style.transform = 'translateX(100%)';
+    }, 5000);
+  }
+
+  // Initialize
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Payment portal initializing...');
+    initializeAuth();
+  });
+
+  // Authentication
+  async function initializeAuth() {
+    console.log('🔐 Starting auth initialization...');
+    
+    auth.onAuthStateChanged(async (user) => {
+      console.log('🔄 Auth state changed, user:', user ? user.email : 'No user');
+      
+      if (user) {
+        currentUser = user;
+        console.log('👤 User authenticated:', user.email);
+        
+        try {
+          const userDoc = await db.collection('users').doc(user.uid).get();
+          
+          if (userDoc.exists) {
+            userData = userDoc.data();
+            console.log('📄 User data loaded:', userData.role);
+            
+            if (userData.role !== 'creator') {
+              console.log('❌ Access denied: Not a creator');
+              document.getElementById('loadingScreen').style.display = 'none';
+              document.getElementById('creatorContent').innerHTML = `
+                <div style="text-align: center; padding: 60px 20px;">
+                  <h3 style="color: #ef4444; margin-bottom: 12px;">Access Denied</h3>
+                  <p>Creator access only. Please contact support.</p>
+                  <a href="../index.html" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background: #0a1f44; color: white; border-radius: 8px; text-decoration: none;">Go to Login</a>
+                </div>
+              `;
+              return;
+            }
+            
+            // Show user interface
+            document.getElementById('loadingScreen').style.display = 'none';
+            document.getElementById('creatorContent').style.display = 'block';
+            document.getElementById('userInfo').style.display = 'flex';
+            
+            // Set creator name
+            let creatorName = userData.displayName || userData.name || user.email.split('@')[0];
+            document.getElementById('creatorName').textContent = creatorName;
+            console.log('✅ User interface loaded');
+            
+            // Load all data
+            await loadAllData();
+            setupEventListeners();
+            
+            console.log('🎉 Portal loaded successfully!');
+            
+          } else {
+            console.log('❌ User document not found');
+            document.getElementById('loadingScreen').style.display = 'none';
+            document.getElementById('creatorContent').innerHTML = `
+              <div style="text-align: center; padding: 60px 20px;">
+                <h3 style="color: #ef4444; margin-bottom: 12px;">User Not Found</h3>
+                <p>Please contact support to set up your account.</p>
+                <a href="../index.html" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background: #0a1f44; color: white; border-radius: 8px; text-decoration: none;">Go to Login</a>
+              </div>
+            `;
+          }
+        } catch (error) {
+          console.error('❌ Error loading user data:', error);
+          document.getElementById('loadingScreen').style.display = 'none';
+          document.getElementById('creatorContent').innerHTML = `
+            <div style="text-align: center; padding: 60px 20px;">
+              <h3 style="color: #ef4444; margin-bottom: 12px;">Error Loading Data</h3>
+              <p>Please refresh the page or contact support.</p>
+              <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; background: #0a1f44; color: white; border-radius: 8px; border: none; cursor: pointer;">Refresh Page</button>
+            </div>
+          `;
+        }
+      } else {
+        console.log('👤 No user logged in');
+        document.getElementById('loadingScreen').style.display = 'none';
+        document.getElementById('creatorContent').innerHTML = `
+          <div style="text-align: center; padding: 60px 20px;">
+            <h3 style="color: #ef4444; margin-bottom: 12px;">Not Logged In</h3>
+            <p>Please login to access the payment portal.</p>
+            <a href="../index.html" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background: #0a1f44; color: white; border-radius: 8px; text-decoration: none;">Go to Login</a>
+          </div>
+        `;
+      }
+    });
+  }
+
+  // Load all data
+  async function loadAllData() {
+    console.log('📦 Loading all data...');
+    
+    try {
+      await Promise.all([
+        loadUserData(),
+        loadMonthlyReports(),
+        loadWithdrawalRequests(),
+        loadTransactions()
+      ]);
+      
+      console.log('✅ All data loaded successfully');
+      
+      updateBalanceDisplay();
+      updateMonthNavigation();
+      updateReportsTable();
+      updateTransactionsTable();
+      
+      showNotification('Payment portal loaded successfully!', 'success');
+      
+    } catch (error) {
+      console.error('❌ Error loading data:', error);
+      showNotification('Error loading data: ' + error.message, 'error');
+    }
+  }
+
+  async function loadUserData() {
+    try {
+      const userDoc = await db.collection('users').doc(currentUser.uid).get();
+      if (userDoc.exists) {
+        userData = userDoc.data();
+        console.log('👤 User data refreshed:', userData);
+      }
+    } catch (error) {
+      console.error('Error loading user data:', error);
+    }
+  }
+
+  // FIXED: Load monthly reports
+  async function loadMonthlyReports() {
+    console.log('📊 Loading monthly reports...');
+    
+    try {
+      // First, check if collection exists
+      const collectionRef = db.collection('monthlyReports');
+      const snapshot = await collectionRef.orderBy('month', 'desc').get();
+      
+      monthlyReports = [];
+      availableMonths = [];
+      
+      console.log(`📋 Found ${snapshot.size} total monthly reports`);
+      
+      snapshot.forEach(doc => {
+        const report = doc.data();
+        report.id = doc.id;
+        
+        // Check if creatorDetails exists
+        if (!report.creatorDetails || !Array.isArray(report.creatorDetails)) {
+          console.log(`❌ Report ${report.month} has no creatorDetails array`);
+          return;
+        }
+        
+        // Find this creator in the report
+        let creatorDetail = null;
+        
+        for (const detail of report.creatorDetails) {
+          // Try multiple matching strategies
+          if (detail.creatorId === currentUser.uid) {
+            creatorDetail = detail;
+            break;
+          }
+          
+          if (detail.creatorEmail && 
+              detail.creatorEmail.toLowerCase() === currentUser.email.toLowerCase()) {
+            creatorDetail = detail;
+            break;
+          }
+        }
+        
+        if (creatorDetail) {
+          console.log(`✅ Creator found in report ${report.month}: $${creatorDetail.earnings}`);
+          
+          monthlyReports.push({
+            id: report.id,
+            month: report.month,
+            status: report.status || 'generated',
+            isLocked: report.isLocked !== false,
+            isEnabled: report.isEnabled !== false,
+            creatorDetail: creatorDetail,
+            creatorEarnings: creatorDetail.earnings || 0,
+            creatorViews: creatorDetail.views || 0,
+            totalViews: report.totalViews || 0,
+            totalPayout: report.totalPayout || 0,
+            payoutRate: report.payoutRate || 0.30,
+            generatedAt: report.generatedAt,
+            generatedBy: report.generatedBy
+          });
+          
+          availableMonths.push(report.month);
+        } else {
+          console.log(`❌ Creator not found in report ${report.month}`);
+        }
+      });
+      
+      console.log(`📊 ${monthlyReports.length} reports loaded for this creator`);
+      
+    } catch (error) {
+      console.error('❌ Error loading monthly reports:', error);
+      showNotification('Error loading reports', 'error');
+    }
+  }
+
+  async function loadWithdrawalRequests() {
+    try {
+      console.log('💰 Loading withdrawal requests...');
+      
+      const snapshot = await db.collection('withdrawals')
+        .where('creatorId', '==', currentUser.uid)
+        .orderBy('createdAt', 'desc')
+        .get();
+      
+      withdrawalRequests = [];
+      snapshot.forEach(doc => {
+        const withdrawal = doc.data();
+        withdrawal.id = doc.id;
+        withdrawalRequests.push(withdrawal);
+      });
+      
+      console.log(`💰 ${withdrawalRequests.length} withdrawal requests loaded`);
+      
+    } catch (error) {
+      console.error('Error loading withdrawal requests:', error);
+    }
+  }
+
+  async function loadTransactions() {
+    try {
+      console.log('📝 Loading transactions...');
+      
+      const snapshot = await db.collection('transactions')
+        .where('creatorId', '==', currentUser.uid)
+        .orderBy('timestamp', 'desc')
+        .limit(50)
+        .get();
+      
+      transactions = [];
+      snapshot.forEach(doc => {
+        const transaction = doc.data();
+        transaction.id = doc.id;
+        transactions.push(transaction);
+      });
+      
+      console.log(`📝 ${transactions.length} transactions loaded`);
+      
+    } catch (error) {
+      console.error('Error loading transactions:', error);
+    }
+  }
+
+  function updateBalanceDisplay() {
+    console.log('💳 Updating balance display...');
+    
+    const totalEarnings = userData?.totalEarned || 0;
+    const availableBalance = userData?.availableBalance || 0;
+    const lockedBalance = userData?.lockedBalance || 0;
+    const totalWithdrawn = userData?.totalWithdrawn || 0;
+    
+    document.getElementById('totalEarnings').textContent = `$${totalEarnings.toFixed(2)}`;
+    document.getElementById('availableBalance').textContent = `$${availableBalance.toFixed(2)}`;
+    document.getElementById('lockedBalance').textContent = `$${lockedBalance.toFixed(2)}`;
+    document.getElementById('totalWithdrawn').textContent = `$${totalWithdrawn.toFixed(2)}`;
+    document.getElementById('maxWithdrawAmount').textContent = `$${availableBalance.toFixed(2)}`;
+    
+    console.log('💳 Balance updated:', { totalEarnings, availableBalance, lockedBalance, totalWithdrawn });
+  }
+
+  function updateMonthNavigation() {
+    const monthName = currentDisplayMonth.toLocaleDateString('en-US', { 
+      month: 'long', 
+      year: 'numeric' 
+    });
+    document.getElementById('currentMonthDisplay').textContent = monthName;
+    
+    const monthSelect = document.getElementById('monthSelect');
+    monthSelect.innerHTML = '<option value="">Select Month</option>';
+    
+    // Get unique months
+    const uniqueMonths = [...new Set(availableMonths)].sort((a, b) => b.localeCompare(a));
+    
+    uniqueMonths.forEach(month => {
+      try {
+        const date = new Date(month + '-01');
+        const optionText = date.toLocaleDateString('en-US', { 
+          month: 'short', 
+          year: 'numeric' 
+        });
+        const option = document.createElement('option');
+        option.value = month;
+        option.textContent = optionText;
+        monthSelect.appendChild(option);
+      } catch (error) {
+        console.error('Error parsing month:', month, error);
+      }
+    });
+  }
+
+  function updateReportsTable() {
+    const tableBody = document.getElementById('reportsTable');
+    
+    if (!tableBody) {
+      console.error('Reports table body not found!');
+      return;
+    }
+    
+    if (monthlyReports.length === 0) {
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="7">
+            <div style="text-align: center; padding: 40px 20px; color: #64748b;">
+              <i class="fas fa-file-alt" style="font-size: 48px; margin-bottom: 16px; opacity: 0.3;"></i>
+              <h4 style="color: #0a1f44; margin-bottom: 8px;">No Monthly Reports Yet</h4>
+              <p>Monthly reports will appear here once they are generated by the admin.</p>
+              <p style="margin-top: 10px; font-size: 12px;">
+                If you think there should be reports, please contact support.
+              </p>
+            </div>
+          </td>
+        </tr>
+      `;
+      return;
+    }
+    
+    // Filter for current month
+    const currentMonthStr = currentDisplayMonth.toISOString().slice(0, 7);
+    const reportsForMonth = monthlyReports.filter(report => report.month === currentMonthStr);
+    
+    let html = '';
+    
+    if (reportsForMonth.length === 0) {
+      // Show all reports
+      html = monthlyReports.map(report => {
+        const reportDate = new Date(report.month + '-01');
+        const currentDate = new Date();
+        const monthsDiff = (currentDate.getFullYear() - reportDate.getFullYear()) * 12 + 
+                          (currentDate.getMonth() - reportDate.getMonth());
+        
+        let status = report.isLocked ? 'locked' : 'available';
+        let statusText = report.isLocked ? 'Locked' : 'Available';
+        let statusClass = report.isLocked ? 'status-locked' : 'status-available';
+        
+        // Check withdrawals for this month
+        const withdrawalsForMonth = withdrawalRequests.filter(w => w.month === report.month);
+        const paidWithdrawals = withdrawalsForMonth.filter(w => w.status === 'paid');
+        const totalWithdrawn = paidWithdrawals.reduce((sum, w) => sum + (w.amount || 0), 0);
+        const remainingBalance = Math.max(0, report.creatorEarnings - totalWithdrawn);
+        
+        if (paidWithdrawals.length > 0 && remainingBalance === 0) {
+          status = 'paid';
+          statusText = 'Paid';
+          statusClass = 'status-paid';
+        } else if (withdrawalsForMonth.some(w => w.status === 'pending' || w.status === 'processing')) {
+          status = 'pending';
+          statusText = 'Processing';
+          statusClass = 'status-pending';
+        }
+        
+        // Calculate available date
+        const availableDate = new Date(reportDate);
+        availableDate.setMonth(availableDate.getMonth() + 3);
+        
+        return `
+          <tr>
+            <td>${reportDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</td>
+            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+            <td>${report.creatorViews.toLocaleString()}</td>
+            <td>$${report.creatorEarnings.toFixed(2)}</td>
+            <td>$${totalWithdrawn.toFixed(2)}</td>
+            <td style="color: ${remainingBalance > 0 ? '#10b981' : 'inherit'}">$${remainingBalance.toFixed(2)}</td>
+            <td>${report.isLocked ? availableDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Now'}</td>
+          </tr>
+        `;
+      }).join('');
+      
+      // Add a note
+      html = `
+        <tr>
+          <td colspan="7" style="background: rgba(10, 31, 68, 0.02); padding: 12px 20px;">
+            <div style="display: flex; align-items: center; gap: 8px; color: #64748b; font-size: 12px;">
+              <i class="fas fa-info-circle"></i>
+              Showing all reports. Select a specific month to filter.
+            </div>
+          </td>
+        </tr>
+        ${html}
+      `;
+      
+    } else {
+      // Show reports for selected month
+      reportsForMonth.forEach(report => {
+        const reportDate = new Date(report.month + '-01');
+        const currentDate = new Date();
+        const monthsDiff = (currentDate.getFullYear() - reportDate.getFullYear()) * 12 + 
+                          (currentDate.getMonth() - reportDate.getMonth());
+        
+        let status = report.isLocked ? 'locked' : 'available';
+        let statusText = report.isLocked ? 'Locked' : 'Available';
+        let statusClass = report.isLocked ? 'status-locked' : 'status-available';
+        
+        // Check withdrawals for this month
+        const withdrawalsForMonth = withdrawalRequests.filter(w => w.month === report.month);
+        const paidWithdrawals = withdrawalsForMonth.filter(w => w.status === 'paid');
+        const totalWithdrawn = paidWithdrawals.reduce((sum, w) => sum + (w.amount || 0), 0);
+        const remainingBalance = Math.max(0, report.creatorEarnings - totalWithdrawn);
+        
+        if (paidWithdrawals.length > 0 && remainingBalance === 0) {
+          status = 'paid';
+          statusText = 'Paid';
+          statusClass = 'status-paid';
+        } else if (withdrawalsForMonth.some(w => w.status === 'pending' || w.status === 'processing')) {
+          status = 'pending';
+          statusText = 'Processing';
+          statusClass = 'status-pending';
+        }
+        
+        // Calculate available date
+        const availableDate = new Date(reportDate);
+        availableDate.setMonth(availableDate.getMonth() + 3);
+        
+        html += `
+          <tr>
+            <td>${reportDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</td>
+            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+            <td>${report.creatorViews.toLocaleString()}</td>
+            <td>$${report.creatorEarnings.toFixed(2)}</td>
+            <td>$${totalWithdrawn.toFixed(2)}</td>
+            <td style="color: ${remainingBalance > 0 ? '#10b981' : 'inherit'}">$${remainingBalance.toFixed(2)}</td>
+            <td>${report.isLocked ? availableDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Now'}</td>
+          </tr>
+        `;
+      });
+    }
+    
+    tableBody.innerHTML = html;
+  }
+
+  function updateTransactionsTable() {
+    const tableBody = document.getElementById('transactionsTable');
+    
+    if (!tableBody) {
+      console.error('Transactions table body not found!');
+      return;
+    }
+    
+    if (transactions.length === 0) {
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="5">
+            <div style="text-align: center; padding: 40px 20px; color: #64748b;">
+              <i class="fas fa-exchange-alt" style="font-size: 48px; margin-bottom: 16px; opacity: 0.3;"></i>
+              <h4 style="color: #0a1f44; margin-bottom: 8px;">No Transactions Yet</h4>
+              <p>Your transaction history will appear here.</p>
+            </div>
+          </td>
+        </tr>
+      `;
+      return;
+    }
+    
+    let html = '';
+    transactions.forEach(transaction => {
+      const date = transaction.timestamp?.toDate ? 
+        transaction.timestamp.toDate().toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric'
+        }) : 
+        'N/A';
+      
+      let amount = transaction.amount || 0;
+      let amountColor = amount >= 0 ? '#10b981' : '#ef4444';
+      let amountPrefix = amount >= 0 ? '+' : '';
+      
+      // Determine transaction type display
+      let typeDisplay = transaction.type || 'Unknown';
+      if (transaction.type === 'monthly_report') typeDisplay = 'Monthly Report';
+      if (transaction.type === 'withdrawal_request') typeDisplay = 'Withdrawal Request';
+      if (transaction.type === 'withdrawal_paid') typeDisplay = 'Withdrawal Paid';
+      if (transaction.type === 'manual_adjustment') typeDisplay = 'Manual Adjustment';
+      
+      // Determine status badge
+      let statusBadge = '';
+      if (transaction.status) {
+        const status = transaction.status.toLowerCase();
+        if (status === 'completed' || status === 'paid') {
+          statusBadge = '<span class="status-badge status-paid">Completed</span>';
+        } else if (status === 'pending') {
+          statusBadge = '<span class="status-badge status-pending">Pending</span>';
+        }
+      }
+      
+      html += `
+        <tr>
+          <td>${date}</td>
+          <td>${typeDisplay}</td>
+          <td>${transaction.notes || 'No description'}</td>
+          <td style="color: ${amountColor}; font-weight: 600;">
+            ${amountPrefix}$${Math.abs(amount).toFixed(2)}
+          </td>
+          <td>${statusBadge || '—'}</td>
+        </tr>
+      `;
+    });
+    
+    tableBody.innerHTML = html;
+  }
+
+  // Month navigation
+  function changeMonth(direction) {
+    currentDisplayMonth.setMonth(currentDisplayMonth.getMonth() + direction);
+    updateMonthNavigation();
+    updateReportsTable();
+  }
+
+  function selectMonth(monthStr) {
+    if (monthStr) {
+      currentDisplayMonth = new Date(monthStr + '-01');
+      updateMonthNavigation();
+      updateReportsTable();
+    }
+  }
+
+  // Tab switching
+  function switchTab(tabName) {
+    console.log(`🔄 Switching to ${tabName} tab`);
+    
+    // Hide all tabs
+    document.querySelectorAll('.tab-content').forEach(tab => {
+      tab.classList.remove('active');
+    });
+    
+    // Remove active class from all tabs
+    document.querySelectorAll('.payment-tab').forEach(tab => {
+      tab.classList.remove('active');
+    });
+    
+    // Show selected tab
+    const tabElement = document.getElementById(tabName + 'Tab');
+    if (tabElement) {
+      tabElement.classList.add('active');
+    } else {
+      console.error(`Tab element not found: ${tabName}Tab`);
+      return;
+    }
+    
+    // Add active class to clicked tab
+    event.currentTarget.classList.add('active');
+  }
+
+  // Payment method toggle
+  function updatePaymentMethod() {
+    const method = document.getElementById('paymentMethod').value;
+    
+    // Hide all sections
+    document.getElementById('paypalDetails').style.display = 'none';
+    document.getElementById('bankDetails').style.display = 'none';
+    
+    // Show selected section
+    if (method === 'paypal') {
+      document.getElementById('paypalDetails').style.display = 'block';
+    } else if (method === 'bank') {
+      document.getElementById('bankDetails').style.display = 'block';
+    }
+  }
+
+  // Setup event listeners
+  function setupEventListeners() {
+    console.log('🔧 Setting up event listeners...');
+    
+    const withdrawalForm = document.getElementById('withdrawalForm');
+    if (withdrawalForm) {
+      withdrawalForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        console.log('📝 Withdrawal form submitted');
+        await submitWithdrawal();
+      });
+    } else {
+      console.error('Withdrawal form not found!');
+    }
+    
+    // Validate amount
+    const withdrawalAmount = document.getElementById('withdrawalAmount');
+    if (withdrawalAmount) {
+      withdrawalAmount.addEventListener('input', function() {
+        const amount = parseFloat(this.value) || 0;
+        const available = userData?.availableBalance || 0;
+        
+        if (amount > available) {
+          this.style.borderColor = '#ef4444';
+          this.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.1)';
+        } else if (amount < 20) {
+          this.style.borderColor = '#f59e0b';
+          this.style.boxShadow = '0 0 0 3px rgba(245, 158, 11, 0.1)';
+        } else {
+          this.style.borderColor = '';
+          this.style.boxShadow = '';
+        }
+      });
+    }
+    
+    // Add event listeners for payment method dropdown
+    const paymentMethod = document.getElementById('paymentMethod');
+    if (paymentMethod) {
+      paymentMethod.addEventListener('change', updatePaymentMethod);
+    }
+    
+    // Add click handlers for tabs
+    document.querySelectorAll('.payment-tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        const tabName = this.getAttribute('onclick').match(/switchTab\('(\w+)'\)/)[1];
+        switchTab(tabName);
+      });
+    });
+    
+    console.log('✅ Event listeners setup complete');
+  }
+
+  // Submit withdrawal
+  async function submitWithdrawal() {
+    console.log('💸 Processing withdrawal submission...');
+    
+    const amount = parseFloat(document.getElementById('withdrawalAmount').value) || 0;
+    const method = document.getElementById('paymentMethod').value;
+    const available = userData?.availableBalance || 0;
+    
+    console.log('📊 Withdrawal details:', { amount, method, available });
+    
+    // Validate
+    if (amount < 20) {
+      alert('❌ Minimum withdrawal amount is $20 USD');
+      document.getElementById('withdrawalAmount').focus();
+      return;
+    }
+    
+    if (amount > available) {
+      alert(`❌ Amount exceeds your available balance of $${available.toFixed(2)}`);
+      document.getElementById('withdrawalAmount').focus();
+      return;
+    }
+    
+    if (!method) {
+      alert('❌ Please select a payment method');
+      document.getElementById('paymentMethod').focus();
+      return;
+    }
+    
+    try {
+      // Get payment details
+      let paymentDetails = {};
+      let validationFailed = false;
+      
+      if (method === 'paypal') {
+        const email = document.getElementById('paypalEmail').value.trim();
+        if (!email) {
+          alert('❌ Please enter your PayPal email');
+          document.getElementById('paypalEmail').focus();
+          validationFailed = true;
+        } else if (!validateEmail(email)) {
+          alert('❌ Please enter a valid email address');
+          document.getElementById('paypalEmail').focus();
+          validationFailed = true;
+        } else {
+          paymentDetails = { 
+            type: 'paypal', 
+            email: email 
+          };
+        }
+      } 
+      else if (method === 'bank') {
+        const accountHolder = document.getElementById('accountHolderName').value.trim();
+        const bankName = document.getElementById('bankName').value.trim();
+        const swiftCode = document.getElementById('swiftCode').value.trim();
+        const routingNumber = document.getElementById('routingNumber').value.trim();
+        const accountNumber = document.getElementById('accountNumber').value.trim();
+        
+        if (!accountHolder) {
+          alert('❌ Please enter account holder name');
+          document.getElementById('accountHolderName').focus();
+          validationFailed = true;
+        } else if (!bankName) {
+          alert('❌ Please enter bank name');
+          document.getElementById('bankName').focus();
+          validationFailed = true;
+        } else if (!swiftCode) {
+          alert('❌ Please enter SWIFT/BIC code');
+          document.getElementById('swiftCode').focus();
+          validationFailed = true;
+        } else if (!routingNumber) {
+          alert('❌ Please enter routing number');
+          document.getElementById('routingNumber').focus();
+          validationFailed = true;
+        } else if (!accountNumber) {
+          alert('❌ Please enter account number');
+          document.getElementById('accountNumber').focus();
+          validationFailed = true;
+        } else {
+          paymentDetails = {
+            type: 'bank',
+            accountHolder: accountHolder,
+            bankName: bankName,
+            swiftCode: swiftCode,
+            routingNumber: routingNumber,
+            accountNumber: accountNumber
+          };
+        }
+      }
+      
+      if (validationFailed) return;
+      
+      // Calculate next payment date (22nd of next month)
+      const today = new Date();
+      let paymentDate = new Date(today.getFullYear(), today.getMonth() + 1, 22);
+      
+      // If today is after the 22nd, move to next month
+      if (today.getDate() > 22) {
+        paymentDate.setMonth(paymentDate.getMonth() + 1);
+      }
+      
+      // Adjust if 22nd is weekend
+      if (paymentDate.getDay() === 0) { // Sunday
+        paymentDate.setDate(23);
+      } else if (paymentDate.getDay() === 6) { // Saturday
+        paymentDate.setDate(24);
+      }
+      
+      // Calculate fees
+      let netAmount = amount;
+      let fee = 0;
+      
+      if (method === 'bank') {
+        fee = 18;
+        netAmount = Math.max(0, amount - fee);
+      } else if (method === 'paypal') {
+        // PayPal fee calculation (3.49% + $0.49)
+        fee = (amount * 0.0349) + 0.49;
+        netAmount = Math.max(0, amount - fee);
+      }
+      
+      // Confirm with user
+      const confirmationMessage = `Withdrawal Request Summary:
+
+💰 Amount: $${amount.toFixed(2)}
+💳 Method: ${method.toUpperCase()}
+📅 Expected Payment Date: ${paymentDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+${fee > 0 ? `📊 Transfer Fee: $${fee.toFixed(2)} (borne by you)` : ''}
+${netAmount > 0 ? `✅ Net Amount You'll Receive: $${netAmount.toFixed(2)}` : ''}
+
+⚠️ Minimum withdrawal is $20 USD
+⚠️ Payments processed on the 22nd of every month
+⚠️ If 22nd is weekend, payment moves to Monday
+
+Do you want to submit this withdrawal request?`;
+      
+      if (!confirm(confirmationMessage)) {
+        console.log('❌ Withdrawal cancelled by user');
+        return;
+      }
+      
+      // Find oldest available month for withdrawal
+      let withdrawalMonth = 'N/A';
+      const currentDate = new Date();
+      
+      for (const report of monthlyReports) {
+        const reportDate = new Date(report.month + '-01');
+        const monthsDiff = (currentDate.getFullYear() - reportDate.getFullYear()) * 12 + 
+                          (currentDate.getMonth() - reportDate.getMonth());
+        
+        if (monthsDiff >= 3 && report.creatorEarnings > 0) {
+          withdrawalMonth = report.month;
+          break;
+        }
+      }
+      
+      console.log('📝 Creating withdrawal request...');
+      
+      // Create withdrawal request
+      const withdrawalData = {
+        creatorId: currentUser.uid,
+        creatorEmail: currentUser.email,
+        amount: amount,
+        fee: fee,
+        netAmount: netAmount,
+        paymentMethod: method,
+        paymentDetails: paymentDetails,
+        status: 'pending',
+        month: withdrawalMonth,
+        expectedPaymentDate: paymentDate,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+      
+      const withdrawalRef = await db.collection('withdrawals').add(withdrawalData);
+      console.log('✅ Withdrawal request created:', withdrawalRef.id);
+      
+      // Update user balance
+      const newAvailableBalance = Math.max(0, available - amount);
+      await db.collection('users').doc(currentUser.uid).update({
+        availableBalance: newAvailableBalance,
+        lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      
+      console.log('✅ User balance updated:', newAvailableBalance);
+      
+      // Add transaction
+      await db.collection('transactions').add({
+        creatorId: currentUser.uid,
+        creatorEmail: currentUser.email,
+        type: 'withdrawal_request',
+        amount: -amount,
+        fee: fee,
+        netAmount: -netAmount,
+        month: withdrawalMonth,
+        paymentMethod: method,
+        status: 'pending',
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        notes: `${method} withdrawal request - Fee: $${fee.toFixed(2)}`
+      });
+      
+      // Update local data
+      userData.availableBalance = newAvailableBalance;
+      
+      // Reset form
+      document.getElementById('withdrawalForm').reset();
+      document.getElementById('paypalDetails').style.display = 'none';
+      document.getElementById('bankDetails').style.display = 'none';
+      document.getElementById('paymentMethod').value = '';
+      
+      // Show success message
+      alert(`✅ Withdrawal request submitted successfully!
+
+Expected payment date: ${paymentDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+You will receive $${netAmount.toFixed(2)} after $${fee.toFixed(2)} fee.`);
+      
+      // Refresh data
+      await loadWithdrawalRequests();
+      await loadTransactions();
+      updateBalanceDisplay();
+      updateReportsTable();
+      updateTransactionsTable();
+      
+      showNotification('Withdrawal request submitted successfully!', 'success');
+      
+    } catch (error) {
+      console.error('❌ Error submitting withdrawal:', error);
+      alert('❌ Error submitting withdrawal request. Please try again.');
+      showNotification('Error submitting withdrawal request', 'error');
+    }
+  }
+
+  // Helper function to validate email
+  function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  }
+
+  // Debug function
+  async function debugReports() {
+    console.log('=== DEBUG REPORT DATA ===');
+    console.log('Current User:', {
+      uid: currentUser?.uid,
+      email: currentUser?.email
+    });
+    
+    console.log('Monthly Reports:', monthlyReports);
+    console.log('Available Months:', availableMonths);
+    
+    // Check Firestore directly
+    const snapshot = await db.collection('monthlyReports').get();
+    console.log(`Total reports in database: ${snapshot.size}`);
+    
+    snapshot.forEach(doc => {
+      const report = doc.data();
+      console.log(`Report ${report.month}:`, {
+        creatorDetails: report.creatorDetails?.map(c => ({
+          id: c.creatorId,
+          email: c.creatorEmail,
+          earnings: c.earnings
+        }))
+      });
+    });
+  }
+
+  // Refresh function
+  async function refreshData() {
+    console.log('🔄 Refreshing data...');
+    showNotification('Refreshing data...', 'info');
+    await loadAllData();
+  }
+
+  // Make functions globally available
+  window.changeMonth = changeMonth;
+  window.selectMonth = selectMonth;
+  window.switchTab = switchTab;
+  window.updatePaymentMethod = updatePaymentMethod;
+  window.debugReports = debugReports;
+  window.refreshData = refreshData;
+
+  console.log('✅ Script loaded successfully');
+</script>
+</body>
+</html>
