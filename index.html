@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
   <title>EVERNET - Music Monetization for Creators</title>
   
   <!-- SEO Meta Tags -->
@@ -50,16 +50,23 @@
       padding: 0;
       box-sizing: border-box;
       font-family: "Inter", sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
     }
 
     body {
       background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
       color: var(--navy);
-      font-size: 14px;
+      font-size: 1rem;
       line-height: 1.6;
       min-height: 100vh;
       position: relative;
       overflow-x: hidden;
+      width: 100%;
     }
 
     body::before {
@@ -77,8 +84,9 @@
 
     /* ========== ENHANCED HEADER ========== */
     header {
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(255, 255, 255, 0.98);
       backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.2);
       padding: 0;
       position: sticky;
@@ -86,6 +94,7 @@
       z-index: 1000;
       box-shadow: 0 2px 20px rgba(10, 31, 68, 0.08);
       transition: all 0.3s ease;
+      width: 100%;
     }
 
     .header-scrolled {
@@ -96,18 +105,19 @@
     .header-container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 0 24px;
+      padding: 0 1.5rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       height: 72px;
+      width: 100%;
     }
 
     /* ========== ENHANCED LOGO ========== */
     .logo {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 0.75rem;
       text-decoration: none;
       transition: transform 0.3s ease;
     }
@@ -126,10 +136,11 @@
       justify-content: center;
       color: var(--white);
       font-weight: 800;
-      font-size: 16px;
+      font-size: 1rem;
       box-shadow: 0 4px 12px rgba(26, 86, 219, 0.3);
       position: relative;
       overflow: hidden;
+      flex-shrink: 0;
     }
 
     .logo-icon::after {
@@ -150,9 +161,10 @@
 
     .logo-text {
       font-weight: 700;
-      font-size: 20px;
+      font-size: 1.25rem;
       color: var(--navy);
       letter-spacing: -0.5px;
+      line-height: 1;
     }
 
     .logo-text span {
@@ -163,115 +175,68 @@
       font-weight: 800;
     }
 
-    /* ========== USER INFO - ENHANCED ========== */
-    .user-info {
+    /* ========== HEADER RIGHT SECTION ========== */
+    .header-right {
       display: flex;
       align-items: center;
-      gap: 16px;
-    }
-
-    .creator-name {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
-      background: rgba(139, 92, 246, 0.1);
-      border-radius: 8px;
-      border: 1px solid rgba(139, 92, 246, 0.2);
-      font-weight: 600;
-      color: var(--navy);
-      font-size: 13px;
-      min-width: 180px;
-      transition: all 0.3s ease;
-    }
-
-    .creator-name:hover {
-      background: rgba(139, 92, 246, 0.15);
-      transform: translateY(-1px);
-    }
-
-    .creator-name i {
-      color: var(--creator);
-      font-size: 16px;
+      gap: 1rem;
     }
 
     /* ========== ENHANCED BUTTONS ========== */
-    .dashboard-btn {
+    .dashboard-btn, .login-btn, .logout-btn, .cta-btn {
       background: var(--navy-gradient);
       color: var(--white);
-      padding: 10px 20px;
+      padding: 0.75rem 1.5rem;
       border-radius: 8px;
       font-weight: 600;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 13px;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
       text-decoration: none;
       border: none;
       transition: all 0.3s ease;
       box-shadow: 0 4px 12px rgba(26, 86, 219, 0.3);
+      white-space: nowrap;
+      min-height: 44px;
     }
 
-    .dashboard-btn:hover {
+    .dashboard-btn:hover, .login-btn:hover, .logout-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 6px 20px rgba(26, 86, 219, 0.4);
     }
 
-    .login-btn {
-      background: var(--navy-gradient);
-      color: var(--white);
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      text-decoration: none;
-      border: none;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.3);
+    .cta-btn {
+      background: var(--gold-gradient);
+      color: var(--navy);
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      min-height: 56px;
+      box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
     }
 
-    .login-btn:hover {
+    .cta-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(26, 86, 219, 0.4);
-    }
-
-    .logout-btn {
-      background: var(--navy-gradient);
-      color: var(--white);
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.3);
-    }
-
-    .logout-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(26, 86, 219, 0.4);
+      box-shadow: 0 12px 25px rgba(212, 175, 55, 0.4);
     }
 
     /* ========== MENU ICON & MOBILE MENU ========== */
     .menu-icon {
       display: none;
-      font-size: 1.2em;
+      font-size: 1.25rem;
       color: var(--navy);
       cursor: pointer;
       background: rgba(10, 31, 68, 0.1);
       border: 2px solid rgba(10, 31, 68, 0.2);
-      padding: 8px;
+      padding: 0.5rem;
       border-radius: 8px;
       transition: all 0.3s ease;
+      min-width: 44px;
+      min-height: 44px;
+      align-items: center;
+      justify-content: center;
     }
 
     .menu-icon:hover {
@@ -284,17 +249,20 @@
       flex-direction: column;
       background: var(--white);
       backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       position: fixed;
       top: 0;
       left: 0;
       width: 85%;
+      max-width: 320px;
       height: 100vh;
       box-shadow: 10px 0 50px rgba(0, 0, 0, 0.1);
-      padding: 80px 25px 40px;
+      padding: 80px 1.5rem 40px;
       z-index: 999;
       gap: 0;
       border-right: 1px solid rgba(0, 31, 63, 0.05);
       display: none;
+      overflow-y: auto;
     }
 
     .nav-links.show {
@@ -311,15 +279,16 @@
       text-decoration: none;
       color: var(--navy);
       font-weight: 500;
-      font-size: 1.1em;
+      font-size: 1.1rem;
       transition: all 0.3s ease;
-      padding: 18px 0;
+      padding: 1rem 0;
       border-bottom: 1px solid rgba(0, 31, 63, 0.05);
       width: 100%;
       border-radius: 0;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 0.75rem;
+      min-height: 48px;
     }
 
     .nav-links a i {
@@ -335,16 +304,21 @@
 
     .close-menu {
       position: absolute;
-      top: 20px;
-      right: 20px;
+      top: 1rem;
+      right: 1rem;
       background: none;
       border: none;
-      font-size: 1.5em;
+      font-size: 1.5rem;
       color: var(--navy);
       cursor: pointer;
-      padding: 8px;
+      padding: 0.5rem;
       border-radius: 8px;
       transition: all 0.3s ease;
+      min-width: 44px;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .close-menu:hover {
@@ -352,18 +326,40 @@
       color: var(--navy-light);
     }
 
+    .nav-links-desktop {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .nav-links-desktop a {
+      text-decoration: none;
+      color: var(--gray-dark);
+      font-weight: 600;
+      font-size: 0.875rem;
+      transition: all 0.3s ease;
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+    }
+
+    .nav-links-desktop a:hover {
+      color: var(--navy);
+      background: rgba(10, 31, 68, 0.05);
+    }
+
     /* ========== HERO SECTION ========== */
     .hero {
       position: relative;
       height: 80vh;
       min-height: 600px;
+      max-height: 800px;
       width: 100%;
       overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 0 24px;
+      padding: 0 1.5rem;
     }
 
     .video-background {
@@ -379,6 +375,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      object-position: center;
     }
 
     .overlay {
@@ -396,65 +393,49 @@
       z-index: 2;
       max-width: 800px;
       color: var(--white);
+      width: 100%;
+      padding: 2rem;
     }
 
     .hero-content h1 {
-      font-size: 48px;
+      font-size: 3rem;
       font-weight: 800;
-      margin-bottom: 24px;
+      margin-bottom: 1.5rem;
       line-height: 1.2;
       letter-spacing: -0.5px;
     }
 
     .hero-content p {
-      font-size: 18px;
+      font-size: 1.125rem;
       color: rgba(255, 255, 255, 0.9);
-      margin-bottom: 32px;
+      margin-bottom: 2rem;
       line-height: 1.6;
-    }
-
-    .cta-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--gold-gradient);
-      color: var(--navy);
-      padding: 16px 32px;
-      border-radius: var(--radius);
-      font-weight: 700;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      font-size: 16px;
-      box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
-    }
-
-    .cta-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 25px rgba(212, 175, 55, 0.4);
     }
 
     /* ========== SECTIONS ========== */
     section {
-      padding: 80px 24px;
+      padding: 5rem 1.5rem;
       max-width: 1200px;
       margin: 0 auto;
+      width: 100%;
     }
 
     .section-header {
       text-align: center;
-      margin-bottom: 48px;
+      margin-bottom: 3rem;
     }
 
     .section-title {
-      font-size: 32px;
+      font-size: 2rem;
       font-weight: 800;
       color: var(--navy);
-      margin-bottom: 12px;
+      margin-bottom: 0.75rem;
       letter-spacing: -0.5px;
+      line-height: 1.2;
     }
 
     .section-subtitle {
-      font-size: 16px;
+      font-size: 1rem;
       color: var(--gray);
       max-width: 600px;
       margin: 0 auto;
@@ -465,18 +446,20 @@
     .features-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 24px;
+      gap: 1.5rem;
+      width: 100%;
     }
 
     .feature-card {
       background: var(--white);
       border-radius: var(--radius-lg);
-      padding: 32px;
+      padding: 2rem;
       box-shadow: var(--shadow);
       border: 1px solid rgba(226, 232, 240, 0.6);
       transition: all 0.4s ease;
       position: relative;
       overflow: hidden;
+      width: 100%;
     }
 
     .feature-card::before {
@@ -495,25 +478,26 @@
     }
 
     .feature-number {
-      font-size: 48px;
+      font-size: 3rem;
       font-weight: 900;
       color: rgba(10, 31, 68, 0.1);
       line-height: 1;
-      margin-bottom: 16px;
+      margin-bottom: 1rem;
     }
 
     .feature-card h3 {
-      font-size: 18px;
+      font-size: 1.125rem;
       font-weight: 700;
       color: var(--navy);
-      margin-bottom: 12px;
+      margin-bottom: 0.75rem;
+      line-height: 1.3;
     }
 
     .feature-card p {
       color: var(--gray-dark);
-      font-size: 14px;
+      font-size: 0.875rem;
       line-height: 1.6;
-      margin-bottom: 8px;
+      margin-bottom: 0.5rem;
     }
 
     .highlight {
@@ -525,19 +509,21 @@
     .steps-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
+      gap: 1.5rem;
+      width: 100%;
     }
 
     .step-card {
       background: var(--white);
       border-radius: var(--radius-lg);
-      padding: 32px;
+      padding: 2rem;
       box-shadow: var(--shadow);
       border: 1px solid rgba(226, 232, 240, 0.6);
       transition: all 0.4s ease;
       position: relative;
       overflow: hidden;
       text-align: center;
+      width: 100%;
     }
 
     .step-card::before {
@@ -565,21 +551,22 @@
       align-items: center;
       justify-content: center;
       font-weight: 700;
-      font-size: 18px;
-      margin: 0 auto 20px;
+      font-size: 1.125rem;
+      margin: 0 auto 1.25rem;
       box-shadow: 0 4px 12px rgba(26, 86, 219, 0.3);
     }
 
     .step-card h3 {
-      font-size: 18px;
+      font-size: 1.125rem;
       font-weight: 700;
       color: var(--navy);
-      margin-bottom: 12px;
+      margin-bottom: 0.75rem;
+      line-height: 1.3;
     }
 
     .step-card p {
       color: var(--gray-dark);
-      font-size: 14px;
+      font-size: 0.875rem;
       line-height: 1.6;
     }
 
@@ -587,9 +574,10 @@
     .modern-footer {
       background: var(--navy);
       color: var(--white);
-      padding: 60px 24px 40px;
+      padding: 3.75rem 1.5rem 2.5rem;
       position: relative;
       overflow: hidden;
+      width: 100%;
     }
 
     .modern-footer::before {
@@ -607,20 +595,22 @@
       margin: 0 auto;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 48px;
+      gap: 3rem;
+      width: 100%;
     }
 
     .footer-brand {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 1rem;
     }
 
     .footer-logo {
       font-weight: 700;
-      font-size: 24px;
+      font-size: 1.5rem;
       color: var(--white);
       letter-spacing: -0.5px;
+      line-height: 1;
     }
 
     .footer-logo span {
@@ -633,14 +623,14 @@
 
     .footer-description {
       color: rgba(255, 255, 255, 0.8);
-      font-size: 14px;
+      font-size: 0.875rem;
       line-height: 1.6;
     }
 
     .social-links {
       display: flex;
-      gap: 12px;
-      margin-top: 8px;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
     }
 
     .social-link {
@@ -654,6 +644,7 @@
       color: var(--white);
       text-decoration: none;
       transition: all 0.3s ease;
+      flex-shrink: 0;
     }
 
     .social-link:hover {
@@ -662,10 +653,11 @@
     }
 
     .footer-links h3 {
-      font-size: 16px;
+      font-size: 1rem;
       font-weight: 700;
       color: var(--white);
-      margin-bottom: 20px;
+      margin-bottom: 1.25rem;
+      line-height: 1.2;
     }
 
     .footer-links ul {
@@ -673,47 +665,51 @@
     }
 
     .footer-links li {
-      margin-bottom: 12px;
+      margin-bottom: 0.75rem;
     }
 
     .footer-links a {
       color: rgba(255, 255, 255, 0.8);
       text-decoration: none;
-      font-size: 14px;
+      font-size: 0.875rem;
       transition: all 0.3s ease;
+      display: inline-block;
     }
 
     .footer-links a:hover {
       color: var(--gold-light);
-      padding-left: 4px;
+      transform: translateX(4px);
     }
 
     .footer-bottom {
       max-width: 1200px;
-      margin: 60px auto 0;
-      padding-top: 30px;
+      margin: 3.75rem auto 0;
+      padding-top: 1.875rem;
       border-top: 1px solid rgba(255, 255, 255, 0.1);
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 20px;
+      gap: 1.25rem;
+      width: 100%;
     }
 
     .copyright {
       color: rgba(255, 255, 255, 0.6);
-      font-size: 12px;
+      font-size: 0.75rem;
+      line-height: 1.4;
     }
 
     .footer-legal {
       display: flex;
-      gap: 20px;
+      gap: 1.25rem;
+      flex-wrap: wrap;
     }
 
     .footer-legal a {
       color: rgba(255, 255, 255, 0.6);
       text-decoration: none;
-      font-size: 12px;
+      font-size: 0.75rem;
       transition: color 0.3s ease;
     }
 
@@ -788,7 +784,11 @@
     /* ========== RESPONSIVE DESIGN ========== */
     @media (max-width: 1024px) {
       .hero-content h1 {
-        font-size: 36px;
+        font-size: 2.5rem;
+      }
+      
+      .section-title {
+        font-size: 1.75rem;
       }
       
       .features-grid, .steps-grid {
@@ -801,51 +801,78 @@
     }
 
     @media (max-width: 768px) {
+      html {
+        font-size: 15px;
+      }
+      
       .header-container {
-        padding: 0 16px;
+        padding: 0 1rem;
       }
       
       .menu-icon {
-        display: block;
+        display: flex;
       }
       
-      .user-info {
-        display: none;
+      .nav-links-desktop {
+        display: none !important;
       }
       
       .hero {
         height: 70vh;
         min-height: 500px;
+        max-height: 700px;
       }
       
       .hero-content h1 {
-        font-size: 28px;
+        font-size: 2rem;
       }
       
       .hero-content p {
-        font-size: 16px;
+        font-size: 1rem;
+      }
+      
+      .hero-content {
+        padding: 1.5rem;
       }
       
       .cta-btn {
-        padding: 14px 24px;
-        font-size: 14px;
+        padding: 0.875rem 1.5rem;
+        font-size: 0.875rem;
+        min-height: 48px;
       }
       
       section {
-        padding: 60px 16px;
+        padding: 3.75rem 1rem;
       }
       
       .section-title {
-        font-size: 24px;
+        font-size: 1.5rem;
+      }
+      
+      .section-subtitle {
+        font-size: 0.9375rem;
       }
       
       .features-grid, .steps-grid {
         grid-template-columns: 1fr;
       }
       
+      .feature-card, .step-card {
+        padding: 1.5rem;
+      }
+      
+      .feature-number {
+        font-size: 2.5rem;
+      }
+      
       .footer-content {
         grid-template-columns: 1fr;
         text-align: center;
+        gap: 2rem;
+      }
+      
+      .footer-brand {
+        align-items: center;
       }
       
       .social-links {
@@ -855,6 +882,8 @@
       .footer-bottom {
         flex-direction: column;
         text-align: center;
+        gap: 1rem;
+        margin-top: 2.5rem;
       }
       
       .chat-btn {
@@ -863,9 +892,23 @@
         width: 50px;
         height: 50px;
       }
+      
+      .header-right {
+        gap: 0.75rem;
+      }
+      
+      .dashboard-btn, .login-btn {
+        padding: 0.625rem 1.25rem;
+        font-size: 0.8125rem;
+        min-height: 40px;
+      }
     }
 
     @media (max-width: 480px) {
+      html {
+        font-size: 14px;
+      }
+      
       .header-container {
         height: 64px;
       }
@@ -873,24 +916,116 @@
       .logo-icon {
         width: 36px;
         height: 36px;
+        font-size: 0.875rem;
       }
       
       .logo-text {
-        font-size: 18px;
+        font-size: 1.125rem;
       }
       
       .hero {
         height: 60vh;
         min-height: 400px;
+        max-height: 600px;
       }
       
       .hero-content h1 {
-        font-size: 24px;
+        font-size: 1.75rem;
+        margin-bottom: 1rem;
+      }
+      
+      .hero-content p {
+        font-size: 0.9375rem;
+        margin-bottom: 1.5rem;
+      }
+      
+      .section-header {
+        margin-bottom: 2rem;
       }
       
       .feature-card, .step-card {
-        padding: 24px;
+        padding: 1.25rem;
       }
+      
+      .modern-footer {
+        padding: 2.5rem 1rem 1.5rem;
+      }
+      
+      .footer-links h3 {
+        margin-bottom: 1rem;
+      }
+      
+      .footer-links li {
+        margin-bottom: 0.5rem;
+      }
+      
+      .social-link {
+        width: 32px;
+        height: 32px;
+        font-size: 0.875rem;
+      }
+      
+      .chat-btn {
+        width: 44px;
+        height: 44px;
+        bottom: 16px;
+        right: 16px;
+      }
+      
+      .chat-btn i {
+        font-size: 18px;
+      }
+      
+      .notification {
+        max-width: 280px;
+        right: 10px;
+        left: 10px;
+        margin: 0 auto;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .hero-content h1 {
+        font-size: 1.5rem;
+      }
+      
+      .logo-text {
+        font-size: 1rem;
+      }
+      
+      .dashboard-btn span, .login-btn span {
+        display: none;
+      }
+      
+      .dashboard-btn, .login-btn {
+        padding: 0.625rem;
+        min-width: 44px;
+        justify-content: center;
+      }
+      
+      .dashboard-btn i, .login-btn i {
+        margin: 0;
+      }
+    }
+
+    /* Prevent horizontal scroll */
+    img, video {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* Improve touch targets */
+    button, 
+    a, 
+    input, 
+    select, 
+    textarea {
+      min-height: 44px;
+    }
+
+    /* Smooth scrolling for anchor links */
+    html {
+      scroll-padding-top: 80px;
     }
   </style>
 </head>
@@ -900,7 +1035,7 @@
   <header id="main-header">
     <div class="header-container">
       <!-- Menu Icon for Mobile -->
-      <button class="menu-icon" onclick="toggleMenu()">
+      <button class="menu-icon" onclick="toggleMenu()" aria-label="Toggle menu">
         <i class="fas fa-bars"></i>
       </button>
       
@@ -910,34 +1045,40 @@
         <div class="logo-text">EVER<span>NET</span></div>
       </a>
       
-      <!-- Desktop User Info -->
-      <div class="user-info" id="userInfo" style="display: none;">
-        <div class="creator-name">
-          <i class="fas fa-user-circle"></i>
-          <span id="userEmail"></span>
-        </div>
-        <a href="/dashboard/" class="dashboard-btn">
-          <i class="fas fa-tachometer-alt"></i>
-          Dashboard
+      <!-- Desktop Navigation Links -->
+      <div class="nav-links-desktop">
+        <a href="#what-is">
+          About
         </a>
-        <button class="logout-btn" onclick="logout()">
-          <i class="fas fa-sign-out-alt"></i>
-          Logout
-        </button>
+        <a href="#how">
+          How it Works
+        </a>
+        <a href="/music/">
+          Music Library
+        </a>
       </div>
       
-      <!-- Login Button for Desktop (when logged out) -->
-      <a href="/sign-in/" class="login-btn" id="loginLink">
-        <i class="fas fa-sign-in-alt"></i>
-        Login
-      </a>
+      <!-- Header Right Section -->
+      <div class="header-right">
+        <!-- Dashboard Button (Shows when logged in) -->
+        <a href="/dashboard/" class="dashboard-btn" id="dashboardBtn" style="display: none;">
+          <i class="fas fa-tachometer-alt"></i>
+          <span>Dashboard</span>
+        </a>
+        
+        <!-- Login Button (Shows when logged out) -->
+        <a href="/sign-in/" class="login-btn" id="loginLink">
+          <i class="fas fa-sign-in-alt"></i>
+          <span>Login</span>
+        </a>
+      </div>
     </div>
   </header>
 
   <!-- Mobile Menu -->
   <nav>
     <div class="nav-links" id="navMenu">
-      <button class="close-menu" onclick="closeMenu()">
+      <button class="close-menu" onclick="closeMenu()" aria-label="Close menu">
         <i class="fas fa-times"></i>
       </button>
       <a href="#" onclick="closeMenu()">
@@ -953,28 +1094,17 @@
         <i class="fas fa-envelope"></i>Contact
       </a>
       
-      <!-- Mobile User Info -->
-      <div class="user-info" id="mobileUserInfo" style="display: none; flex-direction: column; padding: 20px 0; border-top: 1px solid rgba(0, 31, 63, 0.1); margin-top: 20px;">
-        <div class="creator-name" style="margin-bottom: 15px; justify-content: center;">
-          <i class="fas fa-user-circle"></i>
-          <span id="mobileUserEmail"></span>
-        </div>
-        <a href="/dashboard/" class="dashboard-btn" style="margin-bottom: 10px;">
-          <i class="fas fa-tachometer-alt"></i>
-          Dashboard
-        </a>
-        <button class="logout-btn" onclick="logout()">
-          <i class="fas fa-sign-out-alt"></i>
-          Logout
-        </button>
-      </div>
+      <!-- Mobile Logout Button (only shows when logged in) -->
+      <button class="logout-btn" id="mobileLogoutBtn" style="display: none;" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i>Logout
+      </button>
     </div>
   </nav>
 
   <!-- Hero Section -->
   <section class="hero">
     <div class="video-background">
-      <video autoplay muted loop playsinline preload="auto">
+      <video autoplay muted loop playsinline preload="auto" aria-label="Background video showing creative content">
         <source src="https://vinxbbpboupirnyxwghz.supabase.co/storage/v1/object/public/Ever-Music/%20hero-bg.mp4" type="video/mp4">
         Your browser does not support the video tag.
       </video>
@@ -984,9 +1114,9 @@
     
     <div class="hero-content">
       <h1>Where creators are rewarded for passion and value creation.</h1>
-    
+      <p>Turn every YouTube Short into a revenue-earning asset with EVERNET's premium music library</p>
       <a href="/sign-up/" class="cta-btn">
-        <i class="crown"></i>
+        <i class="fas fa-rocket"></i>
         Start Earning Now
       </a>
     </div>
@@ -1074,10 +1204,10 @@
           Join thousands of creators already earning with EVERNET.
         </p>
         <div class="social-links">
-          <a href="https://twitter.com/evernet01" class="social-link"><i class="fab fa-twitter"></i></a>
-          <a href="https://instagram.com/evernet01" class="social-link"><i class="fab fa-instagram"></i></a>
-          <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
-          <a href="https://youtube.com/evernet01" class="social-link"><i class="fab fa-youtube"></i></a>
+          <a href="https://twitter.com/evernet01" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="https://instagram.com/evernet01" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+          <a href="https://youtube.com/evernet01" class="social-link" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
         </div>
       </div>
       
@@ -1102,12 +1232,12 @@
   </footer>
 
   <!-- Chat Button -->
-  <a href="/creator-chat/" class="chat-btn">
+  <a href="/creator-chat/" class="chat-btn" aria-label="Open chat">
     <i class="fas fa-comment-dots"></i>
   </a>
 
   <!-- Notification System -->
-  <div id="notification" class="notification"></div>
+  <div id="notification" class="notification" role="alert" aria-live="assertive"></div>
 
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -1142,19 +1272,29 @@
     function toggleMenu() {
       const nav = document.getElementById('navMenu');
       nav.classList.toggle('show');
+      document.body.style.overflow = nav.classList.contains('show') ? 'hidden' : '';
     }
 
     function closeMenu() {
       const nav = document.getElementById('navMenu');
       nav.classList.remove('show');
+      document.body.style.overflow = '';
     }
 
-    // Close menu when clicking outside
+    // Close menu when clicking outside or pressing Escape
     document.addEventListener('click', function(event) {
       const nav = document.getElementById('navMenu');
       const menuIcon = document.querySelector('.menu-icon');
       
-      if (!nav.contains(event.target) && !menuIcon.contains(event.target) && nav.classList.contains('show')) {
+      if (nav.classList.contains('show') && 
+          !nav.contains(event.target) && 
+          !menuIcon.contains(event.target)) {
+        closeMenu();
+      }
+    });
+
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
         closeMenu();
       }
     });
@@ -1173,23 +1313,19 @@
     function updateUI() {
       const user = auth.currentUser;
       const loginLink = document.getElementById('loginLink');
-      const userInfo = document.getElementById('userInfo');
-      const mobileUserInfo = document.getElementById('mobileUserInfo');
-      const userEmail = document.getElementById('userEmail');
-      const mobileUserEmail = document.getElementById('mobileUserEmail');
+      const dashboardBtn = document.getElementById('dashboardBtn');
+      const mobileLogoutBtn = document.getElementById('mobileLogoutBtn');
 
       if (user) {
-        // User is logged in
+        // User is logged in - Show Dashboard, hide Login
         loginLink.style.display = 'none';
-        userInfo.style.display = 'flex';
-        mobileUserInfo.style.display = 'flex';
-        userEmail.textContent = user.email;
-        mobileUserEmail.textContent = user.email;
+        dashboardBtn.style.display = 'flex';
+        mobileLogoutBtn.style.display = 'flex';
       } else {
-        // User is not logged in
+        // User is not logged in - Show Login, hide Dashboard
         loginLink.style.display = 'flex';
-        userInfo.style.display = 'none';
-        mobileUserInfo.style.display = 'none';
+        dashboardBtn.style.display = 'none';
+        mobileLogoutBtn.style.display = 'none';
       }
     }
 
@@ -1207,22 +1343,54 @@
       }
     }
 
+    // Initialize video play with error handling
+    function initializeVideo() {
+      const video = document.querySelector('video');
+      if (video) {
+        video.muted = true;
+        video.setAttribute('playsinline', '');
+        video.setAttribute('webkit-playsinline', '');
+        
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(error => {
+            console.log('Video autoplay prevented, trying with user interaction:', error);
+            // Try again on user interaction
+            document.addEventListener('click', function playVideoOnce() {
+              video.play().catch(e => console.log('Still cannot play:', e));
+              document.removeEventListener('click', playVideoOnce);
+            }, { once: true });
+          });
+        }
+      }
+    }
+
     // Initialize
     document.addEventListener('DOMContentLoaded', function() {
       // Listen for auth state changes
       auth.onAuthStateChanged(updateUI);
       
-      // Add scroll event listener
-      window.addEventListener('scroll', handleHeaderScroll);
+      // Add scroll event listener with debounce
+      let scrollTimeout;
+      window.addEventListener('scroll', function() {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(handleHeaderScroll, 10);
+      });
       
       // Initialize header state
       handleHeaderScroll();
       updateUI();
+      initializeVideo();
 
-      // Force video to play
-      const video = document.querySelector('video');
-      video.play().catch(error => {
-        console.log('Video autoplay prevented:', error);
+      // Handle mobile viewport resize
+      let resizeTimeout;
+      window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function() {
+          if (window.innerWidth > 768) {
+            closeMenu();
+          }
+        }, 250);
       });
     });
   </script>
