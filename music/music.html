@@ -1,0 +1,1613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EVERNET Music Library</title>
+  
+  <!-- PWA META TAGS -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="version" content="1.0.7">
+  <link rel="manifest" href="/manifest.json?v=1.0.1">
+  <meta name="theme-color" content="#0a1f44">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="EVERNET Music">
+  <link rel="icon" type="image/x-icon" href="favicon.ico?v=1.0.1">
+  <link rel="apple-touch-icon" href="icon-192.png?v=1.0.1">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    /* ========== ENHANCED WORLD-CLASS THEME ========== */
+    :root {
+      --navy: #0a1f44;
+      --navy-accent: #1e40af;
+      --navy-light: #3b82f6;
+      --navy-gradient: linear-gradient(135deg, #0a1f44 0%, #1e40af 100%);
+      --gold: #d4af37;
+      --gold-light: #fbbf24;
+      --gold-gradient: linear-gradient(135deg, #d4af37 0%, #fbbf24 100%);
+      --white: #ffffff;
+      --white-off: #f8fafc;
+      --gray-light: #e2e8f0;
+      --gray: #94a3b8;
+      --gray-dark: #64748b;
+      --success: #10b981;
+      --success-light: #d1fae5;
+      --warning: #f59e0b;
+      --warning-light: #fef3c7;
+      --danger: #ef4444;
+      --danger-light: #fee2e2;
+      --info: #3b82f6;
+      --info-light: #dbeafe;
+      --creator: #8b5cf6;
+      --creator-light: #ede9fe;
+      --radius: 10px;
+      --radius-lg: 16px;
+      --radius-sm: 6px;
+      --shadow: 0 4px 20px rgba(10, 31, 68, 0.08);
+      --shadow-lg: 0 10px 40px rgba(10, 31, 68, 0.12);
+      --shadow-hover: 0 20px 60px rgba(10, 31, 68, 0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Inter", sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      color: var(--navy);
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 300px;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-accent) 100%);
+      clip-path: polygon(0 0, 100% 0, 100% 50%, 0 100%);
+      z-index: -1;
+      opacity: 0.05;
+    }
+
+    /* ========== ENHANCED HEADER ========== */
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 20px rgba(10, 31, 68, 0.08);
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 72px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: translateY(-1px);
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--navy-gradient);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-weight: 800;
+      font-size: 16px;
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logo-icon::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.2) 50%, transparent 70%);
+      animation: shine 3s infinite linear;
+    }
+
+    @keyframes shine {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .logo-text {
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--navy);
+      letter-spacing: -0.5px;
+    }
+
+    .logo-text span {
+      background: var(--gold-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 800;
+    }
+
+    /* USER INFO - ENHANCED */
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .creator-name {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(139, 92, 246, 0.1);
+      border-radius: 8px;
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      font-weight: 600;
+      color: var(--navy);
+      font-size: 13px;
+      min-width: 180px;
+      transition: all 0.3s ease;
+    }
+
+    .creator-name:hover {
+      background: rgba(139, 92, 246, 0.15);
+      transform: translateY(-1px);
+    }
+
+    .creator-name i {
+      color: var(--creator);
+      font-size: 16px;
+    }
+
+    .dashboard-btn {
+      background: var(--navy-gradient);
+      color: var(--white);
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      text-decoration: none;
+      border: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.3);
+    }
+
+    .dashboard-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(26, 86, 219, 0.4);
+    }
+
+    /* ========== MAIN LAYOUT - ENHANCED ========== */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* ========== HORIZONTAL TABS - ENHANCED ========== */
+    .payment-tabs {
+      display: flex;
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 6px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(226, 232, 240, 0.6);
+      gap: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .payment-tabs::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--gold-gradient);
+    }
+
+    .payment-tab {
+      flex: 1;
+      padding: 14px 20px;
+      background: none;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      color: var(--gray-dark);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 13px;
+      white-space: nowrap;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .payment-tab::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--navy-gradient);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .payment-tab.active {
+      background: var(--navy-gradient);
+      color: var(--white);
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.2);
+    }
+
+    .payment-tab.active i {
+      transform: scale(1.1);
+    }
+
+    .payment-tab i {
+      transition: transform 0.3s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .payment-tab span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .payment-tab:hover:not(.active) {
+      background: rgba(10, 31, 68, 0.05);
+      color: var(--navy);
+      transform: translateY(-1px);
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ========== ENHANCED BALANCE SECTION ========== */
+    .balance-section {
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .balance-section::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .balance-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .balance-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(226, 232, 240, 0.6);
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .balance-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--gold-gradient);
+    }
+
+    .balance-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .balance-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      color: var(--gray-dark);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .balance-label i {
+      font-size: 14px;
+    }
+
+    .balance-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 4px;
+      line-height: 1.2;
+    }
+
+    .balance-subtitle {
+      color: var(--gray);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    /* ========== ENHANCED MUSIC LIBRARY SECTION ========== */
+    .reports-section {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(226, 232, 240, 0.6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .reports-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gold-gradient);
+    }
+
+    .section-header {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title i {
+      color: var(--gold);
+      font-size: 18px;
+    }
+
+    /* ========== MINIMIZED INSTRUCTIONS ========== */
+.instructions-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(226, 232, 240, 0.6);
+  border-left: 3px solid var(--danger);
+  position: relative;
+}
+
+.instructions-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.instructions-header i {
+  color: var(--danger);
+  font-size: 12px;
+}
+
+.instructions-header h3 {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--danger);
+}
+
+.instructions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.instruction-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: var(--danger);
+  line-height: 1.2;
+}
+
+.instruction-item i {
+  color: var(--danger);
+  font-size: 8px;
+  min-width: 10px;
+}
+    /* ========== ENHANCED SEARCH ========== */
+    .mobile-search {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .mobile-search-input {
+      width: 100%;
+      padding: 14px 20px 14px 45px;
+      border: 1px solid var(--gray-light);
+      border-radius: var(--radius);
+      font-size: 13px;
+      background: var(--white);
+      color: var(--navy);
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow);
+    }
+
+    .mobile-search-input:focus {
+      outline: none;
+      border-color: var(--navy-light);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .mobile-search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray);
+      font-size: 14px;
+    }
+
+    /* ========== ENHANCED MUSIC LIST ========== */
+    .mobile-music-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    .mobile-track-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(226, 232, 240, 0.6);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mobile-track-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--creator);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .mobile-track-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .mobile-track-card:hover::before {
+      opacity: 1;
+    }
+
+    .track-thumbnail {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: var(--navy-gradient);
+    }
+
+    .track-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .track-name {
+      font-weight: 600;
+      color: var(--navy);
+      font-size: 13px;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .track-artist {
+      color: var(--gray);
+      font-size: 11px;
+      margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .track-theme {
+      display: inline-block;
+      background: rgba(139, 92, 246, 0.1);
+      color: var(--creator);
+      padding: 4px 8px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .track-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .play-btn {
+      width: 36px;
+      height: 36px;
+      background: var(--navy-gradient);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(26, 86, 219, 0.2);
+      font-size: 12px;
+    }
+
+    .play-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 12px rgba(26, 86, 219, 0.3);
+    }
+
+    .play-btn.playing {
+      background: var(--success);
+    }
+
+    .copy-btn {
+      background: var(--navy-gradient);
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      min-width: 70px;
+      justify-content: center;
+      box-shadow: 0 4px 8px rgba(26, 86, 219, 0.2);
+    }
+
+    .copy-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 12px rgba(26, 86, 219, 0.3);
+    }
+
+    .copy-btn.copied {
+      background: var(--success);
+    }
+
+    /* ========== NO RESULTS ========== */
+    .mobile-no-results {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--gray);
+      display: none;
+    }
+
+    .mobile-no-results i {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.3;
+      background: var(--navy-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .mobile-no-results h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--navy);
+    }
+
+    .mobile-no-results p {
+      font-size: 13px;
+      color: var(--gray);
+      max-width: 400px;
+      margin: 0 auto;
+    }
+/* ========== FULL IMAGES ========== */
+.step-image-container {
+  margin-bottom: 12px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(226, 232, 240, 0.6);
+  background: var(--white);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px; /* Minimum height */
+  max-height: 350px; /* Maximum height */
+  padding: 10px;
+}
+
+.step-image {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  display: block;
+  transition: transform 0.3s ease;
+  background: var(--white-off);
+  border-radius: 4px;
+}
+
+/* Make the image container adapt to image size */
+.step-image-container img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+    /* ========== GUIDE SECTION ========== */
+    .mobile-guide-container {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(226, 232, 240, 0.6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mobile-guide-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gold-gradient);
+    }
+
+    .mobile-guide-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .mobile-guide-header h2 {
+      color: var(--navy);
+      font-size: 18px;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .mobile-guide-header p {
+      color: var(--gray);
+      font-size: 13px;
+      max-width: 100%;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    .mobile-process-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .mobile-step {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(226, 232, 240, 0.6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mobile-step::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--creator);
+    }
+
+    .mobile-step:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .mobile-step-number {
+      background: var(--navy-gradient);
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      margin-bottom: 12px;
+      font-size: 12px;
+      box-shadow: 0 4px 8px rgba(26, 86, 219, 0.2);
+    }
+
+    .mobile-step-content h4 {
+      color: var(--navy);
+      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .mobile-step-content p {
+      color: var(--gray);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    /* ========== GUIDELINES SECTION ========== */
+    .mobile-guidelines-container {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(226, 232, 240, 0.6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mobile-guidelines-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gold-gradient);
+    }
+
+    .mobile-guidelines-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .mobile-guidelines-header i {
+      font-size: 18px;
+    }
+
+    .mobile-guidelines-header h3 {
+      color: var(--navy);
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .mobile-guidelines-content {
+      font-size: 13px;
+    }
+
+    .mobile-guideline-section {
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    }
+
+    .mobile-guideline-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .mobile-guideline-section h4 {
+      color: var(--danger);
+      margin-bottom: 10px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mobile-guideline-list {
+      padding-left: 16px;
+      list-style-type: disc;
+    }
+
+    .mobile-guideline-list li {
+      margin-bottom: 8px;
+      font-size: 12px;
+      color: var(--gray-dark);
+      line-height: 1.5;
+    }
+
+    /* ========== FOOTER ========== */
+    .mobile-footer {
+      text-align: center;
+      background: var(--navy);
+      color: var(--white);
+      padding: 20px 24px;
+      margin-top: 24px;
+      border-radius: var(--radius-lg);
+    }
+
+    .mobile-footer p {
+      margin: 8px 0;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .mobile-footer a {
+      color: var(--gold-light);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    .mobile-footer a:hover {
+      color: var(--white);
+      text-decoration: underline;
+    }
+
+    /* ========== NOTIFICATION ========== */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 12px 24px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 500;
+      z-index: 10000;
+      opacity: 0;
+      transform: translateX(100%);
+      transition: all 0.3s ease;
+      max-width: 320px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      font-size: 14px;
+    }
+
+    .notification.show {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .notification.success {
+      background: var(--success);
+    }
+
+    .notification.error {
+      background: var(--danger);
+    }
+
+    .notification.info {
+      background: var(--info);
+    }
+
+    /* ========== RESPONSIVE DESIGN ========== */
+    @media (max-width: 1024px) {
+      .balance-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .mobile-music-list {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      }
+      
+      .mobile-process-steps {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header-container {
+        flex-direction: column;
+        gap: 16px;
+        padding: 16px;
+        height: auto;
+      }
+      
+      .user-info {
+        width: 100%;
+        justify-content: space-between;
+      }
+      
+      .balance-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .payment-tab {
+        padding: 12px 16px;
+        font-size: 12px;
+      }
+      
+      .mobile-music-list {
+        grid-template-columns: 1fr;
+      }
+      
+      .mobile-process-steps {
+        grid-template-columns: 1fr;
+      }
+      
+      main {
+        padding: 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .payment-tab {
+        padding: 10px 12px;
+        font-size: 11px;
+      }
+      
+      .balance-card {
+        padding: 16px;
+      }
+      
+      .reports-section, .mobile-guide-container, .mobile-guidelines-container {
+        padding: 20px;
+      }
+      
+      .balance-value {
+        font-size: 24px;
+      }
+      
+      .track-thumbnail {
+        width: 50px;
+        height: 50px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <a href="#" class="logo">
+        <div class="logo-icon">E/M</div>
+        <div class="logo-text">EverNet<span>Music Library</span></div>
+      </a>
+      
+      <div class="user-info">
+        <div class="creator-name">
+          <i class="fas fa-user-circle"></i>
+          <span id="creatorName">Creator Dashboard</span>
+        </div>
+        <a href="/dashboard/" class="dashboard-btn">
+          <i class="fas fa-arrow-left"></i>
+          Dashboard
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Horizontal Tabs -->
+    <div class="payment-tabs">
+      <button class="payment-tab active" onclick="switchTab('music')">
+        <i class="fas fa-music"></i>
+        Music Library
+      </button>
+      <button class="payment-tab" onclick="switchTab('guide')">
+        <i class="fas fa-play-circle"></i>
+        How to Use
+      </button>
+      <button class="payment-tab" onclick="switchTab('guidelines')">
+        <i class="fas fa-file-alt"></i>
+        Guidelines
+      </button>
+    </div>
+
+    <!-- TAB 1: MUSIC LIBRARY -->
+    <div id="musicTab" class="tab-content active">
+      <section class="reports-section">
+        <div class="section-header">
+          <div class="section-title">
+            <i class="fas fa-music"></i>
+            Premium Music Library
+          </div>
+        </div>
+
+        <!-- Quick Guide Card -->
+        <div class="instructions-card">
+          <div class="instructions-header">
+            <i class="fas fa-info-circle"></i>
+            <h3>Quick Guide</h3>
+          </div>
+          <div class="instructions-list">
+            <div class="instruction-item">
+              <i class="fas fa-play-circle"></i>
+              <span>Click play to preview tracks</span>
+            </div>
+            <div class="instruction-item">
+              <i class="fas fa-copy"></i>
+              <span>Copy code for YouTube Shorts</span>
+            </div>
+            <div class="instruction-item">
+              <i class="fas fa-search"></i>
+              <span>Search by name, artist, or theme</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Search -->
+        <div class="mobile-search">
+          <i class="fas fa-search mobile-search-icon"></i>
+          <input type="text" class="mobile-search-input" placeholder="Search tracks by name, artist, or theme...">
+        </div>
+
+        <!-- Music List -->
+        <div class="mobile-music-list" id="musicList">
+          <!-- Tracks will be dynamically loaded here -->
+        </div>
+
+        <!-- No Results -->
+        <div class="mobile-no-results" id="mobile-no-results">
+          <i class="fas fa-search"></i>
+          <h3>No tracks found</h3>
+          <p>Try adjusting your search terms</p>
+        </div>
+
+        <!-- Hidden Audio Player -->
+        <audio id="audioPlayer" class="audio-player"></audio>
+      </section>
+    </div>
+
+    
+<!-- TAB 2: HOW TO USE -->
+<div id="guideTab" class="tab-content">
+  <section class="mobile-guide-container">
+    <div class="mobile-guide-header">
+      <h2>How to Use EverNet Music</h2>
+      <p>Simple steps to add music to your YouTube Shorts</p>
+    </div>
+
+    <div class="mobile-process-steps">
+      <!-- Step 1 -->
+      <div class="mobile-step">
+        <div class="mobile-step-number">1</div>
+        <div class="mobile-step-content">
+          <div class="step-image-container">
+            <img src="https://cxvlpsrhylgyafxeplsp.supabase.co/storage/v1/object/public/EverNet/InShot_20251208_234909536.jpg" 
+                 alt="Step 1: Copy Audio Code" 
+                 class="step-image"
+                 onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiByeD0iOCIgZmlsbD0iI2YxZjVmOSIvPgo8dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkludGVyIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNjQ3NDhiIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+U3RlcCAxOiBDb3B5IEF1ZGlvIENvZGU8L3RleHQ+Cjx0ZXh0IHg9IjUwJSIgeT0iNjAlIiBmb250LWZhbWlseT0iSW50ZXIiIGZvbnQtc2l6ZT0iMTAiIGZpbGw9IiM5NGEzYjgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5JbWFnZSBub3QgYXZhaWxhYmxlPC90ZXh0Pgo8L3N2Zz4=';">
+          </div>
+          <h4>Copy Audio Code</h4>
+          <p>Copy the unique code from your preferred track in the music library.</p>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="mobile-step">
+        <div class="mobile-step-number">2</div>
+        <div class="mobile-step-content">
+          <div class="step-image-container">
+            <img src="https://cxvlpsrhylgyafxeplsp.supabase.co/storage/v1/object/public/EverNet/InShot_20251208_230944702.jpg" 
+                 alt="Step 2: Open YouTube" 
+                 class="step-image"
+                 onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiByeD0iOCIgZmlsbD0iI2YxZjVmOSIvPgo8dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkludGVyIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNjQ3NDhiIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+U3RlcCAyOiBPcGVuIFlvdVR1YmU8L3RleHQ+Cjx0ZXh0IHg9IjUwJSIgeT0iNjAlIiBmb250LWZhbWlseT0iSW50ZXIiIGZvbnQtc2l6ZT0iMTAiIGZpbGw9IiM5NGEzYjgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5JbWFnZSBub3QgYXZhaWxhYmxlPC90ZXh0Pgo8L3N2Zz4=';">
+          </div>
+          <h4>Open YouTube App</h4>
+          <p>Launch YouTube app on your mobile device and create a new Short.</p>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="mobile-step">
+        <div class="mobile-step-number">3</div>
+        <div class="mobile-step-content">
+          <div class="step-image-container">
+            <img src="https://cxvlpsrhylgyafxeplsp.supabase.co/storage/v1/object/public/EverNet/InShot_20251208_231053093.jpg" 
+                 alt="Step 3: Select Video" 
+                 class="step-image"
+                 onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiByeD0iOCIgZmlsbD0iI2YxZjVmOSIvPgo8dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkludGVyIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNjQ3NDhiIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+U3RlcCAzOiBTZWxlY3QgVmlkZW88L3RleHQ+Cjx0ZXh0IHg9IjUwJSIgeT0iNjAlIiBmb250LWZhbWlseT0iSW50ZXIiIGZvbnQtc2l6ZT0iMTAiIGZpbGw9IiM5NGEzYjgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5JbWFnZSBub3QgYXZhaWxhYmxlPC90ZXh0Pgo8L3N2Zz4=';">
+          </div>
+          <h4>Select Video Content</h4>
+          <p>Choose your video content and tap "Add Sound" for music.</p>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="mobile-step">
+        <div class="mobile-step-number">4</div>
+        <div class="mobile-step-content">
+          <div class="step-image-container">
+            <img src="https://cxvlpsrhylgyafxeplsp.supabase.co/storage/v1/object/public/EverNet/InShot_20251208_231204646.jpg" 
+                 alt="Step 4: Paste Code" 
+                 class="step-image"
+                 onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiByeD0iOCIgZmlsbD0iI2YxZjVmOSIvPgo8dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkludGVyIiBmb250LXNp6UM9IjEyIiBmaWxsPSIjNjQ3NDhiIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+U3RlcCA0OiBQYXN0ZSBDb2RlPC90ZXh0Pgo8dGV4dCB4PSI1MCUiIHk9IjYwJSIgZm9udC1mYW1pbHk9IkludGVyIiBmb250LXNpemU9IjEwIiBmaWxsPSIjOTRhM2I4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+SW1hZ2Ugbm90IGF2YWlsYWJsZTwvdGV4dD4KPC9zdmc+'">
+          </div>
+          <h4>Paste Audio Code</h4>
+          <p>Paste the copied code in YouTube search to find the track.</p>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="mobile-step">
+        <div class="mobile-step-number">5</div>
+        <div class="mobile-step-content">
+          <div class="step-image-container">
+            <img src="https://cxvlpsrhylgyafxeplsp.supabase.co/storage/v1/object/public/EverNet/InShot_20251208_231300907.jpg" 
+                 alt="Step 5: Confirm Selection" 
+                 class="step-image"
+                 onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiByeD0iOCIgZmlsbD0iI2YxZjVmOSIvPgo8dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkludGVyIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNjQ3NDhiIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+U3RlcCA1OiBDb25maXJtIFNlbGVjdGlvbjwvdGV4dD4KPC90ZXh0Pgo8L3N2Zz4=';">
+          </div>
+          <h4>Confirm Selection</h4>
+          <p>Tap the check button to confirm music selection for your Short.</p>
+        </div>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="mobile-step">
+        <div class="mobile-step-number">6</div>
+        <div class="mobile-step-content">
+          <div class="step-image-container">
+            <img src="https://cxvlpsrhylgyafxeplsp.supabase.co/storage/v1/object/public/EverNet/InShot_20251208_231354042.jpg" 
+                 alt="Step 6: Adjust Volume" 
+                 class="step-image"
+                 onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiByeD0iOCIgZmlsbD0iI2YxZjVmOSIvPgo8dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkludGVyIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNjQ3NDhiIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+U3RlcCA2OiBBZGp1c3QgVm9sdW1lPC90ZXh0Pgo8L3N2Zz4=';">
+          </div>
+          <h4>Adjust Volume Settings</h4>
+          <p>Set volume to at least 15% for proper monetization tracking.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+    <!-- TAB 3: GUIDELINES -->
+    <div id="guidelinesTab" class="tab-content">
+      <section class="reports-section">
+        <div class="section-header">
+          <div class="section-title">
+            <i class="fas fa-file-alt"></i>
+            Content Guidelines
+          </div>
+        </div>
+
+        <div class="mobile-guidelines-container">
+          <div class="mobile-guidelines-header">
+            <i class="fas fa-exclamation-triangle" style="color: var(--warning);"></i>
+            <h3>Content Restrictions</h3>
+          </div>
+          <div class="mobile-guidelines-content">
+            <p style="color: var(--danger); font-weight: 600; margin-bottom: 12px;">(Not Eligible for Revenue)</p>
+            
+            <div class="mobile-guideline-section">
+              <h4><i class="fas fa-ban"></i> Music-based Content</h4>
+              <p style="color: var(--gray-dark); margin-bottom: 8px; font-size: 12px;">
+                Do not use on cover songs, instrumental performances, or live stage footage. If video has existing music, do not add EverNet tracks.
+              </p>
+              <ul class="mobile-guideline-list">
+                <li>Revenue may not be recorded</li>
+                <li>Videos may be restricted</li>
+                <li>Excluded from settlement</li>
+              </ul>
+            </div>
+            
+            <div class="mobile-guideline-section">
+              <h4><i class="fas fa-exclamation-circle"></i> Other Restrictions</h4>
+              <ul class="mobile-guideline-list">
+                <li>Low-effort or meaningless content</li>
+                <li>Extremely short repeated uploads</li>
+                <li>Violations of YouTube policies</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="mobile-guidelines-container">
+          <div class="mobile-guidelines-header">
+            <i class="fas fa-check-circle" style="color: var(--success);"></i>
+            <h3>Approved Music Only</h3>
+          </div>
+          <div class="mobile-guidelines-content">
+            <p style="color: var(--gray-dark); margin-bottom: 8px; font-size: 12px;">
+              Use only music listed on official EverNet website. Library updated regularly with licensed tracks. Unlisted tracks may not count for revenue.
+            </p>
+            <p style="margin-top: 12px; font-weight: 600; color: var(--success); font-size: 12px;">
+              Follow guidelines for stable earnings and revenue settlement.
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="mobile-footer">
+    <p>Support: <a href="mailto:support@evergreenempireltd.com">support@evergreenempireltd.com</a></p>
+    <p>
+      <a href="terms-of-service/">Terms of Service</a> | 
+      <a href="privacy-policy/">Privacy Policy</a> | 
+      <a href="creator-agreement/">Creator Agreement</a>
+    </p>
+    <p>© 2025 EverGreen Empire Ltd. All Rights Reserved</p>
+  </footer>
+
+  <!-- Notification System -->
+  <div id="notification" class="notification"></div>
+
+<script>
+  // Music Data with new tracks at the top
+  const musicData = [
+  {
+    id: 1,
+    name: "I'll be fine",
+    artist: "IAkeys & Dasha Blake",
+    theme: "Emotional, Energetic",
+    audioUrl: "https://vinxbbpboupirnyxwghz.supabase.co/storage/v1/object/public/Ever-Music/I%20WILL%20bE%20fine.wav",
+    code: "SE57V2513703",
+    thumbnail: "https://vinxbbpboupirnyxwghz.supabase.co/storage/v1/object/public/Ever-Music/InShot_20251120_182952291.jpg"
+  },
+  {
+    id: 2,
+    name: "Tekno",
+    artist: "Roel Jnr",
+    theme: "Electronic",
+    audioUrl: "https://vinxbbpboupirnyxwghz.supabase.co/storage/v1/object/public/Ever-Music/Tekno.wav",
+    code: "SE57V2513732",
+    thumbnail: "https://vinxbbpboupirnyxwghz.supabase.co/storage/v1/object/public/Ever-Music/InShot_20251121_120810952.jpg"
+  },
+  {
+    id: 3,
+    name: "Time Traveling",
+    artist: "Roel Jnr",
+    theme: "Energetic",
+    audioUrl: "https://vinxbbpboupirnyxwghz.supabase.co/storage/v1/object/public/Ever-Music/Traveling.wav",
+    code: "SE57V2513733",
+    thumbnail: "https://vinxbbpboupirnyxwghz.supabase.co/storage/v1/object/public/Ever-Music/InShot_20251121_120810952.jpg"
+  },
+  {
+    id: 4,
+    name: "Warrior cry",
+    artist: "Roel Jnr",
+    theme: "Cinematic",
+    audioUrl: "https://vinxbbpboupirnyxwghz.supabase.co/storage/v1/object/public/Ever-Music/Warrior%20Cry.mp3",
+    code: "SE57V2513735",
+    thumbnail: "https://vinxbbpboupirnyxwghz.supabase.co/storage/v1/object/public/Ever-Music/InShot_20251121_120810952.jpg"
+  },
+  {
+    id: 5,
+    name: "Sora",
+    artist: "Roel Jnr",
+    theme: "Energetic",
+    audioUrl: "https://vinxbbpboupirnyxwghz.supabase.co/storage/v1/object/public/Ever-Music/Sora.wav",
+    code: "SE57V2513734",
+    thumbnail: "https://vinxbbpboupirnyxwghz.supabase.co/storage/v1/object/public/Ever-Music/InShot_20251121_120810952.jpg"
+  },
+  {
+    id: 6,
+    name: "Free",
+    artist: "Roel Jnr",
+    theme: "Inspirational",
+    audioUrl: "https://cxvlpsrhylgyafxeplsp.supabase.co/storage/v1/object/public/EverNet/Free(MP3_160K)_1.mp3",
+    code: "SE57V2513928",
+    thumbnail: "https://cxvlpsrhylgyafxeplsp.supabase.co/storage/v1/object/public/EverNet/images%20(14).jpeg"
+  },
+  {
+    id: 7,
+    name: "Morning Therapy",
+    artist: "Roel Jnr",
+    theme: "Energetic",
+    audioUrl: "https://vinxbbpboupirnyxwghz.supabase.co/storage/v1/object/public/Ever-Music/Morning%20Therapy(MP3_160K).mp3",
+    code: "SE57V2513008",
+    thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVLxXX5m4h90DhBjFIY-XdrXGKvxvefSFJVCTd3NqGQA&s"
+  },
+  {
+    id: 8,
+    name: "Life Line",
+    artist: "lxrd vynl",
+    theme: "Energetic",
+    audioUrl: "https://vinxbbpboupirnyxwghz.supabase.co/storage/v1/object/public/Ever-Music/Life%20Line(MP3_160K).mp3",
+    code: "SE57V2504012",
+    thumbnail: "https://lh3.googleusercontent.com/Xf9IDuLhXjrnqJ8SqVnqUhinS9fIek90fyKt6Qt23LAu1r22zOQ-euw3v1T82-lX1_j9STczJMsKqPwS"
+  },
+  {
+    id: 9,
+    name: "Timeline",
+    artist: "Fredrick Amna",
+    theme: "Inspirational",
+    audioUrl: "https://vinxbbpboupirnyxwghz.supabase.co/storage/v1/object/public/Ever-Music/Timeline(MP3_160K).mp3",
+    code: "SE57V2504118",
+    thumbnail: "https://lh3.googleusercontent.com/EYq-b_NMoAcOCs-bNi5_3DsCBgBsFezMw7qjcmVHGa68Q594m0XdRFW68A1Xv5dDF813Cde_GHTocoGGwA"
+  },
+  {
+    id: 10,
+    name: "Show Me (Instrumental)",
+    artist: "IAkeys",
+    theme: "Emotional",
+    audioUrl: "https://vinxbbpboupirnyxwghz.supabase.co/storage/v1/object/public/Ever-Music/Show%20Me%20(Instrumental)(MP3_160K).mp3",
+    code: "SE57V2503295",
+    thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQn-jvLsYP6jcm7K6TpjvPJ_R0vXYsS75er2tyqxfZaMg&s=10"
+  },
+  {
+    id: 11,
+    name: "Voild",
+    artist: "Xiava Dinma",
+    theme: "Inspirational",
+    audioUrl: "https://vinxbbpboupirnyxwghz.supabase.co/storage/v1/object/public/Ever-Music/Voild(MP3_160K).mp3",
+    code: "SE57V2504133",
+    thumbnail: "https://lh3.googleusercontent.com/0ma-fBR2StrdbzRQnb_TpQU5U2K4Ej5_qAL06HlX5HwwcY3xgikrAe6IQgxGF3Noa3ToqvMqF6yxGpY"
+  },
+  {
+    id: 12,
+    name: "Hope (Instrumental)",
+    artist: "Juno Wild",
+    theme: "Emotional",
+    audioUrl: "https://vinxbbpboupirnyxwghz.supabase.co/storage/v1/object/public/Ever-Music/Hope%20(Instrumental)(MP3_160K).mp3",
+    code: "SE57V2502423",
+    thumbnail: "https://lh3.googleusercontent.com/qrM5RKB13U61ZkjwdcRobvteAZpzoqqiPxc_O9LD0FlXQBGGBA-RtIs2IU021GdKB1Br8eCKtrd6y40"
+  }
+
+  ];
+
+  let currentAudio = null;
+  let currentPlayingBtn = null;
+
+  // Tab switching
+  function switchTab(tabName) {
+    console.log(`🔄 Switching to ${tabName} tab`);
+    
+    // Hide all tabs
+    document.querySelectorAll('.tab-content').forEach(tab => {
+      tab.classList.remove('active');
+    });
+    
+    // Remove active class from all tabs
+    document.querySelectorAll('.payment-tab').forEach(tab => {
+      tab.classList.remove('active');
+    });
+    
+    // Show selected tab
+    const tabElement = document.getElementById(tabName + 'Tab');
+    if (tabElement) {
+      tabElement.classList.add('active');
+    } else {
+      console.error(`Tab element not found: ${tabName}Tab`);
+      return;
+    }
+    
+    // Add active class to clicked tab
+    event.currentTarget.classList.add('active');
+  }
+
+  // Initialize Music Player
+  function initializeMusicPlayer() {
+    const musicList = document.getElementById('musicList');
+    const noResults = document.getElementById('mobile-no-results');
+    
+    function renderTracks(tracks) {
+      musicList.innerHTML = '';
+      
+      if (tracks.length === 0) {
+        noResults.style.display = 'flex';
+        return;
+      }
+      
+      noResults.style.display = 'none';
+      
+      tracks.forEach(track => {
+        const trackElement = document.createElement('div');
+        trackElement.className = 'mobile-track-card';
+        trackElement.innerHTML = `
+          <img src="${track.thumbnail}" alt="${track.name}" class="track-thumbnail" 
+               onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjYwIiBoZWlnaHQ9IjYwIiByeD0iOCIvPgo8cGF0aCBkPSJNMjQgMjR2MTJMMzYgMzBMMjQgMjRaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4=';this.style.background='linear-gradient(135deg, #0a1f44 0%, #1e40af 100%)'">
+          <div class="track-info">
+            <div class="track-name">${track.name}</div>
+            <div class="track-artist">${track.artist}</div>
+            <span class="track-theme">${track.theme}</span>
+          </div>
+          <div class="track-controls">
+            <button class="play-btn" onclick="togglePlay(${track.id}, this)">
+              <i class="fas fa-play"></i>
+            </button>
+            <button class="copy-btn" onclick="copyCode('${track.code}', this)">
+              <i class="fas fa-copy"></i> Copy
+            </button>
+          </div>
+        `;
+        musicList.appendChild(trackElement);
+      });
+    }
+    
+    renderTracks(musicData);
+    
+    const searchInput = document.querySelector('.mobile-search-input');
+    searchInput.addEventListener('input', function() {
+      const searchTerm = this.value.toLowerCase().trim();
+      
+      if (searchTerm === '') {
+        renderTracks(musicData);
+        return;
+      }
+      
+      const filteredTracks = musicData.filter(track => 
+        track.name.toLowerCase().includes(searchTerm) ||
+        track.artist.toLowerCase().includes(searchTerm) ||
+        track.theme.toLowerCase().includes(searchTerm)
+      );
+      
+      renderTracks(filteredTracks);
+    });
+  }
+
+  // Audio Control Functions
+  function togglePlay(trackId, button) {
+    const track = musicData.find(t => t.id === trackId);
+    const audioPlayer = document.getElementById('audioPlayer');
+    
+    if (currentAudio === trackId) {
+      if (audioPlayer.paused) {
+        audioPlayer.play();
+        button.innerHTML = '<i class="fas fa-pause"></i>';
+        button.classList.add('playing');
+      } else {
+        audioPlayer.pause();
+        button.innerHTML = '<i class="fas fa-play"></i>';
+        button.classList.remove('playing');
+      }
+    } else {
+      if (currentPlayingBtn) {
+        currentPlayingBtn.innerHTML = '<i class="fas fa-play"></i>';
+        currentPlayingBtn.classList.remove('playing');
+      }
+      
+      audioPlayer.src = track.audioUrl;
+      audioPlayer.play();
+      
+      button.innerHTML = '<i class="fas fa-pause"></i>';
+      button.classList.add('playing');
+      
+      currentAudio = trackId;
+      currentPlayingBtn = button;
+      
+      audioPlayer.onended = function() {
+        button.innerHTML = '<i class="fas fa-play"></i>';
+        button.classList.remove('playing');
+        currentAudio = null;
+        currentPlayingBtn = null;
+      };
+    }
+  }
+
+  // Copy Code Function
+  function copyCode(code, button) {
+    navigator.clipboard.writeText(code).then(() => {
+      const originalText = button.innerHTML;
+      button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+      button.classList.add('copied');
+      
+      showNotification('Code copied to clipboard!', 'success');
+      
+      setTimeout(() => {
+        button.innerHTML = originalText;
+        button.classList.remove('copied');
+      }, 1500);
+    }).catch(err => {
+      console.error('Failed to copy: ', err);
+      showNotification('Failed to copy code', 'error');
+    });
+  }
+
+  // Notification System
+  function showNotification(message, type = 'info') {
+    const notification = document.getElementById('notification');
+    notification.textContent = message;
+    notification.className = `notification ${type} show`;
+    
+    setTimeout(() => {
+      notification.classList.remove('show');
+    }, 2500);
+  }
+
+  // Initialize when DOM is loaded
+  document.addEventListener('DOMContentLoaded', function() {
+    initializeMusicPlayer();
+    
+    // Make functions globally available
+    window.switchTab = switchTab;
+    window.togglePlay = togglePlay;
+    window.copyCode = copyCode;
+    
+    console.log('✅ EverNet Music Library loaded successfully');
+  });
+</script>
+</body>
+</html>
