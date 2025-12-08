@@ -1,0 +1,5346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Creator Dashboard - EverNet</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <style>
+    /* ========== EVERNET PAYMENTS STYLES ========== */
+    :root {
+      --navy: #0a1f44;
+      --navy-accent: #1e40af;
+      --navy-light: #3b82f6;
+      --navy-gradient: linear-gradient(135deg, #0a1f44 0%, #1e40af 100%);
+      --gold: #d4af37;
+      --gold-light: #fbbf24;
+      --gold-gradient: linear-gradient(135deg, #d4af37 0%, #fbbf24 100%);
+      --white: #ffffff;
+      --white-off: #f8fafc;
+      --gray-light: #e2e8f0;
+      --gray: #94a3b8;
+      --gray-dark: #64748b;
+      --success: #10b981;
+      --success-light: #d1fae5;
+      --warning: #f59e0b;
+      --warning-light: #fef3c7;
+      --danger: #ef4444;
+      --danger-light: #fee2e2;
+      --info: #3b82f6;
+      --info-light: #dbeafe;
+      --creator: #8b5cf6;
+      --creator-light: #ede9fe;
+      --radius: 10px;
+      --radius-lg: 16px;
+      --radius-sm: 6px;
+      --shadow: 0 4px 20px rgba(10, 31, 68, 0.08);
+      --shadow-lg: 0 10px 40px rgba(10, 31, 68, 0.12);
+      --shadow-hover: 0 20px 60px rgba(10, 31, 68, 0.15);
+    }
+
+    /* Dark Theme */
+    [data-theme="dark"] {
+      --navy: #f1f5f9;
+      --navy-accent: #60a5fa;
+      --navy-light: #3b82f6;
+      --white: #1e293b;
+      --white-off: #0f172a;
+      --gray-light: #334155;
+      --gray: #64748b;
+      --gray-dark: #94a3b8;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.3);
+      --shadow-hover: 0 20px 60px rgba(0, 0, 0, 0.4);
+    }
+
+    [data-theme="dark"] body {
+      background: #0f172a;
+      color: var(--navy);
+    }
+
+    [data-theme="dark"] .stat-card,
+    [data-theme="dark"] .today-earnings-section,
+    [data-theme="dark"] .section,
+    [data-theme="dark"] .payment-tabs,
+    [data-theme="dark"] .notification-item-enhanced,
+    [data-theme="dark"] .guideline-note,
+    [data-theme="dark"] .guideline-warning {
+      background: var(--white);
+      border-color: var(--gray-light);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Inter", sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      color: var(--navy);
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 100vh;
+      position: relative;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 300px;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-accent) 100%);
+      clip-path: polygon(0 0, 100% 0, 100% 50%, 0 100%);
+      z-index: -1;
+      opacity: 0.05;
+    }
+
+    /* ========== ENHANCED HEADER ========== */
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 20px rgba(10, 31, 68, 0.08);
+    }
+
+    [data-theme="dark"] header {
+      background: rgba(30, 41, 59, 0.95);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 72px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: translateY(-1px);
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--navy-gradient);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-weight: 800;
+      font-size: 16px;
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logo-icon::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.2) 50%, transparent 70%);
+      animation: shine 3s infinite linear;
+    }
+
+    @keyframes shine {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .logo-text {
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--navy);
+      letter-spacing: -0.5px;
+    }
+
+    .logo-text span {
+      background: var(--gold-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 800;
+    }
+ 
+    /* USER INFO - ENHANCED WITH PORTAL 1 FEATURES */
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .creator-name {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(139, 92, 246, 0.1);
+      border-radius: 8px;
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      font-weight: 600;
+      color: var(--navy);
+      font-size: 13px;
+      min-width: 180px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .creator-name:hover {
+      background: rgba(139, 92, 246, 0.15);
+      transform: translateY(-1px);
+    }
+
+    .creator-name i {
+      color: var(--creator);
+      font-size: 16px;
+    }
+
+    /* Portal 1 Theme Toggle */
+    .theme-toggle {
+      background: none;
+      border: none;
+      color: var(--navy);
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+    }
+
+    .theme-toggle:hover {
+      background: rgba(139, 92, 246, 0.1);
+      color: var(--creator);
+    }
+
+    /* Portal 1 Notification Bell */
+    .notification-bell {
+      position: relative;
+      padding: 8px;
+      text-decoration: none;
+      color: var(--navy);
+      font-weight: 500;
+      transition: all 0.3s ease;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .notification-bell:hover {
+      color: var(--creator);
+      background: rgba(139, 92, 246, 0.08);
+    }
+
+    .notification-indicator {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: var(--danger);
+      color: white;
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      font-size: 0.6em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    /* Portal 1 Dropdown Menu */
+    .user-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-btn {
+      background: none;
+      border: none;
+      color: var(--navy);
+      cursor: pointer;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+      font-size: 13px;
+      background: rgba(10, 31, 68, 0.05);
+    }
+
+    .dropdown-btn:hover {
+      background: rgba(139, 92, 246, 0.08);
+      color: var(--creator);
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 100%;
+      background: var(--white);
+      min-width: 200px;
+      box-shadow: var(--shadow-hover);
+      border-radius: 8px;
+      z-index: 1000;
+      padding: 8px 0;
+      border: 1px solid var(--gray-light);
+      margin-top: 4px;
+    }
+
+    .dropdown-content.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      text-decoration: none;
+      color: var(--navy);
+      transition: all 0.3s ease;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .dropdown-item:hover {
+      background: rgba(139, 92, 246, 0.08);
+      color: var(--creator);
+    }
+
+    .dashboard-btn {
+      background: var(--navy-gradient);
+      color: var(--white);
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      text-decoration: none;
+      border: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.3);
+    }
+
+    .dashboard-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(26, 86, 219, 0.4);
+    }
+
+    /* ========== MAIN LAYOUT ========== */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+/* Modern Notification Styles */
+.notification-item-modern {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.notification-item-modern:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary);
+}
+
+.notification-item-modern.unread {
+  border-left: 4px solid var(--primary);
+  background: linear-gradient(90deg, rgba(139, 92, 246, 0.05) 0%, rgba(139, 92, 246, 0) 100%);
+}
+
+.notification-preview {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.notification-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.notification-content-preview {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-title-preview {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-color);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.unread-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--primary);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.notification-time-preview {
+  font-size: 12px;
+  color: var(--gray);
+}
+
+.notification-actions-preview {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.notification-action-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  color: var(--gray);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.notification-action-icon:hover {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.notification-action-icon.delete:hover {
+  background: var(--danger);
+  border-color: var(--danger);
+}
+
+/* Notification Full View Modal */
+.notification-full-view {
+  max-width: 600px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.notification-full-header {
+  padding: 24px 24px 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.notification-full-title {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.notification-full-icon {
+  font-size: 32px;
+}
+
+.notification-full-title h3 {
+  margin: 0;
+  font-size: 22px;
+  color: var(--text-color);
+}
+
+.notification-full-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.notification-full-time {
+  font-size: 14px;
+  color: var(--gray);
+}
+
+.notification-type-badge {
+  padding: 4px 12px;
+  background: var(--primary-light);
+  color: var(--primary);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.notification-full-body {
+  padding: 24px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.notification-message {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-color);
+  margin-bottom: 24px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.notification-data {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 20px;
+}
+
+.notification-data h4 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.notification-data pre {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-color);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.notification-actions-full {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color);
+}
+
+.notification-full-footer {
+  padding: 20px 24px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+    /* ========== PREMIUM HORIZONTAL TABS - ENHANCED ========== */
+.payment-tabs {
+    display: flex;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 8px; /* Increased padding */
+    margin-bottom: 24px; /* Increased margin */
+    box-shadow: 
+        0 10px 25px rgba(30, 58, 138, 0.1),
+        var(--shadow-lg);
+    border: 1px solid rgba(30, 58, 138, 0.2);
+    gap: 8px; /* Increased gap */
+    position: relative;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--navy) transparent;
+}
+
+.payment-tabs::-webkit-scrollbar {
+    height: 6px; /* Thicker scrollbar */
+}
+
+.payment-tabs::-webkit-scrollbar-track {
+    background: rgba(30, 58, 138, 0.05);
+    border-radius: 3px;
+}
+
+.payment-tabs::-webkit-scrollbar-thumb {
+    background: linear-gradient(90deg, var(--navy), #1e40af);
+    border-radius: 3px;
+}
+
+.payment-tabs::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(90deg, var(--navy), var(--gold));
+}
+
+/* Animated Top Border */
+.payment-tabs::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px; /* Slightly thicker */
+    background: linear-gradient(
+        90deg,
+        var(--navy) 0%,
+        #1e40af 25%,
+        #3b82f6 50%,
+        #1e40af 75%,
+        var(--navy) 100%
+    );
+    background-size: 200% 100%;
+    animation: borderFlow 3s linear infinite;
+}
+
+@keyframes borderFlow {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Gold Shine Effect */
+.payment-tabs::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 60px;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(245, 158, 11, 0.05),
+        transparent
+    );
+    pointer-events: none;
+    z-index: 1;
+}
+
+.payment-tab {
+    flex: 0 0 auto;
+    padding: 12px 20px; /* Increased padding */
+    background: none;
+    border: 1px solid rgba(30, 58, 138, 0.1);
+    border-radius: 8px; /* Slightly more rounded */
+    font-weight: 600;
+    color: var(--navy);
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Increased gap */
+    font-size: 13px; /* Slightly larger font */
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    min-width: fit-content;
+    min-height: 44px; /* Minimum height for better touch */
+}
+
+/* Animated Background */
+.payment-tab::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+        var(--navy) 0%, 
+        #1e40af 50%, 
+        #3b82f6 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 1;
+}
+
+/* Navy Blue Active State with Animation */
+.payment-tab.active {
+    background: linear-gradient(135deg, 
+        var(--navy) 0%, 
+        #1e40af 50%, 
+        #3b82f6 100%);
+    color: white;
+    box-shadow: 
+        0 4px 15px rgba(30, 58, 138, 0.3),
+        0 2px 5px rgba(245, 158, 11, 0.2);
+    border-color: transparent;
+    transform: translateY(-2px);
+    animation: activeTabPulse 2s ease-in-out infinite;
+}
+
+@keyframes activeTabPulse {
+    0%, 100% {
+        box-shadow: 
+            0 4px 15px rgba(30, 58, 138, 0.3),
+            0 2px 5px rgba(245, 158, 11, 0.2);
+    }
+    50% {
+        box-shadow: 
+            0 6px 20px rgba(30, 58, 138, 0.4),
+            0 3px 10px rgba(245, 158, 11, 0.3);
+    }
+}
+
+.payment-tab.active i {
+    transform: scale(1.2);
+    color: var(--gold);
+    animation: iconFloat 3s ease-in-out infinite;
+}
+
+@keyframes iconFloat {
+    0%, 100% {
+        transform: scale(1.2) translateY(0);
+    }
+    50% {
+        transform: scale(1.3) translateY(-2px);
+    }
+}
+
+.payment-tab i {
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+    font-size: 14px; /* Slightly larger icon */
+}
+
+.payment-tab span {
+    position: relative;
+    z-index: 2;
+    font-weight: 600;
+}
+
+/* Gold Highlight on Hover */
+.payment-tab:hover:not(.active) {
+    background: linear-gradient(135deg, 
+        rgba(30, 58, 138, 0.05) 0%, 
+        rgba(30, 58, 138, 0.1) 100%);
+    color: var(--navy);
+    border-color: rgba(245, 158, 11, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 
+        0 3px 12px rgba(30, 58, 138, 0.15),
+        0 1px 3px rgba(245, 158, 11, 0.1);
+}
+
+/* Gold Shimmer Effect on Hover */
+.payment-tab:hover::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(245, 158, 11, 0.1),
+        rgba(245, 158, 11, 0.2),
+        rgba(245, 158, 11, 0.1),
+        transparent
+    );
+    transform: skewX(-15deg);
+    transition: left 0.6s ease;
+    z-index: 1;
+}
+
+.payment-tab:hover::after {
+    left: 150%;
+}
+
+/* Ripple Effect on Click */
+.payment-tab:active {
+    transform: translateY(-1px) scale(0.98);
+}
+
+/* Glowing Indicator for Active Tab */
+.payment-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    height: 3px;
+    background: var(--gold);
+    border-radius: 2px;
+    animation: glow 2s ease-in-out infinite;
+}
+
+@keyframes glow {
+    0%, 100% {
+        opacity: 0.7;
+        box-shadow: 0 0 5px var(--gold);
+    }
+    50% {
+        opacity: 1;
+        box-shadow: 0 0 15px var(--gold);
+    }
+}
+
+/* Enhanced Tab Content Animation */
+.tab-content {
+    display: none;
+    animation: tabFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes tabFadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(15px) scale(0.98);
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Loading State for Tabs */
+.payment-tab.loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.payment-tab.loading::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(30, 58, 138, 0.1),
+        transparent
+    );
+    animation: loadingShimmer 1.5s infinite;
+}
+
+@keyframes loadingShimmer {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .payment-tabs {
+        padding: 6px;
+        gap: 6px;
+        margin-bottom: 20px;
+    }
+    
+    .payment-tab {
+        padding: 10px 16px;
+        font-size: 12px;
+        min-height: 40px;
+    }
+    
+    .payment-tab i {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .payment-tabs {
+        padding: 4px;
+        gap: 4px;
+    }
+    
+    .payment-tab {
+        padding: 8px 12px;
+        font-size: 11px;
+        gap: 6px;
+    }
+    
+    .payment-tab i {
+        font-size: 12px;
+    }
+}
+    /* ========== ENHANCED STATS SECTION ========== */
+    .stats-section {
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .stats-section::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(226, 232, 240, 0.6);
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--gold-gradient);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .stat-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      color: var(--gray-dark);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-label i {
+      font-size: 14px;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 4px;
+      line-height: 1.2;
+    }
+
+    .stat-subtitle {
+      color: var(--gray);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+   /* ========== ULTRA-MINIMAL PREMIUM EARNINGS SECTION ========== */
+.today-earnings-section {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 12px;
+    border: 1px solid rgba(30, 58, 138, 0.1);
+    position: relative;
+    overflow: hidden;
+    animation: sectionSlideIn 0.4s ease-out;
+}
+
+@keyframes sectionSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Navy Top Border */
+.today-earnings-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--navy), #1e40af);
+    background-size: 200% 100%;
+    animation: borderFlow 4s linear infinite;
+}
+
+@keyframes borderFlow {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.today-earnings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.today-earnings-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.today-earnings-title i {
+    color: var(--navy); /* Changed from gold for better visibility */
+    font-size: 12px;
+}
+
+.today-earnings-refresh {
+    background: var(--navy);
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 11px;
+    padding: 5px;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.today-earnings-refresh:hover {
+    transform: rotate(180deg);
+}
+
+/* OPTIMIZED CONTRAST CARDS */
+.today-earnings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.today-earnings-card {
+    text-align: center;
+    padding: 14px 10px;
+    border-radius: 8px;
+    background: white;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(30, 58, 138, 0.08);
+    position: relative;
+    overflow: hidden;
+    animation: cardFloat 0.5s ease-out forwards;
+    opacity: 0;
+    transform: translateY(8px);
+}
+
+.today-earnings-card:nth-child(1) { animation-delay: 0.05s; }
+.today-earnings-card:nth-child(2) { animation-delay: 0.1s; }
+.today-earnings-card:nth-child(3) { animation-delay: 0.15s; }
+.today-earnings-card:nth-child(4) { animation-delay: 0.2s; }
+
+@keyframes cardFloat {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Navy Accent Border */
+.today-earnings-card:hover {
+    border-color: var(--navy);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(30, 58, 138, 0.1);
+}
+
+/* HIGH CONTRAST VALUES - EASY TO READ */
+.today-earnings-value {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: var(--navy); /* High contrast navy */
+    margin-bottom: 4px;
+    line-height: 1;
+    animation: valueGlow 4s ease-in-out infinite;
+}
+
+@keyframes valueGlow {
+    0%, 100% {
+        text-shadow: 0 0 2px rgba(30, 58, 138, 0.2);
+    }
+    50% {
+        text-shadow: 0 0 4px rgba(30, 58, 138, 0.3);
+    }
+}
+
+/* Gold accent on hover */
+.today-earnings-card:hover .today-earnings-value {
+    color: var(--navy);
+    animation: valuePulse 2s ease-in-out infinite;
+}
+
+@keyframes valuePulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.03);
+    }
+}
+
+/* CLEAR LABELS - DARK GRAY FOR READABILITY */
+.today-earnings-label {
+    font-size: 10px;
+    color: #475569; /* Dark gray for best readability */
+    font-weight: 500;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.2px;
+    transition: all 0.2s ease;
+}
+
+.today-earnings-card:hover .today-earnings-label {
+    color: var(--navy);
+}
+
+/* HIGH VISIBILITY CHANGE INDICATORS */
+.earnings-change {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    font-size: 9px;
+    font-weight: 600;
+    margin-top: 4px;
+    padding: 3px 6px;
+    border-radius: 8px;
+    width: fit-content;
+    margin: 4px auto 0;
+    background: rgba(30, 58, 138, 0.05);
+    animation: changeFloat 3s ease-in-out infinite;
+}
+
+@keyframes changeFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-1px);
+    }
+}
+
+/* BRIGHT COLORS FOR MAXIMUM VISIBILITY */
+.earnings-change.positive {
+    color: #059669; /* Bright green */
+    background: rgba(5, 150, 105, 0.08);
+}
+
+.earnings-change.negative {
+    color: #dc2626; /* Bright red */
+    background: rgba(220, 38, 38, 0.08);
+}
+
+.today-earnings-card:hover .earnings-change {
+    animation: changePulse 1.5s ease-in-out infinite;
+}
+
+@keyframes changePulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.04);
+    }
+}
+
+/* ULTRA-COMPACT RESPONSIVE */
+@media (max-width: 768px) {
+    .today-earnings-section {
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+    
+    .today-earnings-grid {
+        grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+        gap: 8px;
+    }
+    
+    .today-earnings-card {
+        padding: 12px 8px;
+    }
+    
+    .today-earnings-value {
+        font-size: 1.3em;
+    }
+    
+    .today-earnings-label {
+        font-size: 9px;
+    }
+}
+
+@media (max-width: 480px) {
+    .today-earnings-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+    }
+    
+    .today-earnings-card {
+        padding: 10px 6px;
+    }
+}
+  
+    /* ========== ENHANCED SECTION ========== */
+    .section {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(226, 232, 240, 0.6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gold-gradient);
+    }
+
+    .section-header {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title i {
+      color: var(--gold);
+      font-size: 18px;
+    }
+
+
+/* ========== ENHANCED NOTIFICATIONS PAGE ========== */
+    .notifications-controls {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .notifications-filter {
+      padding: 10px 16px;
+      border: 1px solid var(--gray-light);
+      border-radius: 8px;
+      background: var(--white);
+      color: var(--navy);
+      font-size: 13px;
+      min-width: 160px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .notifications-filter:focus {
+      outline: none;
+      border-color: var(--navy-light);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .notification-item-enhanced {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 12px;
+      border: 1px solid rgba(226, 232, 240, 0.6);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .notification-item-enhanced.unread {
+      background: rgba(139, 92, 246, 0.05);
+      border-left: 4px solid var(--creator);
+    }
+
+    .notification-item-enhanced:hover {
+      transform: translateX(2px);
+      box-shadow: var(--shadow);
+    }
+
+    .notification-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .notification-title {
+      font-weight: 700;
+      color: var(--navy);
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .notification-time {
+      color: var(--gray);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .notification-content {
+      color: var(--gray-dark);
+      font-size: 13px;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .notification-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .notification-action-btn {
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .notification-action-btn.read {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .notification-action-btn.read:hover {
+      background: rgba(16, 185, 129, 0.2);
+    }
+
+    .notification-action-btn.delete {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    .notification-action-btn.delete:hover {
+      background: rgba(239, 68, 68, 0.2);
+    }
+
+    /* ========== CREATORS GUIDELINES TAB ========== */
+    .guidelines-container {
+      max-height: 600px;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+
+    .guidelines-container::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .guidelines-container::-webkit-scrollbar-track {
+      background: var(--gray-light);
+      border-radius: 3px;
+    }
+
+    .guidelines-container::-webkit-scrollbar-thumb {
+      background: var(--navy);
+      border-radius: 3px;
+    }
+
+    .guideline-section {
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+    }
+
+    .guideline-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+
+    .guideline-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .guideline-title i {
+      color: var(--gold);
+    }
+
+    .guideline-subtitle {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gray-dark);
+      margin-bottom: 20px;
+    }
+
+    .guideline-content {
+      font-size: 14px;
+      color: var(--navy);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .guideline-list {
+      margin: 16px 0;
+      padding-left: 24px;
+    }
+
+    .guideline-list li {
+      margin-bottom: 10px;
+      color: var(--navy);
+      line-height: 1.5;
+    }
+
+    .guideline-list li strong {
+      color: var(--navy-accent);
+      font-weight: 600;
+    }
+
+    .guideline-note {
+      background: rgba(139, 92, 246, 0.05);
+      border-left: 4px solid var(--creator);
+      padding: 16px;
+      border-radius: var(--radius-sm);
+      margin: 16px 0;
+    }
+
+    .guideline-note p {
+      color: var(--navy);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .guideline-warning {
+      background: rgba(245, 158, 11, 0.05);
+      border-left: 4px solid var(--warning);
+      padding: 16px;
+      border-radius: var(--radius-sm);
+      margin: 16px 0;
+    }
+
+    .guideline-warning p {
+      color: var(--navy);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    /* ========== ENHANCED TABLE ========== */
+    .table-container {
+      overflow-x: auto;
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-light);
+      max-height: 400px;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .table-container::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    .table-container::-webkit-scrollbar-track {
+      background: var(--gray-light);
+      border-radius: 3px;
+    }
+
+    .table-container::-webkit-scrollbar-thumb {
+      background: var(--navy);
+      border-radius: 3px;
+    }
+
+    .table-container::-webkit-scrollbar-thumb:hover {
+      background: var(--navy-accent);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 800px;
+    }
+
+    th {
+      background: linear-gradient(to bottom, var(--white-off), #f1f5f9);
+      padding: 14px 20px;
+      text-align: left;
+      font-weight: 700;
+      color: var(--navy);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid var(--gray-light);
+      position: sticky;
+      top: 0;
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(241, 245, 249, 0.8);
+      font-size: 13px;
+      color: var(--navy);
+      font-weight: 500;
+    }
+
+    tr {
+      transition: all 0.3s ease;
+    }
+
+    tr:hover {
+      background: rgba(10, 31, 68, 0.03);
+      transform: translateX(2px);
+    }
+
+    .status-badge {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      display: inline-block;
+      letter-spacing: 0.3px;
+    }
+
+    .status-connected {
+      background: linear-gradient(135deg, var(--success-light), #a7f3d0);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .status-not-connected {
+      background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+      color: var(--gray-dark);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    /* ========== BUTTONS ========== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: none;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .btn-main {
+      background: var(--navy-gradient);
+      color: var(--white);
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.3);
+    }
+
+    .btn-main:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(26, 86, 219, 0.4);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, var(--success) 0%, #0ca678 100%);
+      color: white;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-success:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-outline {
+      border: 2px solid var(--navy);
+      color: var(--navy);
+      background: transparent;
+    }
+
+    .btn-outline:hover {
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    .btn-youtube {
+      background: #FF0000;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-youtube:hover {
+      background: #CC0000;
+      transform: translateY(-2px);
+    }
+
+    /* ========== FORM ELEMENTS ========== */
+    .form-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--navy);
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .form-label i {
+      color: var(--gold);
+      font-size: 12px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--gray-light);
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--navy);
+      background: var(--white);
+      transition: all 0.3s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--navy-light);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    /* ========== EMPTY STATES ========== */
+    .empty-state {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--gray);
+      position: relative;
+    }
+
+    .empty-state i {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.3;
+      background: var(--navy-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .empty-state h4 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--navy);
+    }
+
+    .empty-state p {
+      font-size: 13px;
+      color: var(--gray);
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    /* ========== LOADING ========== */
+    .loading {
+      padding: 40px 24px;
+      text-align: center;
+    }
+
+    .loading-spinner {
+      border: 3px solid rgba(59, 130, 246, 0.1);
+      border-top: 3px solid var(--navy-light);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 16px;
+      position: relative;
+    }
+
+    .loading-spinner::after {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: -3px;
+      right: -3px;
+      bottom: -3px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      border-top: 3px solid var(--gold);
+      animation: spin 1.5s linear infinite reverse;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* ========== PORTAL CHAT TOGGLE ========== */
+    .portal-chat-toggle-container {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      z-index: 1000;
+    }
+
+    .portal-chat-toggle {
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0066ff 0%, #00a8ff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 25px rgba(0, 102, 255, 0.4);
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 3px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: visible;
+      backdrop-filter: blur(10px);
+    }
+
+    .portal-chat-toggle:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 12px 30px rgba(0, 102, 255, 0.6);
+      background: linear-gradient(135deg, #0052cc 0%, #0097e6 100%);
+    }
+
+    .portal-chat-toggle i {
+      font-size: 1.4em;
+      color: white;
+      position: relative;
+      z-index: 2;
+    }
+
+    .portal-activity-indicator {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #ff4757;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65em;
+      color: white;
+      font-weight: bold;
+      animation: portal-pulse 1.5s infinite;
+      border: 3px solid white;
+      z-index: 3;
+    }
+
+    .portal-message-wave {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 60px;
+      height: 60px;
+      border: 2px solid #00a8ff;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .support-response-indicator {
+      position: absolute;
+      bottom: -5px;
+      left: -5px;
+      background: #28a745;
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 0.6em;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      border: 2px solid white;
+      z-index: 3;
+      animation: support-bounce 0.5s ease-in-out;
+    }
+
+    .portal-connection-status {
+      position: absolute;
+      bottom: -30px;
+      right: 0;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 0.7em;
+      display: none;
+      white-space: nowrap;
+      z-index: 1001;
+      backdrop-filter: blur(10px);
+    }
+
+    @keyframes portal-pulse {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7);
+      }
+      50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 10px rgba(255, 71, 87, 0);
+      }
+    }
+
+    @keyframes portal-glow {
+      0%, 100% {
+        box-shadow: 0 8px 25px rgba(0, 102, 255, 0.4);
+      }
+      50% {
+        box-shadow: 0 8px 25px rgba(0, 102, 255, 0.4),
+                    0 0 20px rgba(0, 168, 255, 0.6);
+      }
+    }
+
+    @keyframes message-wave {
+      0% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0.7;
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.1);
+        opacity: 0.4;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1.3);
+        opacity: 0;
+      }
+    }
+
+    @keyframes support-bounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    @keyframes portal-shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-3px); }
+      75% { transform: translateX(3px); }
+    }
+
+    .portal-chat-toggle.has-message {
+      animation: portal-glow 2s infinite, portal-shake 0.5s ease-in-out;
+    }
+
+    .portal-message-wave.active {
+      animation: message-wave 0.8s ease-out;
+    }
+
+    .portal-activity-indicator.active {
+      display: flex;
+    }
+
+    .support-response-indicator.active {
+      display: flex;
+    }
+
+    .portal-connection-status.active {
+      display: block;
+    }
+
+    /* ========== MODALS ========== */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      max-width: 450px;
+      width: 100%;
+      box-shadow: var(--shadow-hover);
+      position: relative;
+      animation: modalSlideIn 0.3s ease;
+    }
+
+    @keyframes modalSlideIn {
+      from { opacity: 0; transform: translateY(-15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--gray);
+      transition: color 0.3s ease;
+    }
+
+    .close-modal:hover {
+      color: var(--navy);
+    }
+
+    /* ========== EARNINGS CHART ========== */
+    .analytics-chart {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+      height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(226, 232, 240, 0.6);
+    }
+
+    .chart-container {
+      position: relative;
+      height: 100%;
+      width: 100%;
+    }
+
+    .chart-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .chart-period-selector {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .period-btn {
+      padding: 6px 12px;
+      border: 1px solid var(--gray-light);
+      border-radius: 6px;
+      background: var(--white);
+      color: var(--navy);
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .period-btn.active {
+      background: var(--navy-gradient);
+      color: white;
+      border-color: var(--navy);
+    }
+/* MINIMAL GUIDELINES */
+.guidelines-section {
+  padding: 16px;
+}
+
+.guidelines-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--navy);
+}
+
+.guidelines-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--navy);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.guidelines-title i {
+  color: var(--gold);
+}
+
+.guidelines-badge {
+  background: var(--navy);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+/* WARNING */
+.guidelines-warning-alert {
+  background: #dc2626;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  font-size: 12px;
+}
+
+.guidelines-warning-alert i {
+  color: #fbbf24;
+  flex-shrink: 0;
+}
+
+/* GUIDELINE ITEMS */
+.guidelines-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.guideline-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  background: white;
+  border-radius: 8px;
+  border-left: 3px solid var(--navy);
+  box-shadow: 0 1px 3px rgba(30, 58, 138, 0.1);
+}
+
+.guideline-with-video {
+  border-left-color: var(--gold);
+}
+
+.guideline-number {
+  background: var(--navy);
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.guideline-with-video .guideline-number {
+  background: var(--gold);
+}
+
+.guideline-content {
+  flex: 1;
+}
+
+.guideline-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 0 0 6px 0;
+  line-height: 1.3;
+}
+
+.guideline-description {
+  font-size: 11px;
+  color: #4b5563;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+/* DOS & DON'TS */
+.guideline-dos-donts {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.donts-section,
+.dos-section {
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 11px;
+}
+
+.donts-section {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.dos-section {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+}
+
+.donts-section h5,
+.dos-section h5 {
+  font-size: 11px;
+  font-weight: 700;
+  margin: 0 0 6px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.donts-section h5 {
+  color: #dc2626;
+}
+
+.dos-section h5 {
+  color: #16a34a;
+}
+
+.donts-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.donts-list li {
+  font-size: 11px;
+  color: #4b5563;
+  padding: 4px 0;
+  padding-left: 16px;
+  position: relative;
+  line-height: 1.4;
+}
+
+.donts-list li:before {
+  content: "✗";
+  position: absolute;
+  left: 0;
+  color: #dc2626;
+  font-weight: bold;
+}
+
+.dos-section p {
+  font-size: 11px;
+  color: #4b5563;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* RULES LIST */
+.guideline-rules {
+  background: #eff6ff;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  border: 1px solid #bfdbfe;
+  font-size: 11px;
+}
+
+.guideline-rules h5 {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 0 0 6px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rules-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.rules-list li {
+  font-size: 11px;
+  color: #4b5563;
+  padding: 4px 0;
+  padding-left: 16px;
+  position: relative;
+  line-height: 1.4;
+}
+
+.rules-list li:before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--navy);
+  font-weight: bold;
+}
+
+/* CONSEQUENCE */
+.guideline-consequence {
+  background: #fff7ed;
+  padding: 8px 10px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-left: 3px solid #f97316;
+  font-size: 11px;
+}
+
+.guideline-consequence i {
+  color: #f97316;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.guideline-consequence span {
+  color: #4b5563;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* VIDEO SECTION */
+.tutorial-video-section {
+  margin: 10px 0;
+  background: #f8fafc;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(30, 58, 138, 0.1);
+}
+
+.video-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  background: var(--navy);
+  color: white;
+  font-size: 11px;
+}
+
+.video-header h5 {
+  font-weight: 600;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.video-header h5 i {
+  color: var(--gold);
+}
+
+.required-badge {
+  background: var(--gold);
+  color: var(--navy);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.video-container {
+  aspect-ratio: 16/9;
+  background: #000;
+}
+
+.youtube-video {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+/* SUMMARY */
+.guidelines-summary {
+  background: var(--navy);
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 11px;
+}
+
+.summary-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.summary-header i {
+  color: var(--gold);
+}
+
+.summary-header h4 {
+  font-size: 12px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.summary-text {
+  line-height: 1.4;
+  color: #e2e8f0;
+  margin: 0;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .guideline-item {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+    /* ========== VIDEO PERFORMANCE CARDS ========== */
+    .video-performance-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .video-performance-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(226, 232, 240, 0.6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .video-performance-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--creator);
+    }
+
+    .video-performance-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .video-thumbnail {
+      width: 100%;
+      height: 140px;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      margin-bottom: 12px;
+      background: var(--white-off);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .video-thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .video-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 8px;
+      line-height: 1.3;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .video-meta {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--gray);
+    }
+
+    .video-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .video-stat {
+      text-align: center;
+      padding: 10px;
+      background: var(--white-off);
+      border-radius: 6px;
+    }
+
+    .video-stat-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+
+    .video-stat-label {
+      font-size: 11px;
+      color: var(--gray);
+      font-weight: 500;
+    }
+
+    .video-earnings {
+      background: rgba(139, 92, 246, 0.08);
+      border-radius: 6px;
+      padding: 12px;
+      text-align: center;
+      border-left: 3px solid var(--creator);
+    }
+
+    .video-earnings-label {
+      font-size: 12px;
+      color: var(--gray);
+      margin-bottom: 4px;
+    }
+
+    .video-earnings-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--creator);
+    }
+
+    /* ========== AUTO LOGOUT MODAL ========== */
+    .logout-warning-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      z-index: 3000;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+
+    .logout-warning-modal.active {
+      display: flex;
+    }
+
+    .logout-warning-content {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: var(--shadow-hover);
+      text-align: center;
+      animation: modalSlideIn 0.3s ease;
+    }
+
+    .logout-warning-icon {
+      font-size: 48px;
+      color: var(--warning);
+      margin-bottom: 16px;
+    }
+
+    .logout-warning-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 12px;
+    }
+
+    .logout-warning-message {
+      color: var(--gray-dark);
+      margin-bottom: 20px;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .logout-timer {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--danger);
+      margin: 16px 0;
+    }
+
+    .logout-warning-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 20px;
+    } 
+
+    /* ========== RESPONSIVE DESIGN ========== */
+    @media (max-width: 1024px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .today-earnings-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .video-performance-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header-container {
+        flex-direction: column;
+        gap: 16px;
+        padding: 16px;
+        height: auto;
+      }
+      
+      .user-info {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+      
+      .payment-tab {
+        padding: 8px 12px; /* Even smaller on mobile */
+        font-size: 11px;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .today-earnings-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .video-performance-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .notifications-controls {
+        flex-direction: column;
+      }
+      
+      .notifications-filter {
+        min-width: 100%;
+      }
+      
+      .portal-chat-toggle-container {
+        bottom: 15px;
+        right: 15px;
+      }
+      
+      .portal-chat-toggle {
+        width: 55px;
+        height: 55px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      main {
+        padding: 16px;
+      }
+      
+      .payment-tab {
+        padding: 6px 10px; /* Smallest on mobile */
+        font-size: 10px;
+      }
+      
+      .stat-card {
+        padding: 16px;
+      }
+      
+      .section {
+        padding: 20px;
+      }
+      
+      .stat-value {
+        font-size: 24px;
+      }
+      
+      .today-earnings-value {
+        font-size: 1.5em;
+      }
+      
+      .logout-warning-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Auto Logout Warning Modal -->
+  <div class="logout-warning-modal" id="logoutWarningModal">
+    <div class="logout-warning-content">
+      <div class="logout-warning-icon">
+        <i class="fas fa-clock"></i>
+      </div>
+      <h2 class="logout-warning-title">Session Timeout Warning</h2>
+      <p class="logout-warning-message">
+        Your session will expire due to inactivity in <span class="logout-timer" id="logoutTimer">10:00</span> seconds.
+        Would you like to continue your session?
+      </p>
+      <div class="logout-warning-actions">
+        <button class="btn btn-success" onclick="extendSession()">
+          <i class="fas fa-sync-alt"></i> Continue Session
+        </button>
+        <button class="btn btn-outline" onclick="logout()">
+          <i class="fas fa-sign-out-alt"></i> Log Out Now
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PayPal Settings Modal -->
+  <div class="modal" id="paypalModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">PayPal Settings</h3>
+        <button class="close-modal" onclick="closeModal('paypalModal')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">PayPal Email</label>
+        <input type="email" class="form-input" id="paypalSettingsEmail" placeholder="Your PayPal email">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirm PayPal Email</label>
+        <input type="email" class="form-input" id="paypalConfirmEmail" placeholder="Confirm your PayPal email">
+      </div>
+      <div style="display: flex; gap: 12px; margin-top: 24px;">
+        <button class="btn btn-outline" onclick="closeModal('paypalModal')">Cancel</button>
+        <button class="btn btn-main" onclick="savePayPalSettings()">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- YouTube Channel Modal -->
+  <div class="modal" id="youtubeModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Connect YouTube Channel</h3>
+        <button class="close-modal" onclick="closeModal('youtubeModal')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">YouTube Channel URL</label>
+        <input type="url" class="form-input" id="youtubeChannelUrl" placeholder="https://youtube.com/c/yourchannel">
+        <small style="color: var(--gray); margin-top: 5px; display: block; font-size: 12px;">
+          Paste your full YouTube channel URL
+        </small>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Channel Name (Optional)</label>
+        <input type="text" class="form-input" id="channelName" placeholder="Your channel name">
+      </div>
+      <div style="display: flex; gap: 12px; margin-top: 24px;">
+        <button class="btn btn-outline" onclick="closeModal('youtubeModal')">Cancel</button>
+        <button class="btn btn-youtube" onclick="saveYouTubeChannel()">
+          <i class="fab fa-youtube"></i> Connect Channel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Settings Modal -->
+  <div class="modal" id="profileModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Profile Settings</h3>
+        <button class="close-modal" onclick="closeModal('profileModal')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" class="form-input" id="profileName" placeholder="Your full name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" class="form-input" id="profileEmail" placeholder="Your email" readonly>
+      </div>
+      <div style="display: flex; gap: 12px; margin-top: 24px;">
+        <button class="btn btn-outline" onclick="closeModal('profileModal')">Cancel</button>
+        <button class="btn btn-main" onclick="updateProfile()">Update Profile</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Password Reset Modal -->
+  <div class="modal" id="passwordModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Change Password</h3>
+        <button class="close-modal" onclick="closeModal('passwordModal')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Current Password</label>
+        <input type="password" class="form-input" id="currentPassword" placeholder="Your current password">
+      </div>
+      <div class="form-group">
+        <label class="form-label">New Password</label>
+        <input type="password" class="form-input" id="newPassword" placeholder="New password">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirm New Password</label>
+        <input type="password" class="form-input" id="confirmPassword" placeholder="Confirm new password">
+      </div>
+      <div style="display: flex; gap: 12px; margin-top: 24px;">
+        <button class="btn btn-outline" onclick="closeModal('passwordModal')">Cancel</button>
+        <button class="btn btn-main" onclick="updatePassword()">Change Password</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Earnings Modal (For Chart) -->
+  <div class="modal" id="earningsModal">
+    <div class="modal-content" style="max-width: 800px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Earnings Analytics</h3>
+        <button class="close-modal" onclick="closeModal('earningsModal')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="chart-controls">
+        <div class="chart-period-selector">
+          <button class="period-btn active" onclick="changeChartPeriod('week')">Week</button>
+          <button class="period-btn" onclick="changeChartPeriod('month')">Month</button>
+          <button class="period-btn" onclick="changeChartPeriod('quarter')">Quarter</button>
+          <button class="period-btn" onclick="changeChartPeriod('year')">Year</button>
+        </div>
+        <button class="btn btn-outline" onclick="exportChartData()">
+          <i class="fas fa-download"></i> Export Data
+        </button>
+      </div>
+      <div class="analytics-chart">
+        <div class="chart-container">
+          <canvas id="earningsChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <a href="#" class="logo">
+        <div class="logo-icon">EN</div>
+        <div class="logo-text">EverNet  <span>Dashboard</span></div>
+      </a>
+      
+      <div class="user-info" id="userInfo" style="display: none;">
+        <div class="creator-name" onclick="toggleDropdown()">
+          <i class="fas fa-user-circle"></i>
+          <span id="creatorName">Loading...</span>
+          <i class="fas fa-chevron-down" style="font-size: 12px; margin-left: auto;"></i>
+        </div>
+        
+        <div class="user-dropdown">
+          <div class="dropdown-content" id="settingsDropdown">
+            <!-- ADDED: Modern EverNet Website Button -->
+            <a href="https://www.evernet.evergreenempireltd.com" target="_blank" class="dropdown-item" style="background: var(--navy-gradient); color: white; margin-bottom: 8px; border-radius: 6px; text-align: center; justify-content: center;">
+              <i class="fas fa-external-link-alt"></i> Home
+            </a>
+            
+            <button class="dropdown-item" onclick="switchTab('settings')">
+              <i class="fas fa-user-cog"></i> Profile Settings
+            </button>
+            <button class="dropdown-item" onclick="openModal('paypalModal')">
+              <i class="fab fa-paypal"></i> PayPal Settings
+            </button>
+            <button class="dropdown-item" onclick="openModal('passwordModal')">
+              <i class="fas fa-key"></i> Change Password
+            </button>
+            <hr style="margin: 8px 0; border: none; border-top: 1px solid var(--gray-light);">
+            <button class="dropdown-item" onclick="logout()" style="color: var(--danger);">
+              <i class="fas fa-sign-out-alt"></i> Sign Out
+            </button>
+          </div>
+        </div>
+        
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+          <i class="fas fa-moon"></i>
+        </button>
+        
+        <a href="javascript:void(0)" onclick="toggleNotifications()" class="notification-bell">
+          <i class="fas fa-bell"></i>
+          <span class="notification-indicator" id="headerNotificationCount" style="display: none;"></span>
+        </a>
+        
+        <a href="/withdrawal/" class="dashboard-btn">
+          <i class="fas fa-money-bill-wave"></i>
+          Withdraw Funds
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Loading -->
+    <div id="loadingScreen" class="loading">
+      <div class="loading-spinner"></div>
+      <p>Loading creator dashboard...</p>
+    </div>
+
+    <!-- Creator Content -->
+    <div id="creatorContent" style="display: none;">
+      <!-- Horizontal Tabs - UPDATED TO BE SMALLER -->
+      <div class="payment-tabs">
+        <button class="payment-tab active" onclick="switchTab('overview')">
+          <i class="fas fa-tachometer-alt"></i>
+          <span>Overview</span>
+        </button>
+        <button class="payment-tab" onclick="switchTab('notifications')">
+          <i class="fas fa-bell"></i>
+          <span>Notifications</span>
+          <span class="notification-indicator" id="tabNotificationCount" style="display: none;"></span>
+        </button>
+        <button class="payment-tab" onclick="switchTab('guidelines')">
+          <i class="fas fa-book"></i>
+          <span>Guidelines</span>
+        </button>
+                <a href="/music/" class="payment-tab">
+          <i class="fas fa-music"></i>
+          <span>Music</span>
+        </a>
+        <button class="payment-tab" onclick="switchTab('videos')">
+          <i class="fas fa-play-circle"></i>
+          <span>Videos</span>
+        </button>
+        <button class="payment-tab" onclick="switchTab('earnings')">
+          <i class="fas fa-chart-line"></i>
+          <span>Earnings</span>
+        </button>
+
+        <a href="/withdrawal/" class="payment-tab">
+          <i class="fas fa-money-bill-wave"></i>
+          <span>Withdraw</span>
+        </a>
+      </div>
+
+      
+      <!-- TAB 1: OVERVIEW -->
+      <div id="overviewTab" class="tab-content active">
+        <!-- Today's Earnings Section -->
+        <section class="today-earnings-section">
+          <div class="today-earnings-header">
+            <h3 class="today-earnings-title">
+              <i class="fas fa-chart-line"></i>
+              Today's Performance
+            </h3>
+            <button class="today-earnings-refresh" onclick="refreshTodayEarnings()" title="Refresh earnings">
+              <i class="fas fa-sync-alt"></i>
+            </button>
+          </div>
+          
+          <div class="today-earnings-grid">
+            <div class="today-earnings-card">
+              <div class="today-earnings-value" id="todayEarnings">$0.00</div>
+              <div class="today-earnings-label">Total Earnings Today</div>
+              <div class="earnings-change positive" id="todayChange">
+                <i class="fas fa-caret-up"></i>
+                <span>+$0.00</span>
+              </div>
+            </div>
+            
+            <div class="today-earnings-card">
+              <div class="today-earnings-value" id="todayViews">0</div>
+              <div class="today-earnings-label">Views Today</div>
+              <div class="earnings-change positive" id="viewsChange">
+                <i class="fas fa-caret-up"></i>
+                <span>+0</span>
+              </div>
+            </div>
+            
+            <div class="today-earnings-card">
+              <div class="today-earnings-value" id="todayVideos">0</div>
+              <div class="today-earnings-label">Shorts Today</div>
+              <div class="earnings-change positive" id="videosChange">
+                <i class="fas fa-caret-up"></i>
+                <span>+0</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Stats Grid -->
+        <section class="stats-section">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-label">
+                <i class="fas fa-eye"></i>
+                Total Views
+              </div>
+              <div class="stat-value" id="totalViewsEnhanced">0</div>
+              <div class="stat-subtitle">All-time views count</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-label">
+                <i class="fas fa-crown"></i>
+                Premium Views
+              </div>
+              <div class="stat-value" id="premiumViewsEnhanced">0</div>
+              <div class="stat-subtitle">Monetized views</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-label">
+                <i class="fas fa-wallet"></i>
+                Available Balance
+              </div>
+              <div class="stat-value" id="availableBalanceEnhanced" style="color: var(--success);">$0.00</div>
+              <div class="stat-subtitle">Ready for withdrawal</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-label">
+                <i class="fas fa-chart-bar"></i>
+                Total Earned
+              </div>
+              <div class="stat-value" id="totalEarnedEnhanced">$0.00</div>
+              <div class="stat-subtitle">Lifetime earnings</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- YouTube Section -->
+        <section class="section">
+          <div class="section-header">
+            <h3 class="section-title">
+              <i class="fab fa-youtube"></i>
+              YouTube Channel
+            </h3>
+            <span class="status-badge status-not-connected" id="youtubeStatus">Not Connected</span>
+          </div>
+          
+          <div id="youtubeConnected" style="display: none;">
+            <div class="form-group">
+              <label class="form-label">Connected Channel</label>
+              <input type="text" class="form-input" id="currentYouTubeUrl" readonly>
+            </div>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+              <button class="btn btn-outline" onclick="openModal('youtubeModal')">
+                <i class="fas fa-edit"></i>
+                Change Channel
+              </button>
+              <button class="btn btn-youtube" onclick="visitYouTubeChannel()">
+                <i class="fab fa-youtube"></i>
+                Visit Channel
+              </button>
+            </div>
+          </div>
+          
+          <div id="youtubeNotConnected">
+            <div class="empty-state">
+              <i class="fab fa-youtube"></i>
+              <h4>YouTube Channel Not Connected</h4>
+              <p>Connect your YouTube channel to start tracking earnings from your Shorts.</p>
+              <button class="btn btn-youtube" onclick="openModal('youtubeModal')" style="margin-top: 16px;">
+                <i class="fab fa-youtube"></i>
+                Connect YouTube Channel
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- PayPal Section -->
+        <section class="section">
+          <div class="section-header">
+            <h3 class="section-title">
+              <i class="fab fa-paypal"></i>
+              Payment Settings
+            </h3>
+            <span class="status-badge status-not-connected" id="paypalStatus">Not Connected</span>
+          </div>
+          
+          <div id="paypalConnected" style="display: none;">
+            <div class="form-group">
+              <label class="form-label">PayPal Email</label>
+              <input type="email" class="form-input" id="currentPayPalEmail" readonly>
+            </div>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+              <button class="btn btn-outline" onclick="openModal('paypalModal')">
+                <i class="fas fa-edit"></i>
+                Change Email
+              </button>
+              <a href="/withdrawal/" class="btn btn-success">
+                <i class="fas fa-money-bill-wave"></i>
+                Withdraw Funds
+              </a>
+            </div>
+          </div>
+          
+          <div id="paypalNotConnected">
+            <div class="empty-state">
+              <i class="fab fa-paypal"></i>
+              <h4>PayPal Not Connected</h4>
+              <p>Connect your PayPal account to receive payments from your earnings.</p>
+              <button class="btn btn-success" onclick="openModal('paypalModal')" style="margin-top: 16px;">
+                <i class="fab fa-paypal"></i>
+                Connect PayPal Account
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Recent Activity -->
+        <section class="section">
+          <div class="section-header">
+            <h3 class="section-title">
+              <i class="fas fa-clock"></i>
+              Recent Activity
+            </h3>
+          </div>
+          <div id="recentActivity">
+            <div class="empty-state">
+              <i class="fas fa-clock"></i>
+              <h4>No Recent Activity</h4>
+              <p>Your recent activities will appear here.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- TAB 2: ENHANCED NOTIFICATIONS (Portal 1 Style) -->
+      <div id="notificationsTab" class="tab-content">
+        <section class="section">
+          <div class="section-header">
+            <h3 class="section-title">
+              <i class="fas fa-bell"></i>
+              Notifications
+            </h3>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button class="btn btn-outline" onclick="markAllAsRead()">
+                <i class="fas fa-check-double"></i>
+                Mark All as Read
+              </button>
+              <button class="btn btn-outline" style="color: var(--danger); border-color: var(--danger);" onclick="clearAllNotifications()">
+                <i class="fas fa-trash"></i>
+                Clear All
+              </button>
+            </div>
+          </div>
+
+          <!-- Filter Controls -->
+          <div class="notifications-controls">
+            <select class="notifications-filter" id="notificationFilter" onchange="filterNotifications()">
+              <option value="all">All Notifications</option>
+              <option value="unread">Unread Only</option>
+              <option value="read">Read Only</option>
+            </select>
+            
+            <select class="notifications-filter" id="notificationTypeFilter" onchange="filterNotifications()">
+              <option value="all">All Types</option>
+              <option value="system">System</option>
+              <option value="payment">Payment</option>
+              <option value="withdrawal">Withdrawal</option>
+              <option value="update">Update</option>
+            </select>
+          </div>
+
+          <!-- Notifications List -->
+          <div id="notificationsList">
+            <div class="empty-state">
+              <i class="fas fa-bell"></i>
+              <h4>No Notifications</h4>
+              <p>You're all caught up! New notifications will appear here.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- TAB 3: GUIDELINES -->
+<div id="guidelinesTab" class="tab-content">
+  <section class="guidelines-section">
+    <div class="guidelines-header">
+      <h3 class="guidelines-title">
+        <i class="fas fa-book"></i>
+        Creator Guidelines
+      </h3>
+      <span class="guidelines-badge">NON-NEGOTIABLE</span>
+    </div>
+    
+    <div class="guidelines-warning-alert">
+      <i class="fas fa-ban"></i>
+      <div class="warning-content">
+        <strong>ZERO TOLERANCE:</strong> If a creator cannot follow these guidelines, the creator cannot work with EverNet.
+      </div>
+    </div>
+    
+    <div class="guidelines-container">
+      <!-- Guideline 1 -->
+      <div class="guideline-item">
+        <div class="guideline-number">1</div>
+        <div class="guideline-content">
+          <h4 class="guideline-title">Use Only the Official EverNet Music</h4>
+          <p class="guideline-description">
+            Creators must use the original EverNet sound exactly as it is provided inside the platform.
+            This is important for tracking and for accurate reporting.
+          </p>
+          
+          <div class="guideline-dos-donts">
+            <div class="donts-section">
+              <h5><i class="fas fa-times-circle"></i> Please avoid:</h5>
+              <ul class="donts-list">
+                <li>Do not mix the sound with any other music</li>
+                <li>Do not duplicate or layer the sound</li>
+                <li>Do not pitch, speed, or slow the sound</li>
+                <li>Do not merge it with another background audio</li>
+              </ul>
+            </div>
+            
+            <div class="dos-section">
+              <h5><i class="fas fa-check-circle"></i> Allowed:</h5>
+              <p>You may add your voice-over, talking, or natural sound. But the music itself must remain pure EverNet audio.</p>
+            </div>
+          </div>
+          
+          <div class="guideline-consequence">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>Videos that break this rule will not be counted for payment.</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Guideline 2 -->
+      <div class="guideline-item">
+        <div class="guideline-number">2</div>
+        <div class="guideline-content">
+          <h4 class="guideline-title">Minimum Volume Requirement: 15%</h4>
+          <p class="guideline-description">
+            To track your video correctly, the EverNet sound must be clear and audible.
+          </p>
+          
+          <div class="guideline-rules">
+            <h5><i class="fas fa-volume-up"></i> Requirements:</h5>
+            <ul class="rules-list">
+              <li>The EverNet sound must play at 15% volume or higher</li>
+              <li>Do not bury the sound under loud noise</li>
+              <li>Do not hide it behind other audio layers</li>
+              <li>Make sure it is easy to hear from start to finish</li>
+            </ul>
+          </div>
+          
+          <div class="guideline-consequence">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>If the system cannot detect the sound clearly, the video cannot be approved.</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Guideline 3 -->
+      <div class="guideline-item">
+        <div class="guideline-number">3</div>
+        <div class="guideline-content">
+          <h4 class="guideline-title">Follow the Approved Posting Format</h4>
+          <p class="guideline-description">
+            Creators must follow the posting style shown in the tutorial and the graphic demonstration.
+            This keeps your content clean and makes view tracking more accurate.
+          </p>
+          
+          <div class="guideline-consequence">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>If you do not follow the posting format, the video may be rejected.</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Guideline 4 -->
+      <div class="guideline-item">
+        <div class="guideline-number">4</div>
+        <div class="guideline-content">
+          <h4 class="guideline-title">No View Manipulation</h4>
+          <p class="guideline-description">
+            EverNet supports honest, organic growth.
+            Creators must not attempt to manipulate or inflate views in any form.
+          </p>
+          
+          <div class="guideline-consequence">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>If manipulation is detected, the account may be suspended.</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Guideline 5 -->
+      <div class="guideline-item">
+        <div class="guideline-number">5</div>
+        <div class="guideline-content">
+          <h4 class="guideline-title">Stay Professional and Respect the Platform</h4>
+          <p class="guideline-description">
+            We work with creators who value discipline and consistency.
+            EverNet does not bend its standards for any creator, regardless of size or influence.
+          </p>
+          
+          <div class="guideline-consequence">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>Repeated violations will lead to removal from the platform.</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Guideline 6 -->
+      <div class="guideline-item">
+        <div class="guideline-number">6</div>
+        <div class="guideline-content">
+          <h4 class="guideline-title">Keep Your Dashboard Updated</h4>
+          <p class="guideline-description">
+            Creators are responsible for checking their own content.
+            If a video has the wrong sound or wrong settings, fix it immediately.
+          </p>
+          
+          <div class="guideline-consequence">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>Only valid videos will reflect in your report and earnings.</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Guideline 7 -->
+      <div class="guideline-item guideline-with-video">
+        <div class="guideline-number">7</div>
+        <div class="guideline-content">
+          <h4 class="guideline-title">Learn Before You Upload</h4>
+          <p class="guideline-description">
+            Every creator must watch the tutorial and read this guideline before posting any video.
+            This helps you avoid mistakes and ensures accurate tracking.
+          </p>
+          
+          <div class="tutorial-video-section">
+            <div class="video-header">
+              <h5><i class="fas fa-play-circle"></i> Official Tutorial (0:55)</h5>
+              <span class="required-badge">REQUIRED</span>
+            </div>
+            
+            <div class="video-container">
+              <iframe 
+                class="youtube-video"
+                src="https://www.youtube.com/embed/UU9rhgl0PVo?autoplay=0&controls=1&modestbranding=1&rel=0&showinfo=0"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                title="EverNet Official Tutorial">
+              </iframe>
+            </div>
+          </div>
+          
+          <div class="guideline-consequence">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>EverNet will not accept responsibility for errors caused by skipping the guideline.</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Guideline 8 -->
+      <div class="guideline-item">
+        <div class="guideline-number">8</div>
+        <div class="guideline-content">
+          <h4 class="guideline-title">Stay Updated</h4>
+          <p class="guideline-description">
+            EverNet continues to improve its system.
+            Creators must follow new updates and instructions when they are released.
+          </p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="guidelines-summary">
+      <div class="summary-header">
+        <i class="fas fa-shield-alt"></i>
+        <h4>Purpose & Enforcement</h4>
+      </div>
+      <p class="summary-text">
+        These rules protect your work, your earnings, and the entire platform.
+        If you follow them, you will grow smoothly.
+        If you ignore them, the system will restrict your access.
+      </p>
+    </div>
+  </section>
+</div>
+
+      <!-- TAB 4: VIDEO PERFORMANCE (Portal 1 Enhanced) -->
+      <div id="videosTab" class="tab-content">
+        <section class="section">
+          <div class="section-header">
+            <h3 class="section-title">
+              <i class="fas fa-play-circle"></i>
+              Your Shorts Performance
+            </h3>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-outline" onclick="loadVideosData()">
+                <i class="fas fa-sync-alt"></i>
+                Refresh
+              </button>
+            </div>
+          </div>
+
+          <!-- Video Stats Overview -->
+          <div class="stats-grid" style="margin-bottom: 24px;">
+            <div class="stat-card">
+              <div class="stat-label">
+                <i class="fas fa-video"></i>
+                Total Shorts
+              </div>
+              <div class="stat-value" id="totalVideosCount">0</div>
+              <div class="stat-subtitle">Videos tracked</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-label">
+                <i class="fas fa-eye"></i>
+                Total Views
+              </div>
+              <div class="stat-value" id="totalVideoViews">0</div>
+              <div class="stat-subtitle">All video views</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-label">
+                <i class="fas fa-money-bill-wave"></i>
+                Total Earnings
+              </div>
+              <div class="stat-value" id="totalVideoEarnings">$0.00</div>
+              <div class="stat-subtitle">From all videos</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-label">
+                <i class="fas fa-chart-bar"></i>
+                Avg. RPM
+              </div>
+              <div class="stat-value" id="avgRPM">$0.00</div>
+              <div class="stat-subtitle">Revenue per 1000 views</div>
+            </div>
+          </div>
+
+          <!-- Video Performance Grid (Portal 1 Style) -->
+          <div id="videosListContainer">
+            <div class="notifications-controls">
+              <select class="notifications-filter" id="videoSortFilter" onchange="filterVideos()">
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="highestEarnings">Highest Earnings</option>
+                <option value="mostViews">Most Views</option>
+              </select>
+              <input type="text" class="notifications-filter" id="videoSearch" placeholder="Search videos..." onkeyup="filterVideos()">
+            </div>
+            
+            <div id="videosList">
+              <div class="empty-state">
+                <i class="fas fa-video"></i>
+                <h4>No Videos Found</h4>
+                <p>Your scanned YouTube Shorts will appear here</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- TAB 5: EARNINGS & ANALYTICS (Portal 1 Style) -->
+      <div id="earningsTab" class="tab-content">
+        <section class="section">
+          <div class="section-header">
+            <h3 class="section-title">
+              <i class="fas fa-chart-line"></i>
+              Earnings Overview
+            </h3>
+            <div class="chart-controls">
+              <div class="chart-period-selector">
+                <button class="period-btn active" onclick="changeChartPeriod('week')">Week</button>
+                <button class="period-btn" onclick="changeChartPeriod('month')">Month</button>
+                <button class="period-btn" onclick="changeChartPeriod('quarter')">Quarter</button>
+                <button class="period-btn" onclick="changeChartPeriod('year')">Year</button>
+              </div>
+              <button class="btn btn-outline" onclick="exportChartData()">
+                <i class="fas fa-download"></i> Export Data
+              </button>
+            </div>
+          </div>
+          <div class="analytics-chart">
+            <div class="chart-container">
+              <canvas id="earningsChart"></canvas>
+            </div>
+          </div>
+        </section>
+
+        <section class="stats-section">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-label">
+                <i class="fas fa-chart-bar"></i>
+                Lifetime Earnings
+              </div>
+              <div class="stat-value" id="lifetimeEarnings">$0.00</div>
+              <div class="stat-subtitle">All-time total</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-label">
+                <i class="fas fa-calendar"></i>
+                This Month
+              </div>
+              <div class="stat-value" id="thisMonthEarnings">$0.00</div>
+              <div class="stat-subtitle">Current month earnings</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-label">
+                <i class="fas fa-calendar-check"></i>
+                Last Month
+              </div>
+              <div class="stat-value" id="lastMonthEarnings">$0.00</div>
+              <div class="stat-subtitle">Previous month earnings</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-label">
+                <i class="fas fa-calendar-day"></i>
+                Avg. Daily
+              </div>
+              <div class="stat-value" id="avgDailyEarnings">$0.00</div>
+              <div class="stat-subtitle">Average daily earnings</div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- TAB 6: SETTINGS (Portal 1 Style) -->
+      <div id="settingsTab" class="tab-content">
+        <!-- Profile Settings -->
+        <section class="section">
+          <div class="section-header">
+            <h3 class="section-title">
+              <i class="fas fa-user-cog"></i>
+              Profile Settings
+            </h3>
+            <button class="btn btn-outline" onclick="openModal('profileModal')">
+              <i class="fas fa-edit"></i> Edit Profile
+            </button>
+          </div>
+          <div style="display: grid; gap: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--gray-light);">
+              <span style="font-weight: 600; color: var(--navy); font-size: 13px;">Full Name</span>
+              <span style="color: var(--gray-dark); font-size: 13px;" id="profileDisplayName">Loading...</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--gray-light);">
+              <span style="font-weight: 600; color: var(--navy); font-size: 13px;">Email</span>
+              <span style="color: var(--gray-dark); font-size: 13px;" id="profileDisplayEmail">Loading...</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--gray-light);">
+              <span style="font-weight: 600; color: var(--navy); font-size: 13px;">Member Since</span>
+              <span style="color: var(--gray-dark); font-size: 13px;" id="memberSince">Loading...</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0;">
+              <span style="font-weight: 600; color: var(--navy); font-size: 13px;">Account Status</span>
+              <span style="color: var(--success); font-size: 13px; font-weight: 600;" id="accountStatus">Active</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- YouTube Settings -->
+        <section class="section">
+          <div class="section-header">
+            <h3 class="section-title">
+              <i class="fab fa-youtube"></i>
+              YouTube Channel
+            </h3>
+            <button class="btn btn-outline" onclick="openModal('youtubeModal')">
+              <i class="fas fa-edit"></i> Manage
+            </button>
+          </div>
+          <div id="youtubeSettingsInfo">
+            <div style="background: var(--white-off); padding: 16px; border-radius: var(--radius); border: 1px solid var(--gray-light);">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <i class="fab fa-youtube" style="color: #FF0000; font-size: 18px;"></i>
+                <span style="color: var(--navy); font-weight: 500; font-size: 13px;" id="settingsYouTubeUrl">No channel connected</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PayPal Settings -->
+        <section class="section">
+          <div class="section-header">
+            <h3 class="section-title">
+              <i class="fab fa-paypal"></i>
+              Payment Settings
+            </h3>
+            <button class="btn btn-outline" onclick="openModal('paypalModal')">
+              <i class="fab fa-paypal"></i> Manage PayPal
+            </button>
+          </div>
+          <div style="display: grid; gap: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--gray-light);">
+              <span style="font-weight: 600; color: var(--navy); font-size: 13px;">PayPal Email</span>
+              <span style="color: var(--gray-dark); font-size: 13px;" id="settingsPayPalEmail">Not connected</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0;">
+              <span style="font-weight: 600; color: var(--navy); font-size: 13px;">Payment Method</span>
+              <span style="color: var(--gray-dark); font-size: 13px;">PayPal</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Security Settings -->
+        <section class="section">
+          <div class="section-header">
+            <h3 class="section-title">
+              <i class="fas fa-shield-alt"></i>
+              Security
+            </h3>
+            <button class="btn btn-outline" onclick="openModal('passwordModal')">
+              <i class="fas fa-key"></i> Change Password
+            </button>
+          </div>
+          <div style="display: grid; gap: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--gray-light);">
+              <span style="font-weight: 600; color: var(--navy); font-size: 13px;">Last Login</span>
+              <span style="color: var(--gray-dark); font-size: 13px;" id="lastLogin">Loading...</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0;">
+              <span style="font-weight: 600; color: var(--navy); font-size: 13px;">Account Type</span>
+              <span style="color: var(--gray-dark); font-size: 13px;">Creator</span>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===== PORTAL CHAT TOGGLE ===== -->
+  <div class="portal-chat-toggle-container" id="portalChatToggle">
+    <div class="portal-activity-indicator" id="portalActivity">
+      <span id="portalMessageCount">0</span>
+    </div>
+    
+    <div class="support-response-indicator" id="supportResponse">
+      <i class="fas fa-reply"></i>
+    </div>
+    
+    <div class="portal-connection-status" id="portalConnection">
+      <i class="fas fa-wifi"></i> Portal Connected
+    </div>
+    
+    <a href="/creator-chat/" class="portal-chat-toggle" id="portalChatBtn">
+      <i class="fas fa-comments"></i>
+      <div class="portal-message-wave" id="portalMessageWave"></div>
+    </a>
+  </div>
+
+  <!-- Portal Notification Sound -->
+  <audio id="portalNotificationSound" preload="auto" style="display: none;">
+    <source src="https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3" type="audio/mpeg">
+  </audio>
+
+<!-- Firebase Configuration and Portal 1 JavaScript -->
+<script>
+// ========== FIREBASE CONFIGURATION ==========
+const firebaseConfig = {
+  apiKey: "AIzaSyAuSEqhLenwrEz-qrIn1drjAugy1YSkDlI",
+  authDomain: "creators-portal-428c5.firebaseapp.com",
+  projectId: "creators-portal-428c5",
+  storageBucket: "creators-portal-428c5.firebasestorage.app",
+  messagingSenderId: "499280036303",
+  appId: "1:499280036303:web:b4d80d3b7fe1291381d2ba",
+  measurementId: "G-CYWGD80FS5"
+};
+
+// Initialize Firebase
+let app, auth, db;
+try {
+  app = firebase.initializeApp(firebaseConfig);
+  auth = firebase.auth();
+  db = firebase.firestore();
+  console.log('Firebase initialized successfully');
+} catch (error) {
+  console.log('Firebase already initialized, using existing app');
+  app = firebase.app();
+  auth = firebase.auth();
+  db = firebase.firestore();
+}
+
+// ========== DASHBOARD STATE MANAGEMENT ==========
+let userData = {};
+let notifications = [];
+let creatorVideos = [];
+let isInitialized = false;
+let notificationsListener = null;
+let userListener = null;
+let videosListener = null;
+let unreadNotificationsCount = 0;
+let currentNotificationId = null;
+let filteredNotifications = [];
+
+// ========== PORTAL CHAT STATE ==========
+let portalChatListener = null;
+let supportMessagesListener = null;
+let unreadPortalMessages = 0;
+let supportResponsesCount = 0;
+let lastMessageTimestamp = null;
+
+// ========== TODAY'S EARNINGS STATE ==========
+let todayEarningsData = {
+  earnings: 0,
+  views: 0,
+  videos: 0,
+  rpm: 0,
+  hourlyEarnings: 0,
+  yesterdayEarnings: 0,
+  weekToDate: 0,
+  monthToDate: 0
+};
+
+// ========== CHART STATE ==========
+let earningsChart = null;
+let currentChartPeriod = 'week';
+
+// ========== CORE DASHBOARD FUNCTIONS ==========
+
+// Initialize Dashboard
+function initializeDashboard() {
+  console.log('Initializing dashboard...');
+  
+  // Show loading state
+  document.getElementById('loadingScreen').style.display = 'block';
+  document.getElementById('creatorContent').style.display = 'none';
+  
+  // Set up auth state listener
+  auth.onAuthStateChanged(handleAuthStateChange);
+  
+  // Load theme
+  loadTheme();
+  
+  isInitialized = true;
+}
+
+// Handle authentication state changes
+function handleAuthStateChange(user) {
+  if (user) {
+    console.log('User authenticated:', user.email);
+    checkUserRoleAndLoadData(user);
+  } else {
+    console.log('No user authenticated');
+    showAccessDenied();
+  }
+}
+
+// Check user role and load appropriate data
+async function checkUserRoleAndLoadData(user) {
+  try {
+    const userDoc = await db.collection('users').doc(user.uid).get();
+    
+    if (userDoc.exists) {
+      const userData = userDoc.data();
+      if (userData.role === 'admin') {
+        showNotification('Redirecting to admin portal...', 'info');
+        setTimeout(() => {
+          window.location.href = '/admin/';
+        }, 2000);
+        return;
+      }
+    }
+    
+    // Load user data for creator
+    await loadUserData(user.uid);
+    
+  } catch (error) {
+    console.error('Error checking user role:', error);
+    await loadUserData(user.uid);
+  }
+}
+
+// Load user data
+async function loadUserData(userId) {
+  try {
+    console.log('Loading user data for:', userId);
+    
+    // Setup real-time listeners
+    await setupRealTimeUserData(userId);
+    await setupRealTimeNotifications(userId);
+    await setupRealTimeVideos(userId);
+    await setupPortalChatListener(userId);
+    
+    // Show main content
+    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById('creatorContent').style.display = 'block';
+    document.getElementById('userInfo').style.display = 'flex';
+    
+    showNotification('Dashboard loaded successfully!', 'success');
+    
+    // Initialize today's earnings
+    calculateTodayEarnings();
+    
+  } catch (error) {
+    console.error('Error loading user data:', error);
+    showNotification('Error loading dashboard data', 'error');
+    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById('creatorContent').style.display = 'block';
+    document.getElementById('userInfo').style.display = 'flex';
+  }
+}
+
+// ========== REAL-TIME DATA LISTENERS ==========
+
+// Setup real-time user data
+function setupRealTimeUserData(userId) {
+  if (userListener) userListener();
+  
+  userListener = db.collection('users').doc(userId)
+    .onSnapshot({
+      next: (doc) => {
+        if (doc.exists) {
+          userData = doc.data();
+          console.log('User data updated:', userData);
+          updateAllDisplays(userData);
+          updateGreeting();
+          calculateTodayEarnings();
+        }
+      },
+      error: (error) => {
+        console.error('User data listener error:', error);
+      }
+    });
+}
+
+// Setup real-time notifications
+function setupRealTimeNotifications(userId) {
+  if (notificationsListener) {
+    console.log('Removing existing notifications listener');
+    notificationsListener();
+  }
+
+  console.log('Setting up notifications listener for user:', userId);
+
+  notificationsListener = db.collection('userNotifications')
+    .where('userId', '==', userId)
+    .onSnapshot({
+      next: (snapshot) => {
+        console.log('🎯 NOTIFICATIONS SNAPSHOT RECEIVED:', snapshot.size, 'notifications');
+        
+        notifications = [];
+        let previousUnreadCount = unreadNotificationsCount;
+        unreadNotificationsCount = 0;
+        
+        if (snapshot.empty) {
+          console.log('No notifications found for user');
+          updateAllNotificationDisplays();
+          updateNotificationBadges();
+          return;
+        }
+        
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          console.log('📝 Notification data:', doc.id, data);
+          
+          notifications.push({ 
+            id: doc.id, 
+            ...data
+          });
+          
+          if (!data.read) {
+            unreadNotificationsCount++;
+          }
+        });
+        
+        notifications.sort((a, b) => {
+          const timeA = a.timestamp?.toDate ? a.timestamp.toDate().getTime() : new Date(a.timestamp).getTime();
+          const timeB = b.timestamp?.toDate ? b.timestamp.toDate().getTime() : new Date(b.timestamp).getTime();
+          return timeB - timeA;
+        });
+        
+        console.log('✅ Final notifications:', notifications.length, 'Unread:', unreadNotificationsCount);
+        
+        updateAllNotificationDisplays();
+        updateNotificationBadges();
+        
+      },
+      error: (error) => {
+        console.error('💥 NOTIFICATIONS LISTENER ERROR:', error);
+        loadNotificationsOnce(userId);
+      }
+    });
+}
+
+// Fallback: Load notifications once if real-time fails
+async function loadNotificationsOnce(userId) {
+  try {
+    console.log('🔄 Using fallback notification loading for user:', userId);
+    
+    const snapshot = await db.collection('userNotifications')
+      .where('userId', '==', userId)
+      .get();
+    
+    notifications = [];
+    unreadNotificationsCount = 0;
+    
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      notifications.push({ id: doc.id, ...data });
+      
+      if (!data.read) {
+        unreadNotificationsCount++;
+      }
+    });
+    
+    notifications.sort((a, b) => {
+      const timeA = a.timestamp?.toDate ? a.timestamp.toDate().getTime() : new Date(a.timestamp).getTime();
+      const timeB = b.timestamp?.toDate ? b.timestamp.toDate().getTime() : new Date(b.timestamp).getTime();
+      return timeB - timeA;
+    });
+    
+    updateAllNotificationDisplays();
+    updateNotificationBadges();
+    
+  } catch (error) {
+    console.error('💥 FALLBACK NOTIFICATION LOADING ERROR:', error);
+    showNotification('Error loading notifications', 'error');
+  }
+}
+
+// Setup real-time videos
+function setupRealTimeVideos(userId) {
+  if (videosListener) videosListener();
+  
+  videosListener = db.collection('creatorVideos')
+    .where('creatorId', '==', userId)
+    .onSnapshot({
+      next: (snapshot) => {
+        console.log('Videos updated:', snapshot.size);
+        creatorVideos = [];
+        
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          creatorVideos.push({ 
+            id: doc.id, 
+            ...data,
+            assignedAt: data.assignedAt || new Date(),
+            creatorPayout: data.creatorPayout || 0,
+            viewCount: data.viewCount || 0,
+            monetizedViews: data.monetizedViews || 0
+          });
+        });
+        
+        creatorVideos.sort((a, b) => {
+          const dateA = a.assignedAt?.toDate ? a.assignedAt.toDate() : new Date(a.assignedAt);
+          const dateB = b.assignedAt?.toDate ? b.assignedAt.toDate() : new Date(b.assignedAt);
+          return dateB - dateA;
+        });
+        
+        updateVideosDisplay();
+        calculateTodayEarnings();
+      },
+      error: (error) => {
+        console.error('Videos listener error:', error);
+      }
+    });
+}
+
+// ========== PORTAL CHAT FUNCTIONS ==========
+
+function setupPortalChatListener(userId) {
+  console.log('Setting up portal chat listener for user:', userId);
+  
+  const user = auth.currentUser;
+  const userEmail = user ? user.email : '';
+  
+  if (!userEmail) {
+    console.error('No user email found');
+    return;
+  }
+  
+  portalChatListener = db.collection('support_tickets')
+    .where('creatorEmail', '==', userEmail)
+    .onSnapshot({
+      next: async (snapshot) => {
+        console.log('🎫 Portal tickets updated:', snapshot.size);
+        
+        let totalUnread = 0;
+        let supportResponses = 0;
+        
+        const ticketPromises = [];
+        snapshot.forEach(doc => {
+          const ticket = doc.data();
+          const ticketId = doc.id;
+          
+          if (ticket.status !== 'closed' && ticket.status !== 'resolved') {
+            const promise = db.collection('support_messages')
+              .where('ticketId', '==', ticketId)
+              .where('senderType', '==', 'support')
+              .where('read', '==', false)
+              .get()
+              .then(messageSnapshot => {
+                totalUnread += messageSnapshot.size;
+                
+                messageSnapshot.forEach(messageDoc => {
+                  const message = messageDoc.data();
+                  const messageTime = message.timestamp?.toDate ? message.timestamp.toDate() : new Date();
+                  const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+                  
+                  if (messageTime > twentyFourHoursAgo) {
+                    supportResponses++;
+                  }
+                });
+              });
+            ticketPromises.push(promise);
+          }
+        });
+        
+        await Promise.all(ticketPromises);
+        
+        console.log('📊 Portal stats - Unread:', totalUnread, 'Support Responses:', supportResponses);
+        
+        updatePortalChatToggle(totalUnread, supportResponses);
+        
+        if (supportResponses > supportResponsesCount) {
+          playPortalNotificationSound();
+          showPortalMessageEffects();
+        }
+        
+        supportResponsesCount = supportResponses;
+        
+      },
+      error: (error) => {
+        console.error('💥 PORTAL CHAT LISTENER ERROR:', error);
+        showPortalConnectionError();
+      }
+    });
+}
+
+function updatePortalChatToggle(unreadCount, supportResponses) {
+  const portalActivity = document.getElementById('portalActivity');
+  const portalMessageCount = document.getElementById('portalMessageCount');
+  const supportResponse = document.getElementById('supportResponse');
+  const portalChatBtn = document.getElementById('portalChatBtn');
+  const portalConnection = document.getElementById('portalConnection');
+  
+  if (unreadCount > 0) {
+    portalActivity.classList.add('active');
+    portalMessageCount.textContent = unreadCount > 99 ? '99+' : unreadCount;
+    
+    portalConnection.classList.add('active');
+    portalConnection.innerHTML = `<i class="fas fa-wifi"></i> ${unreadCount} new message${unreadCount > 1 ? 's' : ''}`;
+  } else {
+    portalActivity.classList.remove('active');
+    portalConnection.classList.remove('active');
+  }
+  
+  if (supportResponses > 0) {
+    supportResponse.classList.add('active');
+    portalChatBtn.classList.add('has-message');
+  } else {
+    supportResponse.classList.remove('active');
+    portalChatBtn.classList.remove('has-message');
+  }
+  
+  portalConnection.classList.add('active');
+  setTimeout(() => {
+    portalConnection.classList.remove('active');
+  }, 3000);
+}
+
+function playPortalNotificationSound() {
+  try {
+    const sound = document.getElementById('portalNotificationSound');
+    if (sound) {
+      sound.currentTime = 0;
+      sound.play().catch(e => console.log('Audio play failed:', e));
+    }
+  } catch (error) {
+    console.log('Could not play portal notification sound:', error);
+  }
+}
+
+function showPortalMessageEffects() {
+  const portalMessageWave = document.getElementById('portalMessageWave');
+  const portalChatBtn = document.getElementById('portalChatBtn');
+  
+  portalMessageWave.classList.add('active');
+  
+  setTimeout(() => {
+    portalMessageWave.classList.remove('active');
+  }, 1000);
+  
+  portalChatBtn.style.animation = 'support-bounce 0.5s ease-in-out';
+  setTimeout(() => {
+    portalChatBtn.style.animation = '';
+  }, 500);
+}
+
+function showPortalConnectionError() {
+  const portalConnection = document.getElementById('portalConnection');
+  portalConnection.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Portal Disconnected`;
+  portalConnection.classList.add('active');
+  portalConnection.style.background = 'rgba(220, 53, 69, 0.8)';
+  
+  setTimeout(() => {
+    portalConnection.classList.remove('active');
+    portalConnection.style.background = '';
+  }, 5000);
+}
+
+// ========== TODAY'S EARNINGS FUNCTIONALITY ==========
+
+function refreshTodayEarnings() {
+  const refreshBtn = document.querySelector('.today-earnings-refresh i');
+  refreshBtn.style.animation = 'spin 1s linear';
+  
+  setTimeout(() => {
+    calculateTodayEarnings();
+    refreshBtn.style.animation = '';
+    showNotification('Today\'s performance refreshed', 'success');
+  }, 1000);
+}
+
+function calculateTodayEarnings() {
+  const today = new Date();
+  const todayStr = today.toISOString().split('T')[0];
+  
+  todayEarningsData = {
+    earnings: 0,
+    views: 0,
+    videos: 0
+  };
+  
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+  const yesterdayStr = yesterday.toISOString().split('T')[0];
+  
+  let totalSystemEarnings = 0;
+  let totalSystemViews = 0;
+  let todayEarnings = 0;
+  let todayViews = 0;
+  let yesterdayEarnings = 0;
+  
+  creatorVideos.forEach(video => {
+    const videoDate = video.assignedAt?.toDate ? 
+                     video.assignedAt.toDate().toISOString().split('T')[0] : 
+                     new Date(video.assignedAt).toISOString().split('T')[0];
+    
+    totalSystemEarnings += video.creatorPayout || 0;
+    totalSystemViews += video.viewCount || 0;
+    
+    if (videoDate === todayStr) {
+      todayEarnings += video.creatorPayout || 0;
+      todayViews += video.viewCount || 0;
+    }
+    
+    if (videoDate === yesterdayStr) {
+      yesterdayEarnings += video.creatorPayout || 0;
+    }
+  });
+  
+  if (todayEarnings === 0) {
+    todayEarnings = totalSystemEarnings * 0.1;
+    todayViews = totalSystemViews * 0.05;
+  }
+  
+  todayEarningsData.earnings = todayEarnings;
+  todayEarningsData.views = todayViews;
+  todayEarningsData.videos = creatorVideos.filter(video => {
+    const videoDate = video.assignedAt?.toDate ? 
+                     video.assignedAt.toDate().toISOString().split('T')[0] : 
+                     new Date(video.assignedAt).toISOString().split('T')[0];
+    return videoDate === todayStr;
+  }).length;
+  
+  updateTodayEarningsDisplay();
+}
+
+function updateTodayEarningsDisplay() {
+  document.getElementById('todayEarnings').textContent = `$${todayEarningsData.earnings.toFixed(2)}`;
+  document.getElementById('todayViews').textContent = todayEarningsData.views.toLocaleString();
+  document.getElementById('todayVideos').textContent = todayEarningsData.videos.toString();
+  
+  const earningsChange = todayEarningsData.earnings * 0.15;
+  const viewsChange = Math.floor(todayEarningsData.views * 0.12);
+  const videosChange = Math.floor(todayEarningsData.videos * 0.08);
+  
+  const earningsChangeEl = document.getElementById('todayChange');
+  earningsChangeEl.innerHTML = `<i class="fas fa-caret-up"></i><span>+$${earningsChange.toFixed(2)}</span>`;
+  earningsChangeEl.className = 'earnings-change positive';
+  
+  const viewsChangeEl = document.getElementById('viewsChange');
+  viewsChangeEl.innerHTML = `<i class="fas fa-caret-up"></i><span>+${viewsChange.toLocaleString()}</span>`;
+  viewsChangeEl.className = 'earnings-change positive';
+  
+  const videosChangeEl = document.getElementById('videosChange');
+  videosChangeEl.innerHTML = `<i class="fas fa-caret-up"></i><span>+${videosChange}</span>`;
+  videosChangeEl.className = 'earnings-change positive';
+}
+
+// ========== UI STATE MANAGEMENT ==========
+
+function showAccessDenied() {
+  document.getElementById('loadingScreen').style.display = 'none';
+  document.getElementById('creatorContent').innerHTML = `
+    <div class="empty-state" style="padding: 80px 24px;">
+      <i class="fas fa-lock"></i>
+      <h4>Access Denied</h4>
+      <p>You must be logged in to access the creator dashboard.</p>
+      <button class="btn btn-main" onclick="redirectToLogin()" style="margin-top: 16px;">
+        Go to Login
+      </button>
+    </div>
+  `;
+  document.getElementById('creatorContent').style.display = 'block';
+}
+
+// ========== NOTIFICATION DISPLAY FUNCTIONS ==========
+
+function updateAllNotificationDisplays() {
+  updateNotificationsDisplay();
+  updateNotificationBadges();
+}
+
+function updateNotificationBadges() {
+  const headerBadge = document.getElementById('headerNotificationCount');
+  const tabBadge = document.getElementById('tabNotificationCount');
+  
+  if (unreadNotificationsCount > 0) {
+    headerBadge.textContent = unreadNotificationsCount > 99 ? '99+' : unreadNotificationsCount.toString();
+    headerBadge.style.display = 'flex';
+    
+    tabBadge.textContent = unreadNotificationsCount > 99 ? '99+' : unreadNotificationsCount.toString();
+    tabBadge.style.display = 'flex';
+  } else {
+    headerBadge.style.display = 'none';
+    tabBadge.style.display = 'none';
+  }
+}
+
+function updateNotificationsDisplay() {
+  const notificationsList = document.getElementById('notificationsList');
+  
+  if (notifications.length === 0) {
+    notificationsList.innerHTML = `
+      <div class="empty-state">
+        <i class="fas fa-bell"></i>
+        <h4>No Notifications</h4>
+        <p>You're all caught up! New notifications will appear here.</p>
+      </div>
+    `;
+    return;
+  }
+  
+  let notificationsHTML = '';
+  
+  notifications.forEach(notification => {
+    const time = formatTime(notification.timestamp?.toDate());
+    const notificationId = notification.id;
+    
+    notificationsHTML += `
+      <div class="notification-item-modern ${notification.read ? '' : 'unread'}" 
+           data-notification-id="${notificationId}"
+           onclick="openNotificationFullView('${notificationId}')">
+        <div class="notification-preview">
+          <div class="notification-icon">
+            ${getNotificationIcon(notification.type)}
+          </div>
+          <div class="notification-content-preview">
+            <div class="notification-title-preview">
+              ${notification.title || 'Notification'}
+              ${!notification.read ? '<span class="unread-dot"></span>' : ''}
+            </div>
+            <div class="notification-time-preview">${time}</div>
+          </div>
+          <div class="notification-actions-preview">
+            <button class="notification-action-icon" onclick="event.stopPropagation(); toggleReadStatus('${notificationId}')">
+              <i class="fas ${notification.read ? 'fa-envelope' : 'fa-envelope-open'}"></i>
+            </button>
+            <button class="notification-action-icon delete" onclick="event.stopPropagation(); deleteNotification('${notificationId}')">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+  
+  notificationsList.innerHTML = notificationsHTML;
+}
+
+function openNotificationFullView(notificationId) {
+  const notification = notifications.find(n => n.id === notificationId);
+  if (!notification) return;
+  
+  // Mark as read when opened
+  if (!notification.read) {
+    toggleReadStatus(notificationId);
+  }
+  
+  // Create or update full view modal
+  let modal = document.getElementById('notificationFullViewModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'notificationFullViewModal';
+    modal.className = 'modal';
+    modal.innerHTML = `
+      <div class="modal-content notification-full-view">
+        <div class="notification-full-header">
+          <button class="modal-close" onclick="closeNotificationFullView()">
+            <i class="fas fa-times"></i>
+          </button>
+          <div class="notification-full-title">
+            <div class="notification-full-icon">
+              ${getNotificationIcon(notification.type)}
+            </div>
+            <h3>${notification.title || 'Notification'}</h3>
+          </div>
+          <div class="notification-full-meta">
+            <span class="notification-full-time">${formatFullDate(notification.timestamp?.toDate())}</span>
+            ${notification.type ? `<span class="notification-type-badge">${notification.type}</span>` : ''}
+          </div>
+        </div>
+        
+        <div class="notification-full-body">
+          <div class="notification-message">
+            ${notification.message || 'No message content available.'}
+          </div>
+          
+          ${notification.data ? `
+            <div class="notification-data">
+              <h4>Additional Details</h4>
+              <pre>${JSON.stringify(notification.data, null, 2)}</pre>
+            </div>
+          ` : ''}
+          
+          ${notification.actionUrl ? `
+            <div class="notification-actions-full">
+              <a href="${notification.actionUrl}" target="_blank" class="btn btn-main">
+                <i class="fas fa-external-link-alt"></i> Take Action
+              </a>
+            </div>
+          ` : ''}
+        </div>
+        
+        <div class="notification-full-footer">
+          <button class="btn btn-outline" onclick="toggleReadStatus('${notificationId}')">
+            <i class="fas ${notification.read ? 'fa-envelope' : 'fa-envelope-open'}"></i>
+            ${notification.read ? 'Mark as Unread' : 'Mark as Read'}
+          </button>
+          <button class="btn btn-danger" onclick="deleteNotification('${notificationId}')">
+            <i class="fas fa-trash"></i> Delete
+          </button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  } else {
+    // Update existing modal content
+    modal.querySelector('.notification-full-title h3').textContent = notification.title || 'Notification';
+    modal.querySelector('.notification-full-icon').innerHTML = getNotificationIcon(notification.type);
+    modal.querySelector('.notification-full-time').textContent = formatFullDate(notification.timestamp?.toDate());
+    modal.querySelector('.notification-message').innerHTML = notification.message || 'No message content available.';
+    
+    const typeBadge = modal.querySelector('.notification-type-badge');
+    if (notification.type) {
+      if (!typeBadge) {
+        modal.querySelector('.notification-full-meta').innerHTML += 
+          `<span class="notification-type-badge">${notification.type}</span>`;
+      } else {
+        typeBadge.textContent = notification.type;
+      }
+    } else if (typeBadge) {
+      typeBadge.remove();
+    }
+    
+    const dataSection = modal.querySelector('.notification-data');
+    if (notification.data) {
+      if (!dataSection) {
+        modal.querySelector('.notification-full-body').innerHTML += `
+          <div class="notification-data">
+            <h4>Additional Details</h4>
+            <pre>${JSON.stringify(notification.data, null, 2)}</pre>
+          </div>
+        `;
+      } else {
+        dataSection.querySelector('pre').textContent = JSON.stringify(notification.data, null, 2);
+      }
+    } else if (dataSection) {
+      dataSection.remove();
+    }
+    
+    const actionSection = modal.querySelector('.notification-actions-full');
+    if (notification.actionUrl) {
+      if (!actionSection) {
+        modal.querySelector('.notification-full-body').innerHTML += `
+          <div class="notification-actions-full">
+            <a href="${notification.actionUrl}" target="_blank" class="btn btn-main">
+              <i class="fas fa-external-link-alt"></i> Take Action
+            </a>
+          </div>
+        `;
+      } else {
+        actionSection.querySelector('a').href = notification.actionUrl;
+      }
+    } else if (actionSection) {
+      actionSection.remove();
+    }
+    
+    const toggleBtn = modal.querySelector('.btn-outline');
+    toggleBtn.innerHTML = `<i class="fas ${notification.read ? 'fa-envelope' : 'fa-envelope-open'}"></i>
+                           ${notification.read ? 'Mark as Unread' : 'Mark as Read'}`;
+    toggleBtn.onclick = () => toggleReadStatus(notificationId);
+    
+    const deleteBtn = modal.querySelector('.btn-danger');
+    deleteBtn.onclick = () => deleteNotification(notificationId);
+  }
+  
+  modal.classList.add('active');
+}
+
+function closeNotificationFullView() {
+  const modal = document.getElementById('notificationFullViewModal');
+  if (modal) {
+    modal.classList.remove('active');
+  }
+}
+
+function getNotificationIcon(type) {
+  const icons = {
+    'info': '<i class="fas fa-info-circle" style="color: #3498db;"></i>',
+    'success': '<i class="fas fa-check-circle" style="color: #2ecc71;"></i>',
+    'warning': '<i class="fas fa-exclamation-triangle" style="color: #f39c12;"></i>',
+    'error': '<i class="fas fa-exclamation-circle" style="color: #e74c3c;"></i>',
+    'payment': '<i class="fas fa-dollar-sign" style="color: #9b59b6;"></i>',
+    'video': '<i class="fas fa-video" style="color: #1abc9c;"></i>',
+    'system': '<i class="fas fa-cogs" style="color: #95a5a6;"></i>'
+  };
+  
+  return icons[type] || '<i class="fas fa-bell" style="color: #7f8c8d;"></i>';
+}
+
+function formatFullDate(date) {
+  if (!date) return 'Unknown date';
+  return date.toLocaleString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}
+
+// ========== NOTIFICATION INTERACTION FUNCTIONS ==========
+
+async function toggleReadStatus(notificationId) {
+  try {
+    const notification = notifications.find(n => n.id === notificationId);
+    if (!notification) return;
+    
+    await db.collection('userNotifications').doc(notificationId).update({ 
+      read: !notification.read 
+    });
+    
+    // Update UI immediately
+    const notificationEl = document.querySelector(`[data-notification-id="${notificationId}"]`);
+    if (notificationEl) {
+      if (!notification.read) {
+        notificationEl.classList.add('unread');
+      } else {
+        notificationEl.classList.remove('unread');
+      }
+    }
+    
+    // Update full view modal if open
+    const modal = document.getElementById('notificationFullViewModal');
+    if (modal && modal.classList.contains('active')) {
+      const toggleBtn = modal.querySelector('.btn-outline');
+      if (toggleBtn) {
+        toggleBtn.innerHTML = `<i class="fas ${notification.read ? 'fa-envelope' : 'fa-envelope-open'}"></i>
+                               ${notification.read ? 'Mark as Unread' : 'Mark as Read'}`;
+      }
+    }
+    
+  } catch (error) {
+    console.error('Error toggling notification read status:', error);
+    showNotification('Error updating notification', 'error');
+  }
+}
+
+async function deleteNotification(notificationId) {
+  if (!confirm('Are you sure you want to delete this notification?')) {
+    return;
+  }
+  
+  try {
+    await db.collection('userNotifications').doc(notificationId).delete();
+    
+    // Close full view if open
+    closeNotificationFullView();
+    
+    showNotification('Notification deleted', 'success');
+  } catch (error) {
+    console.error('Error deleting notification:', error);
+    showNotification('Error deleting notification', 'error');
+  }
+}
+
+async function markAllAsRead() {
+  const user = auth.currentUser;
+  if (!user) return;
+  
+  try {
+    const snapshot = await db.collection('userNotifications')
+      .where('userId', '==', user.uid)
+      .where('read', '==', false)
+      .get();
+    
+    const updatePromises = [];
+    snapshot.forEach(doc => {
+      updatePromises.push(db.collection('userNotifications').doc(doc.id).update({ read: true }));
+    });
+    
+    await Promise.all(updatePromises);
+    showNotification('All notifications marked as read', 'success');
+    
+  } catch (error) {
+    console.error('Error marking all notifications as read:', error);
+    showNotification('Error updating notifications', 'error');
+  }
+}
+
+async function clearAllNotifications() {
+  const user = auth.currentUser;
+  if (!user) return;
+  
+  if (!confirm('Are you sure you want to clear all notifications? This action cannot be undone.')) {
+    return;
+  }
+  
+  try {
+    const snapshot = await db.collection('userNotifications')
+      .where('userId', '==', user.uid)
+      .get();
+    
+    const deletePromises = [];
+    snapshot.forEach(doc => {
+      deletePromises.push(db.collection('userNotifications').doc(doc.id).delete());
+    });
+    
+    await Promise.all(deletePromises);
+    showNotification('All notifications cleared', 'success');
+    
+  } catch (error) {
+    console.error('Error clearing notifications:', error);
+    showNotification('Error clearing notifications', 'error');
+  }
+}
+
+function filterNotifications() {
+  const statusFilter = document.getElementById('notificationFilter').value;
+  const typeFilter = document.getElementById('notificationTypeFilter').value;
+  
+  filteredNotifications = [...notifications];
+  
+  if (statusFilter === 'unread') {
+    filteredNotifications = filteredNotifications.filter(n => !n.read);
+  } else if (statusFilter === 'read') {
+    filteredNotifications = filteredNotifications.filter(n => n.read);
+  }
+  
+  if (typeFilter !== 'all') {
+    filteredNotifications = filteredNotifications.filter(n => n.type === typeFilter);
+  }
+  
+  updateFilteredNotificationsDisplay();
+}
+
+function updateFilteredNotificationsDisplay() {
+  const notificationsList = document.getElementById('notificationsList');
+  
+  if (filteredNotifications.length === 0) {
+    notificationsList.innerHTML = `
+      <div class="empty-state">
+        <i class="fas fa-filter"></i>
+        <h4>No Notifications Match Filters</h4>
+        <p>Try changing your filter settings.</p>
+        <button class="btn btn-outline" onclick="resetNotificationFilters()" style="margin-top: 12px;">
+          Reset Filters
+        </button>
+      </div>
+    `;
+    return;
+  }
+  
+  let notificationsHTML = '';
+  
+  filteredNotifications.forEach(notification => {
+    const time = formatTime(notification.timestamp?.toDate());
+    const notificationId = notification.id;
+    
+    notificationsHTML += `
+      <div class="notification-item-modern ${notification.read ? '' : 'unread'}" 
+           data-notification-id="${notificationId}"
+           onclick="openNotificationFullView('${notificationId}')">
+        <div class="notification-preview">
+          <div class="notification-icon">
+            ${getNotificationIcon(notification.type)}
+          </div>
+          <div class="notification-content-preview">
+            <div class="notification-title-preview">
+              ${notification.title || 'Notification'}
+              ${!notification.read ? '<span class="unread-dot"></span>' : ''}
+            </div>
+            <div class="notification-time-preview">${time}</div>
+          </div>
+          <div class="notification-actions-preview">
+            <button class="notification-action-icon" onclick="event.stopPropagation(); toggleReadStatus('${notificationId}')">
+              <i class="fas ${notification.read ? 'fa-envelope' : 'fa-envelope-open'}"></i>
+            </button>
+            <button class="notification-action-icon delete" onclick="event.stopPropagation(); deleteNotification('${notificationId}')">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+  
+  notificationsList.innerHTML = notificationsHTML;
+}
+
+function resetNotificationFilters() {
+  document.getElementById('notificationFilter').value = 'all';
+  document.getElementById('notificationTypeFilter').value = 'all';
+  filterNotifications();
+}
+// ========== UI UPDATE FUNCTIONS ==========
+
+function updateAllDisplays(data) {
+  // User Info
+  document.getElementById('creatorName').textContent = data.name || data.email || 'Creator';
+  
+  // Enhanced Stats
+  document.getElementById('totalViewsEnhanced').textContent = (data.totalViews || 0).toLocaleString();
+  document.getElementById('premiumViewsEnhanced').textContent = (data.monetizedViews || 0).toLocaleString();
+  document.getElementById('availableBalanceEnhanced').textContent = `$${(data.availableBalance || 0).toFixed(2)}`;
+  document.getElementById('totalEarnedEnhanced').textContent = `$${(data.totalEarned || 0).toFixed(2)}`;
+
+  // YouTube Channel
+  if (data.youtubeChannel) {
+    document.getElementById('currentYouTubeUrl').value = data.youtubeChannel;
+    document.getElementById('settingsYouTubeUrl').textContent = data.youtubeChannel;
+    document.getElementById('youtubeStatus').textContent = 'Connected';
+    document.getElementById('youtubeStatus').className = 'status-badge status-connected';
+    document.getElementById('youtubeConnected').style.display = 'block';
+    document.getElementById('youtubeNotConnected').style.display = 'none';
+  } else {
+    document.getElementById('youtubeConnected').style.display = 'none';
+    document.getElementById('youtubeNotConnected').style.display = 'block';
+  }
+
+  // PayPal Email
+  if (data.paypalEmail) {
+    document.getElementById('paypalSettingsEmail').value = data.paypalEmail;
+    document.getElementById('paypalConfirmEmail').value = data.paypalEmail;
+    document.getElementById('settingsPayPalEmail').textContent = data.paypalEmail;
+    document.getElementById('currentPayPalEmail').value = data.paypalEmail;
+    document.getElementById('paypalStatus').textContent = 'Connected';
+    document.getElementById('paypalStatus').className = 'status-badge status-connected';
+    document.getElementById('paypalConnected').style.display = 'block';
+    document.getElementById('paypalNotConnected').style.display = 'none';
+  } else {
+    document.getElementById('paypalConnected').style.display = 'none';
+    document.getElementById('paypalNotConnected').style.display = 'block';
+  }
+
+  // Profile Information
+  document.getElementById('profileDisplayName').textContent = data.name || 'Not set';
+  document.getElementById('profileDisplayEmail').textContent = data.email || 'Not set';
+  document.getElementById('profileName').value = data.name || '';
+  document.getElementById('profileEmail').value = data.email || '';
+  
+  if (data.signUpDate) {
+    const signUpDate = data.signUpDate.toDate ? data.signUpDate.toDate() : new Date(data.signUpDate);
+    document.getElementById('memberSince').textContent = signUpDate.toLocaleDateString();
+  }
+
+  // Account Status
+  document.getElementById('accountStatus').textContent = data.status === 'active' ? 'Active' : 'Suspended';
+  document.getElementById('accountStatus').style.color = data.status === 'active' ? 'var(--success)' : 'var(--danger)';
+  
+  // Last Login
+  document.getElementById('lastLogin').textContent = new Date().toLocaleString();
+  
+  // Earnings Data
+  document.getElementById('lifetimeEarnings').textContent = `$${(data.totalEarned || 0).toFixed(2)}`;
+  document.getElementById('thisMonthEarnings').textContent = `$${((data.totalEarned || 0) * 0.1).toFixed(2)}`;
+  document.getElementById('lastMonthEarnings').textContent = `$${((data.totalEarned || 0) * 0.08).toFixed(2)}`;
+  document.getElementById('avgDailyEarnings').textContent = `$${((data.totalEarned || 0) / 30).toFixed(2)}`;
+}
+
+function updateVideosDisplay() {
+  const videosList = document.getElementById('videosList');
+  
+  if (creatorVideos.length === 0) {
+    videosList.innerHTML = `
+      <div class="empty-state">
+        <i class="fas fa-video"></i>
+        <h4>No Videos Found</h4>
+        <p>Your scanned YouTube Shorts will appear here</p>
+      </div>
+    `;
+    return;
+  }
+  
+  // Calculate video stats
+  let totalVideos = creatorVideos.length;
+  let totalViews = 0;
+  let totalEarnings = 0;
+  
+  creatorVideos.forEach(video => {
+    totalViews += video.viewCount || 0;
+    totalEarnings += video.creatorPayout || 0;
+  });
+  
+  const avgRPM = totalViews > 0 ? (totalEarnings / (totalViews / 1000)) : 0;
+  
+  // Update video stats overview
+  document.getElementById('totalVideosCount').textContent = totalVideos.toLocaleString();
+  document.getElementById('totalVideoViews').textContent = totalViews.toLocaleString();
+  document.getElementById('totalVideoEarnings').textContent = `$${totalEarnings.toFixed(2)}`;
+  document.getElementById('avgRPM').textContent = `$${avgRPM.toFixed(2)}`;
+  
+  // Generate videos grid
+  let videosHTML = '<div class="video-performance-grid">';
+  
+  creatorVideos.forEach(video => {
+    const thumbnail = video.thumbnail || video.thumbnails?.medium || '';
+    const assignmentDate = video.assignedAt?.toDate ? video.assignedAt.toDate() : new Date(video.assignedAt);
+    const formattedDate = assignmentDate.toLocaleDateString();
+    
+    videosHTML += `
+      <div class="video-performance-card">
+        <div class="video-thumbnail">
+          ${thumbnail ? 
+            `<img src="${thumbnail}" alt="${video.title}" onerror="this.style.display='none'">` : 
+            `<div class="empty-state" style="padding: 20px;">
+              <i class="fas fa-video"></i>
+              <p>No thumbnail</p>
+            </div>`
+          }
+        </div>
+        
+        <div class="video-details">
+          <h4 class="video-title">${video.title || 'Untitled Video'}</h4>
+          <div class="video-meta">
+            <div class="meta-item">
+              <i class="fas fa-eye"></i> ${formatViewCount(video.viewCount || 0)} views
+            </div>
+            <div class="meta-item">
+              <i class="fas fa-user"></i> ${video.channelTitle || 'Unknown Channel'}
+            </div>
+          </div>
+        </div>
+        
+        <div class="video-stats">
+          <div class="video-stat">
+            <div class="video-stat-value">${formatViewCount(video.viewCount || 0)}</div>
+            <div class="video-stat-label">Total Views</div>
+          </div>
+          <div class="video-stat">
+            <div class="video-stat-value">${formatViewCount(video.monetizedViews || 0)}</div>
+            <div class="video-stat-label">Premium Views</div>
+          </div>
+        </div>
+        
+        <div class="video-earnings">
+          <div class="video-earnings-label">Your Earnings</div>
+          <div class="video-earnings-value">$${(video.creatorPayout || 0).toFixed(2)}</div>
+        </div>
+        
+        <div class="video-assignment-date" style="text-align: center; font-size: 11px; color: var(--gray); margin-top: 10px;">
+          Added on ${formattedDate}
+        </div>
+      </div>
+    `;
+  });
+  
+  videosHTML += '</div>';
+  videosList.innerHTML = videosHTML;
+}
+
+function filterVideos() {
+  // Implementation for video filtering
+  console.log('Filtering videos...');
+}
+
+function loadVideosData() {
+  updateVideosDisplay();
+  showNotification('Video performance data refreshed', 'success');
+}
+
+// ========== TAB MANAGEMENT ==========
+
+function switchTab(tabName) {
+  // Hide all tabs
+  document.querySelectorAll('.tab-content').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  
+  // Remove active class from all tabs
+  document.querySelectorAll('.payment-tab').forEach(tab => {
+    tab.classList.remove('active');
+  });
+
+  // Show selected tab
+  const tabElement = document.getElementById(tabName + 'Tab');
+  if (tabElement) {
+    tabElement.classList.add('active');
+  }
+  
+  // Add active class to clicked tab (if it's a button)
+  if (event && event.currentTarget.tagName === 'BUTTON') {
+    event.currentTarget.classList.add('active');
+  }
+
+  // Load tab-specific data
+  switch(tabName) {
+    case 'overview':
+      updateRecentActivity();
+      break;
+    case 'videos':
+      loadVideosData();
+      break;
+    case 'notifications':
+      loadNotificationsData();
+      break;
+    case 'settings':
+      loadSettingsData();
+      break;
+    case 'earnings':
+      initializeEarningsChart();
+      break;
+  }
+}
+
+function loadNotificationsData() {
+  filteredNotifications = [...notifications];
+  updateFilteredNotificationsDisplay();
+}
+
+function loadSettingsData() {
+  document.getElementById('lastLogin').textContent = new Date().toLocaleString();
+}
+
+function initializeEarningsChart() {
+  if (earningsChart) {
+    earningsChart.destroy();
+  }
+  
+  const ctx = document.getElementById('earningsChart').getContext('2d');
+  
+  // Sample data - in real app, this would come from Firebase
+  const labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const data = [120, 190, 300, 500, 200, 300, 450];
+  
+  earningsChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Earnings ($)',
+        data: data,
+        borderColor: 'rgb(139, 92, 246)',
+        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+        borderWidth: 2,
+        fill: true,
+        tension: 0.4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: {
+            color: 'rgba(226, 232, 240, 0.5)'
+          },
+          ticks: {
+            callback: function(value) {
+              return '$' + value;
+            }
+          }
+        },
+        x: {
+          grid: {
+            color: 'rgba(226, 232, 240, 0.5)'
+          }
+        }
+      }
+    }
+  });
+}
+
+function changeChartPeriod(period) {
+  currentChartPeriod = period;
+  
+  // Update button states
+  document.querySelectorAll('.period-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  event.target.classList.add('active');
+  
+  // In real app, this would fetch new data based on period
+  showNotification(`Showing ${period} earnings data`, 'info');
+}
+
+function exportChartData() {
+  showNotification('Exporting earnings data...', 'info');
+  // In real app, this would generate and download CSV
+}
+
+// ========== UTILITY FUNCTIONS ==========
+
+function updateGreeting() {
+  const hour = new Date().getHours();
+  let greeting = '';
+  
+  if (hour < 12) {
+    greeting = 'Good morning';
+  } else if (hour < 18) {
+    greeting = 'Good afternoon';
+  } else {
+    greeting = 'Good evening';
+  }
+  
+  const userName = userData.name || 'Creator';
+  // You can add a greeting display if needed
+}
+
+function showNotification(message, type = 'info') {
+  // Create notification element if it doesn't exist
+  let notification = document.getElementById('customNotification');
+  if (!notification) {
+    notification = document.createElement('div');
+    notification.id = 'customNotification';
+    notification.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 12px 20px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+      z-index: 10000;
+      transform: translateX(150%);
+      transition: transform 0.3s ease;
+      max-width: 300px;
+      box-shadow: var(--shadow-lg);
+      font-size: 13px;
+    `;
+    document.body.appendChild(notification);
+  }
+  
+  notification.textContent = message;
+  notification.style.background = type === 'success' ? 'linear-gradient(135deg, var(--success) 0%, #0ca678 100%)' :
+                              type === 'error' ? 'linear-gradient(135deg, var(--danger) 0%, #e83e8c 100%)' :
+                              'linear-gradient(135deg, var(--info) 0%, #6f42c1 100%)';
+  
+  notification.style.transform = 'translateX(0)';
+  
+  setTimeout(() => {
+    notification.style.transform = 'translateX(150%)';
+  }, 4000);
+}
+
+function formatTime(date) {
+  if (!date) return 'Recently';
+  const now = new Date();
+  const diffMs = now - date;
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMs / 3600000);
+  const diffDays = Math.floor(diffMs / 86400000);
+  
+  if (diffMins < 1) return 'Just now';
+  if (diffMins < 60) return `${diffMins} min ago`;
+  if (diffHours < 24) return `${diffHours} hr ago`;
+  if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+  return date.toLocaleDateString();
+}
+
+function formatViewCount(count) {
+  if (!count) return '0';
+  if (count >= 1000000) {
+    return (count / 1000000).toFixed(1) + 'M';
+  } else if (count >= 1000) {
+    return (count / 1000).toFixed(1) + 'K';
+  }
+  return count.toString();
+}
+
+function updateRecentActivity() {
+  const recentActivity = document.getElementById('recentActivity');
+  const activities = [];
+  
+  creatorVideos.slice(0, 3).forEach(video => {
+    activities.push({
+      type: 'video',
+      message: `New Shorts scanned: "${video.title}" - $${(video.creatorPayout || 0).toFixed(2)} earned`,
+      time: video.assignedAt
+    });
+  });
+  
+  notifications.slice(0, 3).forEach(notification => {
+    activities.push({
+      type: 'notification',
+      message: notification.title,
+      time: notification.timestamp
+    });
+  });
+  
+  if (activities.length === 0) {
+    recentActivity.innerHTML = `
+      <div class="empty-state">
+        <i class="fas fa-clock"></i>
+        <h4>No Recent Activity</h4>
+        <p>Your recent activities will appear here.</p>
+      </div>
+    `;
+    return;
+  }
+  
+  activities.sort((a, b) => (b.time?.toDate() || 0) - (a.time?.toDate() || 0));
+  
+  let activityHTML = '';
+  activities.forEach(activity => {
+    activityHTML += `
+      <div class="notification-item-enhanced" style="margin-bottom: 10px;">
+        <div class="notification-content" style="margin-bottom: 8px;">
+          ${activity.message}
+        </div>
+        <div class="notification-time">${formatTime(activity.time?.toDate())}</div>
+      </div>
+    `;
+  });
+  
+  recentActivity.innerHTML = activityHTML;
+}
+
+// ========== MODAL FUNCTIONS ==========
+
+function openModal(modalId) {
+  document.getElementById(modalId).classList.add('active');
+}
+
+function closeModal(modalId) {
+  document.getElementById(modalId).classList.remove('active');
+}
+
+function toggleNotifications() {
+  switchTab('notifications');
+}
+
+// ========== DROPDOWN FUNCTIONS ==========
+
+function toggleDropdown() {
+  const dropdown = document.getElementById('settingsDropdown');
+  dropdown.classList.toggle('show');
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(event) {
+  const dropdown = document.getElementById('settingsDropdown');
+  const dropdownBtn = document.querySelector('.creator-name');
+  
+  if (dropdown && dropdownBtn && !dropdown.contains(event.target) && !dropdownBtn.contains(event.target)) {
+    dropdown.classList.remove('show');
+  }
+  
+  // Close modals when clicking outside
+  const modals = document.querySelectorAll('.modal.active');
+  modals.forEach(modal => {
+    if (event.target === modal) {
+      modal.classList.remove('active');
+    }
+  });
+});
+
+// ========== THEME FUNCTIONS ==========
+
+function toggleTheme() {
+  const currentTheme = document.documentElement.getAttribute('data-theme');
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  
+  document.documentElement.setAttribute('data-theme', newTheme);
+  localStorage.setItem('theme', newTheme);
+  
+  // Update theme toggle icon
+  const themeIcon = document.querySelector('.theme-toggle i');
+  themeIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+  
+  showNotification(`${newTheme === 'dark' ? 'Dark' : 'Light'} theme activated`, 'info');
+}
+
+function loadTheme() {
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  
+  const themeIcon = document.querySelector('.theme-toggle i');
+  themeIcon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+}
+
+// ========== YOUTUBE FUNCTIONS ==========
+
+async function saveYouTubeChannel() {
+  const youtubeUrl = document.getElementById('youtubeChannelUrl').value;
+  const channelName = document.getElementById('channelName').value;
+  
+  if (!youtubeUrl) {
+    showNotification('Please enter your YouTube channel URL', 'error');
+    return;
+  }
+  
+  if (!isValidYouTubeUrl(youtubeUrl)) {
+    showNotification('Please enter a valid YouTube channel URL', 'error');
+    return;
+  }
+  
+  const user = auth.currentUser;
+  
+  try {
+    await db.collection('users').doc(user.uid).set({
+      youtubeChannel: youtubeUrl,
+      youtubeChannelName: channelName || 'YouTube Channel',
+      youtubeConnectedAt: new Date(),
+      lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+    }, { merge: true });
+    
+    showNotification('YouTube channel connected successfully!', 'success');
+    closeModal('youtubeModal');
+    
+  } catch (error) {
+    console.error('Error saving YouTube channel:', error);
+    showNotification('Error saving YouTube channel', 'error');
+  }
+}
+
+function visitYouTubeChannel() {
+  if (userData.youtubeChannel) {
+    window.open(userData.youtubeChannel, '_blank');
+  } else {
+    showNotification('No YouTube channel connected', 'error');
+  }
+}
+
+function isValidYouTubeUrl(url) {
+  const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/;
+  return youtubeRegex.test(url);
+}
+
+// ========== PAYPAL FUNCTIONS ==========
+
+async function savePayPalSettings() {
+  const email = document.getElementById('paypalSettingsEmail').value;
+  const confirmEmail = document.getElementById('paypalConfirmEmail').value;
+  
+  if (!email || !isValidEmail(email)) {
+    showNotification('Please enter a valid email address', 'error');
+    return;
+  }
+  
+  if (email !== confirmEmail) {
+    showNotification('Email addresses do not match', 'error');
+    return;
+  }
+  
+  const user = auth.currentUser;
+  
+  try {
+    await db.collection('users').doc(user.uid).set({
+      paypalEmail: email,
+      lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+    }, { merge: true });
+    
+    showNotification('PayPal settings updated successfully', 'success');
+    closeModal('paypalModal');
+    
+  } catch (error) {
+    console.error('Error saving PayPal settings:', error);
+    showNotification('Error saving PayPal settings', 'error');
+  }
+}
+
+// ========== PROFILE FUNCTIONS ==========
+
+async function updateProfile() {
+  const name = document.getElementById('profileName').value;
+  
+  if (!name) {
+    showNotification('Please enter your name', 'error');
+    return;
+  }
+  
+  const user = auth.currentUser;
+  
+  try {
+    await db.collection('users').doc(user.uid).set({
+      name: name,
+      lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+    }, { merge: true });
+    
+    showNotification('Profile updated successfully', 'success');
+    closeModal('profileModal');
+    
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    showNotification('Error updating profile', 'error');
+  }
+}
+
+// ========== PASSWORD FUNCTIONS ==========
+
+async function updatePassword() {
+  const currentPassword = document.getElementById('currentPassword').value;
+  const newPassword = document.getElementById('newPassword').value;
+  const confirmPassword = document.getElementById('confirmPassword').value;
+  
+  if (!currentPassword || !newPassword || !confirmPassword) {
+    showNotification('Please fill in all password fields', 'error');
+    return;
+  }
+  
+  if (newPassword !== confirmPassword) {
+    showNotification('New passwords do not match', 'error');
+    return;
+  }
+  
+  if (newPassword.length < 6) {
+    showNotification('Password must be at least 6 characters', 'error');
+    return;
+  }
+  
+  const user = auth.currentUser;
+  const credential = firebase.auth.EmailAuthProvider.credential(user.email, currentPassword);
+  
+  try {
+    await user.reauthenticateWithCredential(credential);
+    await user.updatePassword(newPassword);
+    
+    showNotification('Password updated successfully', 'success');
+    closeModal('passwordModal');
+    
+    document.getElementById('currentPassword').value = '';
+    document.getElementById('newPassword').value = '';
+    document.getElementById('confirmPassword').value = '';
+    
+  } catch (error) {
+    if (error.code === 'auth/wrong-password') {
+      showNotification('Current password is incorrect', 'error');
+    } else {
+      console.error('Error updating password:', error);
+      showNotification('Error updating password', 'error');
+    }
+  }
+}
+
+// ========== UTILITY VALIDATION FUNCTIONS ==========
+
+function isValidEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+// ========== REFRESH FUNCTION ==========
+
+function refreshStats() {
+  showNotification('Refreshing statistics...', 'info');
+  refreshTodayEarnings();
+}
+
+// ========== LOGOUT FUNCTION ==========
+
+async function logout() {
+  try {
+    // Remove all real-time listeners
+    if (notificationsListener) notificationsListener();
+    if (userListener) userListener();
+    if (videosListener) videosListener();
+    if (portalChatListener) portalChatListener();
+    
+    notificationsListener = null;
+    userListener = null;
+    videosListener = null;
+    portalChatListener = null;
+    
+    await auth.signOut();
+    showNotification('Successfully signed out', 'success');
+    
+    // Redirect to sign-in page
+    setTimeout(() => {
+      window.location.href = '/sign-in/';
+    }, 1000);
+    
+  } catch (error) {
+    console.error('Logout error:', error);
+    showNotification('Error signing out', 'error');
+  }
+} 
+
+function redirectToLogin() {
+  window.location.href = '/sign-in/';
+}
+
+// ========== AUTO LOGOUT FUNCTIONS ==========
+
+function extendSession() {
+  document.getElementById('logoutWarningModal').classList.remove('active');
+  showNotification('Session extended', 'success');
+}
+
+// ========== INITIALIZATION ==========
+
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('Dashboard initializing...');
+  initializeDashboard();
+});
+
+// ========== CLEANUP ON UNLOAD ==========
+window.addEventListener('beforeunload', function() {
+  if (notificationsListener) notificationsListener();
+  if (userListener) userListener();
+  if (videosListener) videosListener();
+  if (portalChatListener) portalChatListener();
+});
+</script>
+</body>
+</html>
