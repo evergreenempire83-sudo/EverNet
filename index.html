@@ -9,6 +9,23 @@
   <meta name="description" content="EVERNET - Music monetization platform where creators earn revenue from YouTube Shorts using premium music library">
   <meta name="keywords" content="music monetization, YouTube Shorts, creator revenue, premium music, content creation">
   
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#0a1f44">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="EVERNET">
+  <link rel="apple-touch-icon" href="/icon-192.png">
+  
+  <!-- Manifest -->
+  <link rel="manifest" href="/manifest.json">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  
+  <!-- Sitemap (for search engines) -->
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
+  
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
@@ -345,6 +362,92 @@
     .nav-links-desktop a:hover {
       color: var(--navy);
       background: rgba(10, 31, 68, 0.05);
+    }
+
+    /* ========== PWA INSTALL BUTTON ========== */
+    #installButton {
+      position: fixed;
+      bottom: 100px;
+      right: 30px;
+      z-index: 999;
+      background: var(--gold-gradient);
+      color: var(--navy);
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+      transition: all 0.3s ease;
+      min-height: 44px;
+    }
+
+    #installButton.show {
+      display: flex;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    #installButton:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(212, 175, 55, 0.6);
+    }
+
+    #installButton i {
+      font-size: 1.2rem;
+    }
+
+    /* ========== OFFLINE NOTIFICATION ========== */
+    #offlineNotification {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      max-width: 400px;
+      background: var(--warning-light);
+      color: var(--navy);
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      border-left: 4px solid var(--warning);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      z-index: 1001;
+      display: none;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    #offlineNotification.show {
+      display: flex;
+      animation: slideInLeft 0.3s ease;
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    #offlineNotification i {
+      font-size: 1.5rem;
+      color: var(--warning);
     }
 
     /* ========== HERO SECTION ========== */
@@ -798,6 +901,11 @@
       .footer-content {
         grid-template-columns: repeat(2, 1fr);
       }
+      
+      #installButton {
+        bottom: 90px;
+        right: 25px;
+      }
     }
 
     @media (max-width: 768px) {
@@ -902,6 +1010,19 @@
         font-size: 0.8125rem;
         min-height: 40px;
       }
+      
+      #installButton {
+        bottom: 80px;
+        right: 20px;
+        padding: 0.625rem 1.25rem;
+        font-size: 0.875rem;
+      }
+      
+      #offlineNotification {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+      }
     }
 
     @media (max-width: 480px) {
@@ -982,6 +1103,17 @@
         left: 10px;
         margin: 0 auto;
       }
+      
+      #installButton {
+        bottom: 70px;
+        right: 16px;
+        padding: 0.5rem 1rem;
+        font-size: 0.8125rem;
+      }
+      
+      #installButton i {
+        font-size: 1rem;
+      }
     }
 
     @media (max-width: 360px) {
@@ -1005,6 +1137,21 @@
       
       .dashboard-btn i, .login-btn i {
         margin: 0;
+      }
+      
+      #installButton span {
+        display: none;
+      }
+      
+      #installButton {
+        padding: 0.5rem;
+        min-width: 44px;
+        justify-content: center;
+      }
+      
+      #installButton i {
+        margin: 0;
+        font-size: 1.2rem;
       }
     }
 
@@ -1041,7 +1188,7 @@
       
       <!-- Logo -->
       <a href="#" class="logo">
-        <div class="logo-icon">EVN</div>
+        <div class="logo-icon">E/N</div>
         <div class="logo-text">EVER<span>NET</span></div>
       </a>
       
@@ -1114,9 +1261,9 @@
     
     <div class="hero-content">
       <h1>Where creators are rewarded for passion and value creation.</h1>
-     
+    
       <a href="/sign-up/" class="cta-btn">
-        <i class="fas fet"></i>
+        <i class=""></i>
         Start Earning Now
       </a>
     </div>
@@ -1231,6 +1378,21 @@
     </div>
   </footer>
 
+  <!-- PWA Install Button -->
+  <button id="installButton" aria-label="Install EVERNET App">
+    <i class="fas fa-download"></i>
+    <span>Install App</span>
+  </button>
+
+  <!-- Offline Notification -->
+  <div id="offlineNotification" aria-live="assertive">
+    <i class="fas fa-wifi-slash"></i>
+    <div>
+      <strong>You're offline</strong>
+      <p>EVERNET is working offline. Some features may be limited.</p>
+    </div>
+  </div>
+
   <!-- Chat Button -->
   <a href="/creator-chat/" class="chat-btn" aria-label="Open chat">
     <i class="fas fa-comment-dots"></i>
@@ -1239,8 +1401,7 @@
   <!-- Notification System -->
   <div id="notification" class="notification" role="alert" aria-live="assertive"></div>
 
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <!-- Service Worker Registration and PWA Logic -->
   <script>
     // Firebase configuration
     const firebaseConfig = {
@@ -1257,6 +1418,123 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
+    // ========== PWA INSTALLATION LOGIC ==========
+    let deferredPrompt;
+    const installButton = document.getElementById('installButton');
+    const isAppInstalled = localStorage.getItem('evernet_app_installed') === 'true';
+
+    // Show install button only if app is not installed
+    if (!isAppInstalled && 'serviceWorker' in navigator && 'BeforeInstallPromptEvent' in window) {
+      window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent Chrome 67 and earlier from automatically showing the prompt
+        e.preventDefault();
+        // Stash the event so it can be triggered later
+        deferredPrompt = e;
+        
+        // Show install button
+        setTimeout(() => {
+          installButton.classList.add('show');
+        }, 3000); // Show after 3 seconds
+        
+        // Log the install prompt
+        console.log('📱 PWA install prompt available');
+      });
+    }
+
+    // Install button click handler
+    installButton.addEventListener('click', async () => {
+      if (!deferredPrompt) {
+        // If we missed the prompt, just redirect to install instructions
+        showNotification('Open browser menu and select "Install App"', 'info');
+        return;
+      }
+      
+      // Show the install prompt
+      deferredPrompt.prompt();
+      
+      // Wait for the user to respond to the prompt
+      const { outcome } = await deferredPrompt.userChoice;
+      
+      // We've used the prompt, and can't use it again, discard it
+      deferredPrompt = null;
+      
+      // Hide the install button
+      installButton.classList.remove('show');
+      
+      if (outcome === 'accepted') {
+        console.log('✅ User accepted the install prompt');
+        localStorage.setItem('evernet_app_installed', 'true');
+        showNotification('EVERNET app installed successfully!', 'success');
+      } else {
+        console.log('❌ User dismissed the install prompt');
+        showNotification('You can install EVERNET later from browser menu', 'info');
+      }
+    });
+
+    // Check if app is already installed
+    window.addEventListener('appinstalled', (evt) => {
+      console.log('🎉 EVERNET was installed');
+      localStorage.setItem('evernet_app_installed', 'true');
+      installButton.classList.remove('show');
+      showNotification('EVERNET installed successfully!', 'success');
+      
+      // Track installation
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'app_installed');
+      }
+    });
+
+    // ========== SERVICE WORKER REGISTRATION ==========
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(registration => {
+            console.log('✅ ServiceWorker registration successful with scope:', registration.scope);
+            
+            // Check for updates
+            registration.addEventListener('updatefound', () => {
+              const newWorker = registration.installing;
+              console.log('🔄 New service worker found:', newWorker);
+              
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  showNotification('New version available! Refresh to update.', 'info');
+                }
+              });
+            });
+            
+            // Check if page was loaded via service worker
+            if (navigator.serviceWorker.controller) {
+              console.log('📦 Page is being controlled by service worker');
+            }
+          })
+          .catch(error => {
+            console.error('❌ ServiceWorker registration failed:', error);
+          });
+      });
+      
+      // Listen for messages from service worker
+      navigator.serviceWorker.addEventListener('message', event => {
+        console.log('📨 Message from service worker:', event.data);
+      });
+    }
+
+    // ========== OFFLINE DETECTION ==========
+    const offlineNotification = document.getElementById('offlineNotification');
+    
+    function updateOnlineStatus() {
+      if (navigator.onLine) {
+        offlineNotification.classList.remove('show');
+      } else {
+        offlineNotification.classList.add('show');
+      }
+    }
+    
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+    updateOnlineStatus(); // Check initial status
+
+    // ========== EXISTING APP LOGIC ==========
     // Notification System
     function showNotification(message, type = 'info') {
       const notification = document.getElementById('notification');
@@ -1392,8 +1670,21 @@
           }
         }, 250);
       });
+      
+      // Check PWA installation status on load
+      if (window.matchMedia('(display-mode: standalone)').matches || 
+          window.navigator.standalone === true) {
+        console.log('📱 Running in standalone mode');
+        localStorage.setItem('evernet_app_installed', 'true');
+        installButton.classList.remove('show');
+      }
     });
+
+    // Send analytics when installed
+    if (localStorage.getItem('evernet_app_installed') === 'true') {
+      console.log('📊 App already installed, sending analytics');
+      // You can send to your analytics here
+    }
   </script>
 </body>
-
 </html>
