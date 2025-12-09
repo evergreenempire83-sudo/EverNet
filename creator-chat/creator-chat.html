@@ -1,0 +1,2046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evernet Support</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+ <style>
+    /* ========== ULTRA-MINIMAL WORLD-CLASS THEME ========== */
+    :root {
+      --navy: #0a1f44;
+      --navy-accent: #1e40af;
+      --navy-light: #3b82f6;
+      --navy-gradient: linear-gradient(135deg, #0a1f44 0%, #1e40af 100%);
+      --gold: #d4af37;
+      --gold-light: #fbbf24;
+      --gold-gradient: linear-gradient(135deg, #d4af37 0%, #fbbf24 100%);
+      --white: #ffffff;
+      --white-off: #f8fafc;
+      --gray-light: #e2e8f0;
+      --gray: #94a3b8;
+      --gray-dark: #64748b;
+      --success: #10b981;
+      --success-light: #d1fae5;
+      --warning: #f59e0b;
+      --warning-light: #fef3c7;
+      --danger: #ef4444;
+      --danger-light: #fee2e2;
+      --info: #3b82f6;
+      --info-light: #dbeafe;
+      --creator: #8b5cf6;
+      --creator-light: #ede9fe;
+      --online: #10b981;
+      --offline: #ef4444;
+      --radius: 8px;
+      --radius-lg: 12px;
+      --radius-sm: 4px;
+      --shadow: 0 2px 12px rgba(10, 31, 68, 0.06);
+      --shadow-lg: 0 4px 24px rgba(10, 31, 68, 0.08);
+      --shadow-hover: 0 8px 32px rgba(10, 31, 68, 0.12);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      color: var(--navy);
+      font-size: 13px;
+      line-height: 1.5;
+      min-height: 100vh;
+      position: relative;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 280px;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-accent) 100%);
+      clip-path: polygon(0 0, 100% 0, 100% 40%, 0 80%);
+      z-index: -1;
+      opacity: 0.04;
+    }
+
+    /* ========== EXACT PORTAL 1 HEADER ANIMATION ========== */
+    .portal-header {
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 1px 15px rgba(10, 31, 68, 0.06);
+      height: 64px;
+    }
+
+    .portal-header .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 100%;
+    }
+
+    /* EXACT LOGO FROM PORTAL 1 */
+    .portal-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      transition: transform 0.3s ease;
+    }
+
+    .portal-brand:hover {
+      transform: translateY(-1px);
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--navy-gradient);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-weight: 800;
+      font-size: 14px;
+      box-shadow: 0 3px 10px rgba(26, 86, 219, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logo-icon::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.2) 50%, transparent 70%);
+      animation: shine 3s infinite linear;
+    }
+
+    @keyframes shine {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .logo-text {
+      font-weight: 700;
+      font-size: 17px;
+      color: var(--navy);
+      letter-spacing: -0.3px;
+    }
+
+    .logo-text span {
+      background: var(--gold-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 800;
+    }
+
+    /* Back Button - Ultra Minimal */
+    .back-btn {
+      background: var(--navy-gradient);
+      color: var(--white);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      text-decoration: none;
+      border: none;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(26, 86, 219, 0.25);
+      position: relative;
+      overflow: hidden;
+      height: 34px;
+    }
+
+    .back-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .back-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.35);
+    }
+
+    .back-btn:hover::before {
+      left: 100%;
+    }
+
+    /* ========== COMPACT STATUS BAR ========== */
+    .status-bar {
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 8px 20px;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+      position: sticky;
+      top: 64px;
+      z-index: 999;
+      box-shadow: 0 1px 8px rgba(10, 31, 68, 0.04);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 44px;
+      font-size: 12px;
+    }
+
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 12px;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 6px;
+      border: 1px solid rgba(226, 232, 240, 0.7);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--offline);
+      box-shadow: 0 0 6px rgba(239, 68, 68, 0.25);
+      animation: pulse 2s infinite;
+    }
+
+    .status-dot.online {
+      background: var(--online);
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.35);
+      animation: pulseOnline 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    @keyframes pulseOnline {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 8px rgba(16, 185, 129, 0.35); }
+      50% { transform: scale(1.2); box-shadow: 0 0 12px rgba(16, 185, 129, 0.5); }
+    }
+
+    .status-text {
+      font-weight: 600;
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .status-text::before {
+      content: '🕐';
+      font-size: 10px;
+      opacity: 0.8;
+    }
+
+    /* GMT Time - Ultra Compact */
+    .gmt-time {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      background: linear-gradient(135deg, rgba(10, 31, 68, 0.06), rgba(30, 64, 175, 0.04));
+      border-radius: 6px;
+      font-weight: 600;
+      color: var(--navy);
+      border: 1px solid rgba(59, 130, 246, 0.15);
+      height: 30px;
+    }
+
+    .gmt-time i {
+      color: var(--gold);
+      font-size: 11px;
+    }
+
+    /* ========== ULTRA-COMPACT MAIN CONTENT ========== */
+    .creator-portal {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px;
+      min-height: calc(100vh - 108px);
+    }
+
+    .portal-content {
+      display: flex;
+      gap: 16px;
+      height: calc(100vh - 140px);
+    }
+
+    /* ========== COMPACT SIDEBAR ========== */
+    .sidebar {
+      width: 280px;
+      background: var(--white);
+      border-radius: 10px;
+      border: 1px solid rgba(226, 232, 240, 0.6);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .sidebar-header {
+      padding: 16px;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+    }
+
+    .sidebar-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sidebar-title i {
+      color: var(--gold);
+      font-size: 13px;
+    }
+
+    .new-ticket-btn {
+      background: var(--navy-gradient);
+      color: var(--white);
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 12px;
+      height: 36px;
+    }
+
+    /* ========== COMPACT TICKETS LIST ========== */
+    .tickets-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+    }
+
+    .tickets-list::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .ticket-item {
+      background: var(--white);
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+      font-size: 12px;
+    }
+
+    .ticket-item:hover {
+      border-color: var(--navy-light);
+      transform: translateX(2px);
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+    }
+
+    .ticket-item.active {
+      background: rgba(59, 130, 246, 0.04);
+      border-color: var(--navy-light);
+    }
+
+    .ticket-id {
+      font-family: 'SF Mono', monospace;
+      font-weight: 700;
+      color: var(--navy);
+      font-size: 11px;
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .ticket-subject {
+      font-weight: 600;
+      font-size: 12px;
+      margin-bottom: 6px;
+      color: var(--navy);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .ticket-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+    }
+
+    .ticket-date {
+      color: var(--gray);
+      font-weight: 500;
+    }
+
+    .ticket-status {
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .unread-badge {
+      width: 6px;
+      height: 6px;
+      background: var(--danger);
+      border-radius: 50%;
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      animation: pulse 1.5s infinite;
+    }
+
+    /* ========== COMPACT CHAT AREA ========== */
+    .chat-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--white);
+      border-radius: 10px;
+      border: 1px solid rgba(226, 232, 240, 0.6);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .chat-header {
+      padding: 16px;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+      background: var(--white);
+    }
+
+    .chat-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chat-title i {
+      color: var(--gold);
+      font-size: 14px;
+    }
+
+    .chat-subtitle {
+      font-size: 11px;
+      color: var(--gray);
+      font-weight: 500;
+    }
+
+    .chat-header-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .new-ticket-chat-btn,
+    .back-to-tickets-btn {
+      padding: 6px 12px;
+      border-radius: 5px;
+      font-weight: 600;
+      font-size: 11px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      height: 28px;
+    }
+
+    /* ========== ULTRA-COMPACT CHAT MESSAGES ========== */
+.chat-messages {
+    flex: 1;
+    padding: 12px;
+    overflow-y: auto;
+    background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.message {
+    max-width: 75%;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    animation: messageSlideIn 0.15s ease;
+    line-height: 1.3;
+}
+
+@keyframes messageSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message.creator {
+    align-self: flex-end;
+    background: var(--navy-gradient);
+    color: var(--white);
+    border-bottom-right-radius: 4px;
+}
+
+.message.support {
+    align-self: flex-start;
+    background: var(--white);
+    color: var(--navy);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-bottom-left-radius: 4px;
+}
+
+.message.system {
+    align-self: center;
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    color: #92400e;
+    font-size: 11px;
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    max-width: 90%;
+    text-align: center;
+}
+
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3px;
+    font-size: 9px;
+    opacity: 0.85;
+    font-weight: 600;
+}
+
+.message-content {
+    line-height: 1.35;
+    font-size: 12px;
+    word-break: break-word;
+}
+
+.message-time {
+    font-size: 8px;
+    opacity: 0.6;
+    text-align: right;
+    letter-spacing: 0.3px;
+    font-weight: 500;
+}
+
+/* ========== ULTRA-COMPACT CHAT INPUT ========== */
+.chat-input-area {
+    padding: 12px;
+    border-top: 1px solid rgba(226, 232, 240, 0.6);
+    background: var(--white);
+}
+
+.input-container {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+}
+
+.chat-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid var(--gray-light);
+    border-radius: 6px;
+    font-size: 12px;
+    resize: none;
+    min-height: 36px;
+    max-height: 80px;
+    line-height: 1.35;
+}
+
+.chat-input:focus {
+    outline: none;
+    border-color: var(--navy-light);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.send-btn {
+    background: var(--navy-gradient);
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-weight: 600;
+    font-size: 11px;
+    height: 36px;
+    min-width: 60px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.send-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(26, 86, 219, 0.3);
+}
+
+.send-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ========== ULTRA-COMPACT AUTO RESPONSE ========== */
+.auto-response-notice {
+    background: linear-gradient(135deg, rgba(255, 251, 235, 0.9), rgba(254, 243, 199, 0.8));
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    border-radius: 4px;
+    padding: 8px 10px;
+    margin-bottom: 10px;
+    font-size: 10px;
+    color: #92400e;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 1.3;
+}
+
+.auto-response-notice i {
+    font-size: 11px;
+    flex-shrink: 0;
+}
+
+/* ========== ULTRA-COMPACT CHAT HEADER ========== */
+.chat-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+    background: var(--white);
+}
+
+.chat-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 2px;
+    line-height: 1.2;
+}
+
+.chat-subtitle {
+    font-size: 10px;
+    color: var(--gray);
+    font-weight: 500;
+}
+
+.chat-header-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.back-to-tickets-btn,
+.new-ticket-chat-btn {
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 10px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    height: 26px;
+    transition: all 0.2s ease;
+}
+
+.back-to-tickets-btn {
+    background: var(--white-off);
+    color: var(--navy);
+    border: 1px solid var(--gray-light);
+}
+
+.new-ticket-chat-btn {
+    background: var(--navy-gradient);
+    color: var(--white);
+}
+
+.back-to-tickets-btn:hover,
+.new-ticket-chat-btn:hover {
+    transform: translateY(-1px);
+}
+
+/* ========== ULTRA-COMPACT CLOSED TICKET ========== */
+.closed-ticket-view {
+    text-align: center;
+    padding: 30px 16px;
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+}
+
+.closed-ticket-icon {
+    font-size: 36px;
+    margin-bottom: 12px;
+    color: var(--gray-dark);
+    opacity: 0.6;
+}
+
+.closed-ticket-message {
+    color: var(--navy);
+    margin-bottom: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.closed-ticket-btn {
+    background: var(--navy-gradient);
+    color: var(--white);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 11px;
+    height: 32px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.closed-ticket-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(26, 86, 219, 0.3);
+}
+
+/* ========== SCROLLBAR MINIMIZED ========== */
+.chat-messages::-webkit-scrollbar {
+    width: 3px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+    background: rgba(226, 232, 240, 0.2);
+    border-radius: 1.5px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background: var(--navy);
+    border-radius: 1.5px;
+}
+
+/* ========== RESPONSIVE EVEN SMALLER ========== */
+@media (max-width: 768px) {
+    .chat-messages {
+        padding: 8px;
+        gap: 6px;
+    }
+    
+    .message {
+        max-width: 85%;
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+    
+    .message-content {
+        font-size: 11px;
+    }
+    
+    .message-header {
+        font-size: 8px;
+    }
+    
+    .message-time {
+        font-size: 7px;
+    }
+    
+    .chat-input-area {
+        padding: 10px;
+    }
+    
+    .chat-input {
+        font-size: 11px;
+        min-height: 32px;
+        padding: 6px 10px;
+    }
+    
+    .send-btn {
+        height: 32px;
+        font-size: 10px;
+        min-width: 50px;
+    }
+}
+    /* ========== COMPACT CHAT INPUT ========== */
+    .chat-input-area {
+      padding: 16px;
+      border-top: 1px solid rgba(226, 232, 240, 0.6);
+      background: var(--white);
+    }
+
+    .auto-response-notice {
+      background: linear-gradient(135deg, rgba(255, 251, 235, 0.9), rgba(254, 243, 199, 0.8));
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+      font-size: 11px;
+      color: #92400e;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      animation: fadeInUp 0.3s ease;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .input-container {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+    }
+
+    .chat-input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1px solid var(--gray-light);
+      border-radius: 8px;
+      font-size: 13px;
+      resize: none;
+      min-height: 44px;
+      line-height: 1.4;
+    }
+
+    .send-btn {
+      background: var(--navy-gradient);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-weight: 600;
+      font-size: 12px;
+      height: 44px;
+      min-width: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    /* ========== COMPACT CLOSED TICKET VIEW ========== */
+    .closed-ticket-view {
+      text-align: center;
+      padding: 40px 16px;
+      background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+    }
+
+    .closed-ticket-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      background: var(--navy-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .closed-ticket-message {
+      color: var(--navy);
+      margin-bottom: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      max-width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .closed-ticket-btn {
+      background: var(--navy-gradient);
+      color: var(--white);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 12px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ========== ULTRA-COMPACT MODALS ========== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(10, 31, 68, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 12px;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal {
+    background: var(--white);
+    border-radius: 8px;
+    padding: 16px;
+    max-width: 360px;
+    width: 100%;
+    box-shadow: 0 8px 24px rgba(10, 31, 68, 0.15);
+    border: 1px solid rgba(226, 232, 240, 0.7);
+    animation: slideUp 0.15s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+}
+
+.modal-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 1.2;
+}
+
+.modal-title i {
+    color: var(--gold);
+    font-size: 12px;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    color: var(--gray);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.close-modal:hover {
+    background: var(--white-off);
+    color: var(--navy);
+}
+
+.form-group {
+    margin-bottom: 12px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 600;
+    color: var(--navy);
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.form-label i {
+    font-size: 10px;
+}
+
+.form-input,
+.form-textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--gray-light);
+    border-radius: 5px;
+    font-size: 12px;
+    line-height: 1.3;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--navy-light);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.form-textarea {
+    min-height: 80px;
+    resize: vertical;
+    line-height: 1.4;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(226, 232, 240, 0.5);
+}
+
+.btn {
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 11px;
+    cursor: pointer;
+    border: none;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    height: 32px;
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn-primary {
+    background: var(--navy-gradient);
+    color: var(--white);
+}
+
+.btn-primary:hover {
+    box-shadow: 0 3px 8px rgba(26, 86, 219, 0.3);
+}
+
+.btn-secondary {
+    background: var(--white);
+    color: var(--navy);
+    border: 1px solid var(--gray-light);
+}
+
+.btn-secondary:hover {
+    background: var(--white-off);
+    border-color: var(--navy-light);
+}
+
+/* ========== ULTRA-COMPACT LOADING ========== */
+.loading {
+    text-align: center;
+    padding: 24px 12px;
+    color: var(--gray);
+}
+
+.loading-spinner {
+    border: 2px solid rgba(59, 130, 246, 0.08);
+    border-top: 2px solid var(--navy-light);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 0.6s linear infinite;
+    margin: 0 auto 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-spinner::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    border-top: 2px solid var(--gold);
+    animation: spin 1s linear infinite reverse;
+}
+
+/* ========== CHAR COUNT (if used) ========== */
+.char-count {
+    text-align: right;
+    font-size: 10px;
+    color: var(--gray);
+    margin-top: 4px;
+    font-weight: 500;
+}
+
+/* ========== MODAL MAX-HEIGHT & SCROLL ========== */
+.modal-content {
+    max-height: 50vh;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.modal-content::-webkit-scrollbar {
+    width: 3px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: rgba(226, 232, 240, 0.2);
+    border-radius: 1.5px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: var(--navy);
+    border-radius: 1.5px;
+}
+
+/* ========== RESPONSIVE EVEN SMALLER ========== */
+@media (max-width: 480px) {
+    .modal-overlay {
+        padding: 8px;
+    }
+    
+    .modal {
+        padding: 14px;
+        max-width: 320px;
+    }
+    
+    .modal-title {
+        font-size: 13px;
+    }
+    
+    .form-input,
+    .form-textarea {
+        font-size: 11px;
+        padding: 7px 9px;
+    }
+    
+    .form-textarea {
+        min-height: 70px;
+    }
+    
+    .btn {
+        font-size: 10px;
+        height: 30px;
+        padding: 6px 10px;
+    }
+    
+    .loading {
+        padding: 20px 8px;
+    }
+    
+    .loading-spinner {
+        width: 20px;
+        height: 20px;
+    }
+}
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 768px) {
+      .creator-portal {
+        padding: 12px;
+      }
+      
+      .portal-header {
+        height: 56px;
+      }
+      
+      .portal-brand {
+        font-size: 15px;
+      }
+      
+      .logo-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 12px;
+      }
+      
+      .back-btn {
+        padding: 6px 12px;
+        font-size: 11px;
+        height: 32px;
+      }
+      
+      .status-bar {
+        top: 56px;
+        height: 40px;
+        padding: 6px 12px;
+        font-size: 11px;
+      }
+      
+      .portal-content {
+        flex-direction: column;
+        height: auto;
+        gap: 12px;
+      }
+      
+      .sidebar {
+        width: 100%;
+        max-height: 240px;
+      }
+      
+      .message {
+        max-width: 85%;
+        font-size: 12px;
+        padding: 8px 12px;
+      }
+      
+      .chat-input {
+        font-size: 12px;
+        min-height: 40px;
+      }
+      
+      .send-btn {
+        height: 40px;
+        font-size: 11px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        font-size: 12px;
+      }
+      
+      .portal-header .header-container {
+        padding: 0 12px;
+      }
+      
+      .creator-portal {
+        padding: 8px;
+      }
+      
+      .chat-header {
+        padding: 12px;
+      }
+      
+      .chat-messages {
+        padding: 12px;
+      }
+      
+      .chat-input-area {
+        padding: 12px;
+      }
+      
+      .modal {
+        padding: 16px;
+      }
+    }
+
+    /* ========== SCROLLBAR ========== */
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: rgba(226, 232, 240, 0.2);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: var(--navy);
+      border-radius: 2px;
+    }
+
+    /* ========== FULL SCREEN CHAT ========== */
+    .full-screen-chat .sidebar {
+      display: none;
+    }
+
+    .full-screen-chat .chat-area {
+      width: 100%;
+    }
+</style>
+</head>
+<body>
+    <!-- Main Portal -->
+<div class="creator-portal">
+    <!-- Header -->
+<header>
+    <div class="header-container">
+      <a href="#" class="logo">
+        <div class="logo-icon">W/P</div>
+        <div class="logo-text">Evernet<span>Support</span></div>
+      </a>
+        <div class="header-actions">
+            <a href="/dashboard/" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Back to Dashboard
+            </a>
+        </div>
+    </header>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <div class="status-indicator">
+            <div class="status-dot" id="statusDot"></div>
+            <div class="status-text" id="statusText">Checking status...</div>
+        </div>
+        <div class="gmt-time" id="gmtTime">--:-- GMT</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="portal-content" id="portalContent">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-title">
+                    <i class="fas fa-ticket-alt"></i>
+                    My Support Tickets
+                </div>
+                <button class="new-ticket-btn" onclick="openNewTicketModal()">
+                    <i class="fas fa-plus"></i> New Ticket
+                </button>
+            </div>
+            <div class="tickets-list" id="ticketsList">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <div>Loading tickets...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Area -->
+        <div class="chat-area">
+            <div class="chat-header">
+                <div class="chat-title" id="chatTitle">Select a ticket</div>
+                <div class="chat-subtitle" id="chatSubtitle">Support hours: 9am-5pm GMT</div>
+                
+                <!-- Action buttons for full-screen mode -->
+                <div class="chat-header-actions">
+                    <button class="back-to-tickets-btn" onclick="showTicketList()">
+                        <i class="fas fa-list"></i>
+                        Show All Tickets
+                    </button>
+                    <button class="new-ticket-chat-btn" onclick="openNewTicketModal()">
+                        <i class="fas fa-plus"></i>
+                        Create New Ticket
+                    </button>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="loading">
+                    <i class="fas fa-comments"></i>
+                    <div>Select a ticket to view conversation</div>
+                </div>
+            </div>
+
+            <!-- Chat Input Area (shown for open tickets) -->
+            <div class="chat-input-area" id="chatInputArea" style="display: none;">
+                <div class="auto-response-notice" id="autoResponseNotice" style="display: none;">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Support is currently offline. You'll receive an auto-response and support will reply during work hours.</span>
+                </div>
+                <div class="input-container">
+                    <textarea 
+                        class="chat-input" 
+                        id="chatInput" 
+                        placeholder="Type your message here..." 
+                        oninput="handleTyping()"
+                        onkeydown="handleKeyDown(event)"
+                    ></textarea>
+                    <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled>
+                        <i class="fas fa-paper-plane"></i> Send
+                    </button>
+                </div>
+            </div>
+
+            <!-- Closed Ticket View (shown when ticket is closed) -->
+            <div class="closed-ticket-view" id="closedTicketView" style="display: none;">
+                <div class="closed-ticket-icon">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <div class="closed-ticket-message">
+                    This ticket has been closed by support.
+                </div>
+                <button class="closed-ticket-btn" onclick="openNewTicketModal()">
+                    <i class="fas fa-plus"></i>
+                    Create New Ticket
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- New Ticket Modal -->
+<div class="modal-overlay" id="newTicketModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">Create New Ticket</h3>
+            <button class="close-modal" onclick="closeModal('newTicketModal')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Subject</label>
+            <input type="text" class="form-input" id="ticketSubject" placeholder="What do you need help with?">
+        </div>
+        <div class="form-group">
+            <label class="form-label">Description</label>
+            <textarea class="form-textarea" id="ticketMessage" placeholder="Please describe your issue in detail..."></textarea>
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-secondary" onclick="closeModal('newTicketModal')">Cancel</button>
+            <button class="btn btn-primary" onclick="createNewTicket()">
+                <i class="fas fa-plus"></i> Create Ticket
+            </button>
+        </div>
+    </div>
+</div>
+
+    <!-- Firebase -->
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAuSEqhLenwrEz-qrIn1drjAugy1YSkDlI",
+            authDomain: "creators-portal-428c5.firebaseapp.com",
+            projectId: "creators-portal-428c5",
+            storageBucket: "creators-portal-428c5.firebasestorage.app",
+            messagingSenderId: "499280036303",
+            appId: "1:499280036303:web:b4d80d3b7fe1291381d2ba",
+            measurementId: "G-CYWGD80FS5"
+        };
+
+        let app, auth, db;
+        try {
+            app = firebase.initializeApp(firebaseConfig);
+            auth = firebase.auth();
+            db = firebase.firestore();
+        } catch (error) {
+            app = firebase.app();
+            auth = firebase.auth();
+            db = firebase.firestore();
+        }
+    </script>
+
+    <!-- Main Script -->
+    <script>
+        let currentUser = null;
+        let currentTicketId = null;
+        let messagesListener = null;
+        let supportSettings = null;
+        let isSupportOnline = false;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                await checkAuthState();
+                await loadSupportSettings();
+                updateGMTTime();
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+
+        // Auth
+        async function checkAuthState() {
+            return new Promise((resolve) => {
+                auth.onAuthStateChanged(async (user) => {
+                    if (user) {
+                        currentUser = user;
+                        await loadUserTickets();
+                        resolve();
+                    } else {
+                        window.location.href = 'index.html';
+                    }
+                });
+            });
+        }
+
+        // Support Settings
+        async function loadSupportSettings() {
+            try {
+                const settingsRef = db.collection('support_settings').doc('configuration');
+                const settingsDoc = await settingsRef.get();
+                
+                if (settingsDoc.exists) {
+                    supportSettings = settingsDoc.data();
+                } else {
+                    supportSettings = {
+                        workHoursStart: 9,
+                        workHoursEnd: 17,
+                        weekendDays: [0, 6],
+                        afterHoursResponse: "Thank you for reaching out to EverNet Support! Our support team will begin reviewing your message at 9am GMT. In the meantime, feel free to add any additional details to your message.",
+                        weekendResponse: "Thank you for reaching out to EverNet Support! Our team is currently offline for the weekend and will be back on Monday at 9am GMT."
+                    };
+                }
+                
+                updateSupportStatus();
+                setInterval(updateSupportStatus, 60000);
+                
+            } catch (error) {
+                console.error('Error loading settings:', error);
+            }
+        }
+
+        // FIXED: Time check function
+        function updateSupportStatus() {
+            const now = new Date();
+            const gmtHour = now.getUTCHours(); // UTC hour (GMT)
+            const gmtDay = now.getUTCDay(); // UTC day (0 = Sunday)
+            
+            console.log('Current GMT time:', {
+                hour: gmtHour,
+                day: gmtDay,
+                dayName: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][gmtDay]
+            });
+            
+            const statusDot = document.getElementById('statusDot');
+            const statusText = document.getElementById('statusText');
+            const autoResponseNotice = document.getElementById('autoResponseNotice');
+            
+            const isWeekend = supportSettings.weekendDays.includes(gmtDay);
+            const isWorkHours = gmtHour >= supportSettings.workHoursStart && 
+                               gmtHour < supportSettings.workHoursEnd;
+            
+            if (isWeekend) {
+                statusDot.className = 'status-dot';
+                statusText.textContent = 'Support Offline - Weekend';
+                statusText.style.color = 'var(--offline)';
+                isSupportOnline = false;
+                
+                if (autoResponseNotice) {
+                    autoResponseNotice.style.display = 'flex';
+                    autoResponseNotice.innerHTML = `<i class="fas fa-info-circle"></i> <span>${supportSettings.weekendResponse || 'Support is offline for the weekend. Back Monday at 9am GMT.'}</span>`;
+                }
+            } else if (!isWorkHours) {
+                statusDot.className = 'status-dot';
+                statusText.textContent = `Support Offline - Back at ${supportSettings.workHoursStart}am GMT`;
+                statusText.style.color = 'var(--offline)';
+                isSupportOnline = false;
+                
+                if (autoResponseNotice) {
+                    autoResponseNotice.style.display = 'flex';
+                    autoResponseNotice.innerHTML = `<i class="fas fa-info-circle"></i> <span>${supportSettings.afterHoursResponse || 'Support is currently offline. Back tomorrow at 9am GMT.'}</span>`;
+                }
+            } else {
+                statusDot.className = 'status-dot online';
+                statusText.textContent = `Support Online - ${supportSettings.workHoursStart}am-${supportSettings.workHoursEnd}pm GMT`;
+                statusText.style.color = 'var(--online)';
+                isSupportOnline = true;
+                
+                if (autoResponseNotice) {
+                    autoResponseNotice.style.display = 'none';
+                }
+            }
+        }
+
+        function updateGMTTime() {
+            const now = new Date();
+            const gmtTime = now.toUTCString().split(' ')[4];
+            document.getElementById('gmtTime').textContent = gmtTime + ' GMT';
+            setTimeout(updateGMTTime, 60000);
+        }
+
+        // Auto-response system
+        async function sendAutoResponse(ticketId) {
+            if (isSupportOnline) return; // Only send auto-responses when offline
+            
+            try {
+                const ticketDoc = await db.collection('support_tickets').doc(ticketId).get();
+                if (!ticketDoc.exists) return;
+                
+                const ticket = ticketDoc.data();
+                const now = new Date();
+                const gmtHour = now.getUTCHours();
+                const gmtDay = now.getUTCDay();
+                
+                let autoResponseMessage = '';
+                
+                // Check if it's weekend
+                if (supportSettings.weekendDays.includes(gmtDay)) {
+                    autoResponseMessage = supportSettings.weekendResponse || 
+                        "Thank you for reaching out to EverNet Support! Our team is currently offline for the weekend and will be back on Monday at 9am GMT.";
+                } else {
+                    autoResponseMessage = supportSettings.afterHoursResponse || 
+                        "Thank you for reaching out to EverNet Support! Our support team will begin reviewing your message at 9am GMT. In the meantime, feel free to add any additional details to your message.";
+                }
+                
+                // Save auto-response message
+                const messageData = {
+                    ticketId: ticketId,
+                    senderId: 'system',
+                    senderType: 'system',
+                    senderEmail: 'support@evergreenempireltd.com',
+                    senderName: 'Auto-Response System',
+                    message: autoResponseMessage,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    read: false,
+                    automated: true
+                };
+                
+                await db.collection('support_messages').add(messageData);
+                
+                console.log('Auto-response sent for ticket:', ticketId);
+                
+            } catch (error) {
+                console.error('Error sending auto-response:', error);
+            }
+        }
+
+        // Ticket Management
+        function selectTicket(ticketId) {
+            currentTicketId = ticketId;
+            
+            // AUTO GO FULL SCREEN WHEN TICKET IS SELECTED
+            document.getElementById('portalContent').classList.add('full-screen-chat');
+            
+            document.querySelectorAll('.ticket-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`.ticket-item[onclick*="${ticketId}"]`)?.classList.add('active');
+            
+            loadTicketChat(ticketId);
+        }
+
+        function showTicketList() {
+            // Exit full screen mode
+            document.getElementById('portalContent').classList.remove('full-screen-chat');
+            
+            // Hide chat input and closed ticket view
+            document.getElementById('chatInputArea').style.display = 'none';
+            document.getElementById('closedTicketView').style.display = 'none';
+            
+            // Reset chat display
+            document.getElementById('chatMessages').innerHTML = `
+                <div class="loading">
+                    <i class="fas fa-comments" style="font-size: 3em; margin-bottom: 15px; opacity: 0.2; color: var(--navy);"></i>
+                    <div style="color: var(--navy);">Select a ticket to view conversation</div>
+                </div>
+            `;
+        }
+
+        async function loadUserTickets() {
+            try {
+                const ticketsList = document.getElementById('ticketsList');
+                ticketsList.innerHTML = `<div class="loading"><div class="loading-spinner"></div><div>Loading...</div></div>`;
+                
+                const allTicketsSnapshot = await db.collection('support_tickets').get();
+                
+                if (allTicketsSnapshot.empty) {
+                    ticketsList.innerHTML = `
+                        <div style="text-align: center; padding: 40px; color: var(--navy);">
+                            <i class="fas fa-inbox" style="font-size: 2em; margin-bottom: 10px; opacity: 0.2;"></i>
+                            <div>No support tickets yet</div>
+                            <button class="new-ticket-btn" onclick="openNewTicketModal()" style="margin-top: 20px;">
+                                <i class="fas fa-plus"></i> Create First Ticket
+                            </button>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const userTickets = [];
+                allTicketsSnapshot.forEach(doc => {
+                    const ticket = doc.data();
+                    const ticketId = doc.id;
+                    
+                    if (ticket.creatorId === currentUser.uid || 
+                        ticket.creatorEmail === currentUser.email) {
+                        userTickets.push({ id: ticketId, ...ticket });
+                    }
+                });
+                
+                if (userTickets.length === 0) {
+                    ticketsList.innerHTML = `
+                        <div style="text-align: center; padding: 40px; color: var(--navy);">
+                            <i class="fas fa-inbox" style="font-size: 2em; margin-bottom: 10px; opacity: 0.2;"></i>
+                            <div>No support tickets yet</div>
+                            <button class="new-ticket-btn" onclick="openNewTicketModal()" style="margin-top: 20px;">
+                                <i class="fas fa-plus"></i> Create First Ticket
+                            </button>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Sort by date
+                userTickets.sort((a, b) => {
+                    const timeA = a.lastMessageAt ? a.lastMessageAt.toDate().getTime() : 0;
+                    const timeB = b.lastMessageAt ? b.lastMessageAt.toDate().getTime() : 0;
+                    return timeB - timeA;
+                });
+                
+                let html = '';
+                
+                for (const ticketData of userTickets) {
+                    const ticket = ticketData;
+                    const ticketId = ticketData.id;
+                    
+                    const unreadQuery = await db.collection('support_messages')
+                        .where('ticketId', '==', ticketId)
+                        .where('senderType', '==', 'support')
+                        .where('read', '==', false)
+                        .get();
+                    
+                    const hasUnread = !unreadQuery.empty;
+                    const safeTicketId = ticketId.replace(/'/g, "\\'");
+                    
+                    html += `
+                        <div class="ticket-item ${currentTicketId === ticketId ? 'active' : ''}" 
+                             onclick="selectTicket('${safeTicketId}')">
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <div class="ticket-id">#${ticketId.substring(0, 8)}</div>
+                                ${hasUnread ? '<div class="unread-badge"></div>' : ''}
+                            </div>
+                            <div class="ticket-subject">${ticket.subject || 'No subject'}</div>
+                            <div class="ticket-meta">
+                                <span>${ticket.createdAt ? formatDate(ticket.createdAt.toDate()) : ''}</span>
+                                <span class="ticket-status status-${ticket.status || 'open'}">
+                                    ${ticket.status || 'Open'}
+                                </span>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                ticketsList.innerHTML = html;
+                
+                if (!currentTicketId && userTickets.length > 0) {
+                    selectTicket(userTickets[0].id);
+                }
+                
+            } catch (error) {
+                console.error('Error loading tickets:', error);
+                ticketsList.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: var(--navy);">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div>Unable to load tickets</div>
+                        <button class="new-ticket-btn" onclick="openNewTicketModal()" style="margin-top: 20px;">
+                            <i class="fas fa-plus"></i> Create New Ticket
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        async function loadTicketChat(ticketId) {
+            try {
+                const ticketDoc = await db.collection('support_tickets').doc(ticketId).get();
+                
+                if (!ticketDoc.exists) {
+                    return;
+                }
+                
+                const ticket = ticketDoc.data();
+                
+                document.getElementById('chatTitle').textContent = ticket.subject || 'No subject';
+                document.getElementById('chatSubtitle').textContent = 
+                    `Created: ${ticket.createdAt ? formatDate(ticket.createdAt.toDate()) : ''} | Status: ${ticket.status || 'Open'}`;
+                
+                loadTicketMessages(ticketId);
+                markMessagesAsRead(ticketId);
+                
+                // Check if ticket is closed
+                if (ticket.status === 'closed' || ticket.status === 'resolved') {
+                    // Show closed ticket view, hide chat input
+                    document.getElementById('chatInputArea').style.display = 'none';
+                    document.getElementById('closedTicketView').style.display = 'block';
+                } else {
+                    // Show chat input for open tickets
+                    document.getElementById('chatInputArea').style.display = 'block';
+                    document.getElementById('closedTicketView').style.display = 'none';
+                }
+                
+            } catch (error) {
+                console.error('Error loading chat:', error);
+            }
+        }
+
+        async function loadTicketMessages(ticketId) {
+            try {
+                if (messagesListener) {
+                    messagesListener();
+                }
+                
+                const chatMessages = document.getElementById('chatMessages');
+                chatMessages.innerHTML = `<div class="loading"><div class="loading-spinner"></div><div>Loading messages...</div></div>`;
+                
+                messagesListener = db.collection('support_messages')
+                    .where('ticketId', '==', ticketId)
+                    .orderBy('timestamp', 'asc')
+                    .onSnapshot((snapshot) => {
+                        if (snapshot.empty) {
+                            chatMessages.innerHTML = `
+                                <div style="text-align: center; padding: 40px; color: var(--navy);">
+                                    <i class="fas fa-comments" style="font-size: 2em; margin-bottom: 10px; opacity: 0.2;"></i>
+                                    <div>No messages yet. Start the conversation!</div>
+                                </div>
+                            `;
+                            return;
+                        }
+                        
+                        let html = '';
+                        snapshot.forEach(doc => {
+                            const message = doc.data();
+                            const time = message.timestamp ? message.timestamp.toDate() : new Date();
+                            let messageClass = 'creator';
+                            let senderName = 'You';
+                            
+                            if (message.senderType === 'support') {
+                                messageClass = 'support';
+                                senderName = 'Evernet Support';
+                            } else if (message.senderType === 'system') {
+                                messageClass = 'system';
+                                senderName = 'Auto-Response';
+                            }
+                            
+                            html += `
+                                <div class="message ${messageClass}">
+                                    <div class="message-header">
+                                        <span><strong>${senderName}</strong></span>
+                                        <span>${time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                                    </div>
+                                    <div class="message-content">${message.message || ''}</div>
+                                    <div class="message-time">
+                                        ${time.toLocaleDateString()}
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        
+                        chatMessages.innerHTML = html;
+                        
+                        setTimeout(() => {
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                        }, 100);
+                        
+                    }, (error) => {
+                        console.error('Error loading messages:', error);
+                    });
+                
+            } catch (error) {
+                console.error('Error loading messages:', error);
+            }
+        }
+
+        async function markMessagesAsRead(ticketId) {
+            try {
+                const unreadQuery = await db.collection('support_messages')
+                    .where('ticketId', '==', ticketId)
+                    .where('senderType', '==', 'support')
+                    .where('read', '==', false)
+                    .get();
+                
+                const batch = db.batch();
+                unreadQuery.forEach(doc => {
+                    batch.update(doc.ref, { read: true });
+                });
+                
+                if (!unreadQuery.empty) {
+                    await batch.commit();
+                }
+                
+            } catch (error) {
+                console.error('Error marking as read:', error);
+            }
+        }
+
+        // Messaging
+        function handleTyping() {
+            const chatInput = document.getElementById('chatInput');
+            const sendBtn = document.getElementById('sendBtn');
+            
+            if (chatInput.value.trim() !== '') {
+                sendBtn.disabled = false;
+            } else {
+                sendBtn.disabled = true;
+            }
+        }
+
+        function handleKeyDown(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        async function sendMessage() {
+            const chatInput = document.getElementById('chatInput');
+            const message = chatInput.value.trim();
+            
+            if (!message || !currentTicketId) {
+                return;
+            }
+            
+            try {
+                const messageData = {
+                    ticketId: currentTicketId,
+                    senderId: currentUser.uid,
+                    senderType: 'creator',
+                    senderEmail: currentUser.email,
+                    senderName: currentUser.displayName || currentUser.email.split('@')[0],
+                    message: message,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    read: false
+                };
+                
+                await db.collection('support_messages').add(messageData);
+                
+                await db.collection('support_tickets').doc(currentTicketId).update({
+                    lastMessageAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    status: 'open',
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                chatInput.value = '';
+                document.getElementById('sendBtn').disabled = true;
+                
+                // Send auto-response if support is offline
+                if (!isSupportOnline) {
+                    setTimeout(() => {
+                        sendAutoResponse(currentTicketId);
+                    }, 1000);
+                }
+                
+            } catch (error) {
+                console.error('Error sending message:', error);
+            }
+        }
+
+        // New Ticket
+        async function createNewTicket() {
+            const subject = document.getElementById('ticketSubject').value.trim();
+            const message = document.getElementById('ticketMessage').value.trim();
+            
+            if (!subject || !message) {
+                alert('Please fill all fields');
+                return;
+            }
+            
+            try {
+                const ticketData = {
+                    creatorId: currentUser.uid,
+                    creatorEmail: currentUser.email,
+                    creatorName: currentUser.displayName || currentUser.email.split('@')[0],
+                    subject: subject,
+                    description: message,
+                    status: 'open',
+                    priority: 'medium',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    lastMessageAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                const ticketRef = await db.collection('support_tickets').add(ticketData);
+                
+                const messageData = {
+                    ticketId: ticketRef.id,
+                    senderId: currentUser.uid,
+                    senderType: 'creator',
+                    senderEmail: currentUser.email,
+                    senderName: currentUser.displayName || currentUser.email.split('@')[0],
+                    message: message,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    read: false
+                };
+                
+                await db.collection('support_messages').add(messageData);
+                
+                closeModal('newTicketModal');
+                document.getElementById('ticketSubject').value = '';
+                document.getElementById('ticketMessage').value = '';
+                
+                // Send auto-response immediately if support is offline
+                if (!isSupportOnline) {
+                    setTimeout(() => {
+                        sendAutoResponse(ticketRef.id);
+                    }, 1000);
+                }
+                
+                selectTicket(ticketRef.id);
+                
+            } catch (error) {
+                console.error('Error creating ticket:', error);
+                alert('Failed to create ticket');
+            }
+        }
+
+        // Modals
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function openNewTicketModal() {
+            openModal('newTicketModal');
+        }
+
+        // Utility
+        function formatDate(date) {
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMins / 60);
+            const diffDays = Math.floor(diffHours / 24);
+            
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return `${diffMins}m ago`;
+            if (diffHours < 24) return `${diffHours}h ago`;
+            if (diffDays < 7) return `${diffDays}d ago`;
+            return date.toLocaleDateString();
+        }
+    </script>
+</body>
+</html> 
